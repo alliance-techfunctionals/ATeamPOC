@@ -2,25 +2,10 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/src-code/.vs
-/src-code/packages
-/src-code/References
-/src-code/RV.TradeBlotter.DAL/obj/Debug
-/src-code/RV.TradeBlotter.Models/obj/Debug
-/src-code/RV.TradeBlotter.Server.API/bin
-/src-code/RV.TradeBlotter.Server.API/Logs
-/src-code/RV.TradeBlotter.Server.API/obj/Debug
-/src-code/RV.TradeBlotter.Services/obj/Debug
-/src-code/RV.TradeBlotter.Utils/obj/Debug
-/src-code/Wuki.Base.Utilities/obj/Debug
-/src-code/RV.TradeBlotter.Desktop/obj/Debug
-/src-code/*/bin/*
-/src-code/*/obj/*
-/*.xlsx
 
-/src-code/*/*.csproj
-/src-code/RV.TradeBlotter.Desktop/Releases
-/src-code/RV.TradeBlotter.Desktop/*.nupkg
-/.vs
-/src-code/RV.TradeBlotter.Desktop/Releases.7z
-/*.7z
+/*/bin
+/*/obj
+
+
+.vs
+/.vs/
