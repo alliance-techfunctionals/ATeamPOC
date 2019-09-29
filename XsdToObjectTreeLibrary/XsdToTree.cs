@@ -20,7 +20,6 @@ namespace XsdToObjectTreeLibrary
             foreach (XmlSchemaElement element in customerSchema.Elements.Values)
             {
                 RecursiveElementAnalyser("-", element, ref nodes);
-                Console.WriteLine("\r\n");
             }
             return nodes;
         }
@@ -34,7 +33,6 @@ namespace XsdToObjectTreeLibrary
             string dataType = element.ElementSchemaType.TypeCode.ToString();
 
             var root = elementName + " (" + dataType + ")";
-            Console.WriteLine(root);
             var node = new Node();
             node.Name = element.Name;
             node.DisplayName = root;
@@ -55,7 +53,6 @@ namespace XsdToObjectTreeLibrary
                         string attrName = attribute.Name ?? attribute.RefName.ToString();
                         string attrDesc = string.Format(prefix + "(Attr:: {0} ({1}))", attrName, attrDataType);
                         attributes.Add(attrDesc);
-                        Console.WriteLine(attrDesc);
                     }
                 }
 
@@ -82,7 +79,6 @@ namespace XsdToObjectTreeLibrary
                                 childNodes.Add(childNode);
 
                                 children.Add(xmlSchemaElement.RefName.Name);
-                                Console.WriteLine(child);
                             }
                             else
                             {
