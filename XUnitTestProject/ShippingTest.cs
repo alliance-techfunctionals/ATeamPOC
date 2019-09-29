@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
+using XsdToObjectTree.UnitTest.Helper;
 using XsdToObjectTreeLibrary;
 using XsdToObjectTreeLibrary.Model;
 using Xunit;
@@ -15,7 +16,8 @@ namespace XUnitTestProject
         public void CountTest()
         {
             var expectedNodes = GetTestData();
-            string xml = File.ReadAllText("shippingdetails.xsd");
+            var path = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), "inpputtestxsds\\shipping.xsd");
+            string xml = File.ReadAllText(path);
             var reader = XmlReader.Create(new StringReader(xml));
             XmlSchemaSet xss = new XmlSchemaSet();
             XmlUrlResolver xur = new XmlUrlResolver();
@@ -32,7 +34,8 @@ namespace XUnitTestProject
         public void TreeTest()
         {
             var expectedNodes = GetTestData();
-            string xml = File.ReadAllText("shippingdetails.xsd"); 
+            var path = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), "inpputtestxsds\\shipping.xsd");
+            string xml = File.ReadAllText(path);
             var reader = XmlReader.Create(new StringReader(xml));
 
             XmlSchemaSet xss = new XmlSchemaSet();
