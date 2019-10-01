@@ -8,9 +8,15 @@ namespace XsdToObjectTreeLibrary
 {
     public class XsdToTree
     {
-        public List<Node> AnalyseSchema(XmlSchemaSet set)
+        public Node AnalyseSchema(XmlSchemaSet set)
         {
-            var nodes = new List<Node>();
+            var node = new Node();
+            node.Children = new List<Node>();
+            node.DisplayName = "Root";
+            node.Name = "Root";
+            node.NodePath = "/";
+            node.NodeType = NodeTypeEnum.Element;
+
             XmlSchema customerSchema = null;
             foreach (XmlSchema schema in set.Schemas())
             {
@@ -19,39 +25,51 @@ namespace XsdToObjectTreeLibrary
 
             foreach (XmlSchemaElement element in customerSchema.Elements.Values)
             {
-                RecursiveElementAnalyser("-", element, ref nodes);
+                var childNode = new Node();
+                childNode.NodePath = node.NodePath;
+                RecursiveElementAnalyser("-", element, ref childNode);
+                node.Children.Add(childNode);
             }
-            return nodes;
+
+            return node;
         }
 
-        protected void RecursiveElementAnalyser(string prefix, XmlSchemaElement element, ref List<Node> nodes)
+        protected void RecursiveElementAnalyser(string prefix, XmlSchemaElement element, ref Node node)
         {
             string elementName = prefix + element.Name;
+
             var children = new List<string>();
             var attributes = new List<string>();
+
             var childNodes = new List<Node>();
+
             string dataType = element.ElementSchemaType.TypeCode.ToString();
 
             var root = elementName + " (" + dataType + ")";
-            var node = new Node();
+
             node.Name = element.Name;
             node.DisplayName = root;
             node.NodeType = NodeTypeEnum.Element;
-            node.NodePath = element.Name;
+            node.NodePath = node.NodePath + element.Name;
 
             XmlSchemaComplexType complexType = element.ElementSchemaType as XmlSchemaComplexType;
+
             if (complexType != null)
             {
                 if (complexType.AttributeUses.Count > 0)
                 {
-                    IDictionaryEnumerator enumerator = complexType.AttributeUses.GetEnumerator();
+                    IDictionaryEnumerator enumerator =
+                        complexType.AttributeUses.GetEnumerator();
 
                     while (enumerator.MoveNext())
                     {
-                        XmlSchemaAttribute attribute = (XmlSchemaAttribute)enumerator.Value;
+                        XmlSchemaAttribute attribute =
+                            (XmlSchemaAttribute)enumerator.Value;
+
                         string attrDataType = attribute.AttributeSchemaType.TypeCode.ToString();
                         string attrName = attribute.Name ?? attribute.RefName.ToString();
                         string attrDesc = string.Format(prefix + "(Attr:: {0} ({1}))", attrName, attrDataType);
+
                         attributes.Add(attrDesc);
                     }
                 }
@@ -66,16 +84,17 @@ namespace XsdToObjectTreeLibrary
                         if (xmlSchemaElement != null)
                             if (xmlSchemaElement != null && xmlSchemaElement.RefName == null)
                             {
-                                RecursiveElementAnalyser(prefix, xmlSchemaElement, ref nodes);
+                                RecursiveElementAnalyser(prefix, xmlSchemaElement, ref node);
                             }
                             else if (xmlSchemaElement.RefName != null)
                             {
                                 var child = prefix + "-" + xmlSchemaElement.RefName;
+
                                 var childNode = new Node();
                                 childNode.Name = xmlSchemaElement.RefName.Name;
                                 childNode.DisplayName = xmlSchemaElement.RefName.Name;
                                 childNode.NodeType = NodeTypeEnum.Attribute;
-                                childNode.NodePath = element.Name + "/" + xmlSchemaElement.RefName;
+                                childNode.NodePath = node.NodePath + "/" + xmlSchemaElement.RefName;
                                 childNodes.Add(childNode);
 
                                 children.Add(xmlSchemaElement.RefName.Name);
@@ -90,7 +109,7 @@ namespace XsdToObjectTreeLibrary
                                         var xmlChoiceSchemaElement = choiceElement as XmlSchemaElement;
                                         if (xmlChoiceSchemaElement != null)
                                         {
-                                            RecursiveElementAnalyser(prefix, xmlChoiceSchemaElement, ref nodes);
+                                            RecursiveElementAnalyser(prefix, xmlChoiceSchemaElement, ref node);
                                         }
                                     }
                                 }
@@ -101,9 +120,7 @@ namespace XsdToObjectTreeLibrary
 
             node.Attributes = attributes;
             node.Children = childNodes;
-            nodes.Add(node);
-
-            //nodes.Add(root.Replace("-", ""), children);
+        
         }
     }
 }
