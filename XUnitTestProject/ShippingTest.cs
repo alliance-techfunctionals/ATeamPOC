@@ -16,7 +16,7 @@ namespace XUnitTestProject
         public void CountTest()
         {
             var expectedNodes = GetTestData();
-            var path = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), "inpputtestxsds\\shipping.xsd");
+            var path = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), "samplexsds\\shipping.xsd");
             string xml = File.ReadAllText(path);
             var reader = XmlReader.Create(new StringReader(xml));
             XmlSchemaSet xss = new XmlSchemaSet();
@@ -34,7 +34,7 @@ namespace XUnitTestProject
         public void TreeTest()
         {
             var expectedNodes = GetTestData();
-            var path = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), "inpputtestxsds\\shipping.xsd");
+            var path = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), "samplexsds\\shipping.xsd");
             string xml = File.ReadAllText(path);
             var reader = XmlReader.Create(new StringReader(xml));
 
