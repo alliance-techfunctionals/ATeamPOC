@@ -1,5 +1,7 @@
+using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
 using XsdToObjectTree.UnitTest.Helper;
@@ -24,6 +26,9 @@ namespace XUnitTestProject
 
             var target = new XsdToTree();
             var result = target.AnalyseSchema(xss);
+
+            var jsonStr = JsonConvert.SerializeObject(result);
+            var jsonOnlyChildren = JsonConvert.SerializeObject(result.Children.Where(n => n.Children != null && n.Children.Count > 0));
         }
     }
 }

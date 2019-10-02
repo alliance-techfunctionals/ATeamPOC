@@ -27,7 +27,7 @@ namespace XsdToObjectTreeLibrary
             {
                 var childNode = new Node();
                 childNode.NodePath = node.NodePath;
-                RecursiveElementAnalyser("-", element, ref childNode);
+                RecursiveElementAnalyser("", element, ref childNode);
                 node.Children.Add(childNode);
             }
 
@@ -36,7 +36,7 @@ namespace XsdToObjectTreeLibrary
 
         protected void RecursiveElementAnalyser(string prefix, XmlSchemaElement element, ref Node node)
         {
-            string elementName = prefix + element.Name;
+            string elementName = prefix + (element.Name ?? element.RefName.ToString());
 
             var children = new List<string>();
             var attributes = new List<string>();
@@ -45,9 +45,9 @@ namespace XsdToObjectTreeLibrary
 
             string dataType = element.ElementSchemaType.TypeCode.ToString();
 
-            var root = elementName + " (" + dataType + ")";
+            var root = elementName; // + " (" + dataType + ")";
 
-            node.Name = element.Name;
+            node.Name = element.Name ?? element.RefName.ToString();
             node.DisplayName = root;
             node.NodeType = NodeTypeEnum.Element;
             node.NodePath = node.NodePath + element.Name;
@@ -71,6 +71,12 @@ namespace XsdToObjectTreeLibrary
                         string attrDesc = string.Format(prefix + "(Attr:: {0} ({1}))", attrName, attrDataType);
 
                         attributes.Add(attrDesc);
+                        var childNode = new Node();
+                        childNode.Name = attribute.RefName.Name;
+                        childNode.DisplayName = attribute.RefName.Name;
+                        childNode.NodeType = NodeTypeEnum.Attribute;
+                        childNode.NodePath = node.NodePath + "/@" + attribute.RefName;
+                        childNodes.Add(childNode);
                     }
                 }
 
@@ -95,6 +101,8 @@ namespace XsdToObjectTreeLibrary
                                 childNode.DisplayName = xmlSchemaElement.RefName.Name;
                                 childNode.NodeType = NodeTypeEnum.Attribute;
                                 childNode.NodePath = node.NodePath + "/" + xmlSchemaElement.RefName;
+                                
+                                RecursiveElementAnalyser(prefix, xmlSchemaElement, ref childNode);
                                 childNodes.Add(childNode);
 
                                 children.Add(xmlSchemaElement.RefName.Name);
@@ -118,7 +126,7 @@ namespace XsdToObjectTreeLibrary
                 }
             }
 
-            node.Attributes = attributes;
+            //node.Attributes = attributes;
             node.Children = childNodes;
         
         }
