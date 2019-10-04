@@ -34,6 +34,17 @@ namespace XUnitTestProject
             result.Should().BeEquivalentTo(expectedResult);
         }
 
+        [Fact]
+        public void XsdToTree_Demo1()
+        {
+            var xss = GetXmlSchema("TestData\\Input\\demo1.xsd");
+            var expectedResult = GetExpectedResult("TestData\\Output\\demo2.example.json");
+
+            var target = new XsdToTree();
+            var result = target.GetTree(xss);
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
         private Node GetExpectedResult(string path)
         {
             var outputPath = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), path);
