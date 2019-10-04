@@ -76,6 +76,7 @@ namespace XsdToObjectTreeLibrary
                         childNode.DisplayName = attribute.RefName.Name;
                         childNode.NodeType = NodeTypeEnum.Attribute;
                         childNode.NodePath = node.NodePath + "/@" + attribute.RefName;
+                        childNode.Children = new List<Node>();
                         childNodes.Add(childNode);
                     }
                 }
