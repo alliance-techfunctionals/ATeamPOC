@@ -10,54 +10,65 @@ using Xunit;
 
 namespace XUnitTestProject
 {
-    public class ShippingDetailsTest
+    public class UnitTest1
     {
         [Fact]
         public void CountTest()
         {
-            var expectedNodes = GetTestData();
-            var path = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), "TestData\\Input\\shipping.xsd");
-            string xml = File.ReadAllText(path);
-            var reader = XmlReader.Create(new StringReader(xml));
-            XmlSchemaSet xss = new XmlSchemaSet();
+            Node expectedNode = GetTestData();
+
+            var completePath = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), "samplexsds\\shipping.xsd");
+            string xmlInput = File.ReadAllText(completePath);
+            var xmlreader = XmlReader.Create(new StringReader(xmlInput));
+
+            XmlSchemaSet schemaSet = new XmlSchemaSet();
             XmlUrlResolver xur = new XmlUrlResolver();
             xur.Credentials = System.Net.CredentialCache.DefaultCredentials;
-            xss.XmlResolver = xur;
-            xss.Add(null, reader);
-            xss.Compile();
+
+            schemaSet.XmlResolver = xur;
+            schemaSet.Add(null, xmlreader);
+            schemaSet.Compile();
+
             var xsd2Tree = new XsdToTree();
-            var nodes = xsd2Tree.AnalyseSchema(xss);
-            Assert.Equal((double)expectedNodes.Count, (double)nodes.Count, 1);
+            var actualNode = xsd2Tree.AnalyseSchema(schemaSet);
+
+            Assert.Equal(expectedNode.Children.Count, actualNode.Children.Count);
         }
 
         [Fact]
         public void TreeTest()
         {
-            var expectedNodes = GetTestData();
-            var path = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), "TestData\\Input\\shipping.xsd");
-            string xml = File.ReadAllText(path);
-            var reader = XmlReader.Create(new StringReader(xml));
+            var expectedNode = GetTestData();
+
+            var completePath = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), "samplexsds\\shipping.xsd");
+            string xmlInput = File.ReadAllText(completePath);
+
+            var xmlReader = XmlReader.Create(new StringReader(xmlInput));
 
             XmlSchemaSet xss = new XmlSchemaSet();
             XmlUrlResolver xur = new XmlUrlResolver();
             xur.Credentials = System.Net.CredentialCache.DefaultCredentials;
 
             xss.XmlResolver = xur;
-            xss.Add(null, reader);
+            xss.Add(null, xmlReader);
             xss.Compile();
 
             var xsd2Tree = new XsdToTree();
-            var nodes = xsd2Tree.AnalyseSchema(xss);
-            Assert.Equal(expectedNodes.Count, nodes.Count);
-            NodeLoop(expectedNodes, nodes);
+            var node = xsd2Tree.AnalyseSchema(xss);
+
+            Assert.Equal(expectedNode.Children.Count, node.Children.Count);
+            NodeLoop(expectedNode, node);
         }
 
-        private void NodeLoop(List<Node> expectedNodes, List<Node> nodes)
+        private void NodeLoop(Node expectedRootNode, Node rootNode)
         {
-            for (int i = 0; i < expectedNodes.Count; i++)
+            var expectedChildNodes = expectedRootNode.Children;
+            var childNodes = rootNode.Children;
+
+            for (int i = 0; i < expectedChildNodes.Count; i++)
             {
-                var expectedNode = expectedNodes[i];
-                var node = nodes[i];
+                var expectedNode = expectedChildNodes[i];
+                var node = childNodes[i];
 
                 Assert.Equal(expectedNode.Name, node.Name);
                 Assert.Equal(expectedNode.NodePath, node.NodePath);
@@ -74,6 +85,7 @@ namespace XUnitTestProject
                 //        {
                 //            var expectedAttr = expectedNode.Attributes[j];
                 //            var nodeAttr = node.Attributes[j];
+
                 //            Assert.Equal(expectedAttr, nodeAttr);
                 //        }
                 //    }
@@ -82,85 +94,93 @@ namespace XUnitTestProject
                 if (expectedNode.Children != null && node.Children != null)
                 {
                     Assert.Equal(expectedNode.Children.Count, node.Children.Count);
+
                     if (expectedNode.Children.Count == node.Children.Count)
                     {
-                        NodeLoop(expectedNode.Children, node.Children);
+                        NodeLoop(expectedNode, node);
                     }
+
                 }
             }
         }
 
-        private List<Node> GetTestData()
+        private Node GetTestData()
         {
+            var rootNode = new Node();
+            rootNode.DisplayName = "Root";
+            rootNode.Name = "Root";
+            rootNode.NodePath = "/";
+            rootNode.NodeType = NodeTypeEnum.Element;
+
             var nodes = new List<Node>();
 
             var node1 = new Node();
             node1.DisplayName = "-orderperson (String)";
             node1.Name = "orderperson";
-            node1.NodePath = "orderperson";
+            node1.NodePath = "/orderperson";
             node1.NodeType = NodeTypeEnum.Element;
             nodes.Add(node1);
 
             var node2 = new Node();
             node2.DisplayName = "-name (String)";
             node2.Name = "name";
-            node2.NodePath = "name";
+            node2.NodePath = "/name";
             node2.NodeType = NodeTypeEnum.Element;
             nodes.Add(node2);
 
             var node3 = new Node();
             node3.DisplayName = "-address (String)";
             node3.Name = "address";
-            node3.NodePath = "address";
+            node3.NodePath = "/address";
             node3.NodeType = NodeTypeEnum.Element;
             nodes.Add(node3);
 
             var node4 = new Node();
             node4.DisplayName = "-city (String)";
             node4.Name = "city";
-            node4.NodePath = "city";
+            node4.NodePath = "/city";
             node4.NodeType = NodeTypeEnum.Element;
             nodes.Add(node4);
 
             var node5 = new Node();
             node5.DisplayName = "-country (String)";
             node5.Name = "country";
-            node5.NodePath = "country";
+            node5.NodePath = "/country";
             node5.NodeType = NodeTypeEnum.Element;
             nodes.Add(node5);
 
             var node6 = new Node();
             node6.DisplayName = "-title (String)";
             node6.Name = "title";
-            node6.NodePath = "title";
+            node6.NodePath = "/title";
             node6.NodeType = NodeTypeEnum.Element;
             nodes.Add(node6);
 
             var node7 = new Node();
             node7.DisplayName = "-note (String)";
             node7.Name = "note";
-            node7.NodePath = "note";
+            node7.NodePath = "/note";
             node7.NodeType = NodeTypeEnum.Element;
             nodes.Add(node7);
 
             var node8 = new Node();
             node8.DisplayName = "-quantity (PositiveInteger)";
             node8.Name = "quantity";
-            node8.NodePath = "quantity";
+            node8.NodePath = "/quantity";
             node8.NodeType = NodeTypeEnum.Element;
             nodes.Add(node8);
 
             var node9 = new Node();
             node9.DisplayName = "-price (Decimal)";
             node9.Name = "price";
-            node9.NodePath = "price";
+            node9.NodePath = "/price";
             node9.NodeType = NodeTypeEnum.Element;
             nodes.Add(node9);
 
             var node10 = new Node();
             node10.DisplayName = "-shipto (None)";
             node10.Name = "shipto";
-            node10.NodePath = "shipto";
+            node10.NodePath = "/shipto";
             node10.NodeType = NodeTypeEnum.Element;
 
             var node10Children = new List<Node>();
@@ -168,25 +188,25 @@ namespace XUnitTestProject
             var node10_1 = new Node();
             node10_1.DisplayName = "name";
             node10_1.Name = "name";
-            node10_1.NodePath = "shipto/name";
+            node10_1.NodePath = "/shipto/name";
             node10_1.NodeType = NodeTypeEnum.Attribute;
 
             var node10_2 = new Node();
             node10_2.DisplayName = "address";
             node10_2.Name = "address";
-            node10_2.NodePath = "shipto/address";
+            node10_2.NodePath = "/shipto/address";
             node10_2.NodeType = NodeTypeEnum.Attribute;
 
             var node10_3 = new Node();
             node10_3.DisplayName = "city";
             node10_3.Name = "city";
-            node10_3.NodePath = "shipto/city";
+            node10_3.NodePath = "/shipto/city";
             node10_3.NodeType = NodeTypeEnum.Attribute;
 
             var node10_4 = new Node();
             node10_4.DisplayName = "country";
             node10_4.Name = "country";
-            node10_4.NodePath = "shipto/country";
+            node10_4.NodePath = "/shipto/country";
             node10_4.NodeType = NodeTypeEnum.Attribute;
 
             node10Children.Add(node10_1);
@@ -200,7 +220,7 @@ namespace XUnitTestProject
             var node11 = new Node();
             node11.DisplayName = "-item (None)";
             node11.Name = "item";
-            node11.NodePath = "item";
+            node11.NodePath = "/item";
             node11.NodeType = NodeTypeEnum.Element;
 
             var node11Children = new List<Node>();
@@ -208,25 +228,25 @@ namespace XUnitTestProject
             var node11_1 = new Node();
             node11_1.DisplayName = "title";
             node11_1.Name = "title";
-            node11_1.NodePath = "item/title";
+            node11_1.NodePath = "/item/title";
             node11_1.NodeType = NodeTypeEnum.Attribute;
 
             var node11_2 = new Node();
             node11_2.DisplayName = "note";
             node11_2.Name = "note";
-            node11_2.NodePath = "item/note";
+            node11_2.NodePath = "/item/note";
             node11_2.NodeType = NodeTypeEnum.Attribute;
 
             var node11_3 = new Node();
             node11_3.DisplayName = "quantity";
             node11_3.Name = "quantity";
-            node11_3.NodePath = "item/quantity";
+            node11_3.NodePath = "/item/quantity";
             node11_3.NodeType = NodeTypeEnum.Attribute;
 
             var node11_4 = new Node();
             node11_4.DisplayName = "price";
             node11_4.Name = "price";
-            node11_4.NodePath = "item/price";
+            node11_4.NodePath = "/item/price";
             node11_4.NodeType = NodeTypeEnum.Attribute;
 
             node11Children.Add(node11_1);
@@ -240,7 +260,7 @@ namespace XUnitTestProject
             var node12 = new Node();
             node12.DisplayName = "-shiporder (None)";
             node12.Name = "shiporder";
-            node12.NodePath = "shiporder";
+            node12.NodePath = "/shiporder";
             node12.NodeType = NodeTypeEnum.Element;
 
             var node12Children = new List<Node>();
@@ -248,19 +268,19 @@ namespace XUnitTestProject
             var node12_1 = new Node();
             node12_1.DisplayName = "orderperson";
             node12_1.Name = "orderperson";
-            node12_1.NodePath = "shiporder/orderperson";
+            node12_1.NodePath = "/shiporder/orderperson";
             node12_1.NodeType = NodeTypeEnum.Attribute;
 
             var node12_2 = new Node();
             node12_2.DisplayName = "shipto";
             node12_2.Name = "shipto";
-            node12_2.NodePath = "shiporder/shipto";
+            node12_2.NodePath = "/shiporder/shipto";
             node12_2.NodeType = NodeTypeEnum.Attribute;
 
             var node12_3 = new Node();
             node12_3.DisplayName = "item";
             node12_3.Name = "item";
-            node12_3.NodePath = "shiporder/item";
+            node12_3.NodePath = "/shiporder/item";
             node12_3.NodeType = NodeTypeEnum.Attribute;
 
             node12Children.Add(node12_1);
@@ -270,7 +290,9 @@ namespace XUnitTestProject
             node12.Children = node12Children;
             nodes.Add(node12);
 
-            return nodes;
+            rootNode.Children = nodes;
+
+            return rootNode;
         }
     }
 }
