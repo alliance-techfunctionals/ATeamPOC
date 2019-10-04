@@ -6,22 +6,24 @@ using XsdToObjectTreeLibrary.Model;
 
 namespace XsdToObjectTreeLibrary
 {
-    public class XsdToTree
+    public class XsdToTree : IXsdToTree
     {
-        public Node AnalyseSchema(XmlSchemaSet set)
+        public Node GetTree(XmlSchemaSet set)
         {
             XmlSchema customerSchema = null;
             foreach (XmlSchema schema in set.Schemas())
             {
                 customerSchema = schema;
             }
-            var mainnode = new Node();
+
+            var rootNode = new Node();
             foreach (XmlSchemaElement element in customerSchema.Elements.Values)
             {
-                mainnode.NodePath = "/";
-                RecursiveElementAnalyser("", element, ref mainnode);
+                rootNode.NodePath = "/";
+                RecursiveElementAnalyser("", element, ref rootNode);
             }
-            return mainnode;
+
+            return rootNode;
         }
 
         protected void RecursiveElementAnalyser(string prefix, XmlSchemaElement element, ref Node node)
@@ -44,25 +46,24 @@ namespace XsdToObjectTreeLibrary
             {
                 if (complexType.AttributeUses.Count > 0)
                 {
-                    IDictionaryEnumerator enumerator =
-                        complexType.AttributeUses.GetEnumerator();
-
+                    var enumerator = complexType.AttributeUses.GetEnumerator();
                     while (enumerator.MoveNext())
                     {
-                        XmlSchemaAttribute attribute =
-                            (XmlSchemaAttribute)enumerator.Value;
+                        XmlSchemaAttribute attribute = (XmlSchemaAttribute)enumerator.Value;
 
                         string attrDataType = attribute.AttributeSchemaType.TypeCode.ToString();
                         string attrName = attribute.Name ?? attribute.RefName.ToString();
                         string attrDesc = string.Format(prefix + "(Attr:: {0} ({1}))", attrName, attrDataType);
 
                         attributes.Add(attrDesc);
-                        var childNode = new Node();
-                        childNode.Name = attribute.QualifiedName.Name;
-                        childNode.DisplayName = attribute.QualifiedName.Name;
-                        childNode.NodeType = NodeTypeEnum.Attribute;
-                        childNode.NodePath = node.NodePath + "/@" + attribute.QualifiedName.Name;
-                        childNode.Children = new List<Node>();
+                        var childNode = new Node
+                        {
+                            Name = attribute.QualifiedName.Name,
+                            DisplayName = attribute.QualifiedName.Name,
+                            NodeType = NodeTypeEnum.Attribute,
+                            NodePath = node.NodePath + "/@" + attribute.QualifiedName.Name,
+                            Children = new List<Node>()
+                        };
                         childNodes.Add(childNode);
                     }
                 }
@@ -88,7 +89,7 @@ namespace XsdToObjectTreeLibrary
                                 childNode.DisplayName = xmlSchemaElement.RefName.Name;
                                 childNode.NodeType = NodeTypeEnum.Attribute;
                                 childNode.NodePath = node.NodePath + "/" + xmlSchemaElement.RefName;
-                                
+
                                 RecursiveElementAnalyser(prefix, xmlSchemaElement, ref childNode);
                                 childNodes.Add(childNode);
 
@@ -112,6 +113,7 @@ namespace XsdToObjectTreeLibrary
                     }
                 }
             }
+
             node.Children = childNodes;
         }
     }
