@@ -29,19 +29,15 @@ namespace XsdToObjectTreeLibrary
         protected void RecursiveElementAnalyser(string prefix, XmlSchemaElement element, ref Node node)
         {
             string elementName = prefix + (element.Name ?? element.RefName.ToString());
-            var children = new List<string>();
-            var attributes = new List<string>();
-            var childNodes = new List<Node>();
+            var children = new List<Node>();
 
             string dataType = element.ElementSchemaType.TypeCode.ToString();
-            var root = elementName; // + " (" + dataType + ")";
             node.Name = element.Name ?? element.RefName.ToString();
-            node.DisplayName = root;
+            node.DisplayName = elementName;
             node.NodeType = NodeTypeEnum.Element;
             node.NodePath = node.NodePath + element.Name;
 
-            XmlSchemaComplexType complexType = element.ElementSchemaType as XmlSchemaComplexType;
-
+            var complexType = element.ElementSchemaType as XmlSchemaComplexType;
             if (complexType != null)
             {
                 if (complexType.AttributeUses.Count > 0)
@@ -49,51 +45,44 @@ namespace XsdToObjectTreeLibrary
                     var enumerator = complexType.AttributeUses.GetEnumerator();
                     while (enumerator.MoveNext())
                     {
-                        XmlSchemaAttribute attribute = (XmlSchemaAttribute)enumerator.Value;
+                        var attribute = (XmlSchemaAttribute)enumerator.Value;
 
                         string attrDataType = attribute.AttributeSchemaType.TypeCode.ToString();
-                        string attrName = attribute.Name ?? attribute.RefName.ToString();
-                        string attrDesc = string.Format(prefix + "(Attr:: {0} ({1}))", attrName, attrDataType);
-
-                        attributes.Add(attrDesc);
                         var childNode = new Node
                         {
                             Name = attribute.QualifiedName.Name,
                             DisplayName = attribute.QualifiedName.Name,
                             NodeType = NodeTypeEnum.Attribute,
-                            NodePath = node.NodePath + "/@" + attribute.QualifiedName.Name,
-                            Children = new List<Node>()
+                            NodePath = node.NodePath + "/@" + attribute.QualifiedName.Name
                         };
-                        childNodes.Add(childNode);
+                        children.Add(childNode);
                     }
                 }
 
-                XmlSchemaSequence sequence = complexType.ContentTypeParticle as XmlSchemaSequence;
-
+                var sequence = complexType.ContentTypeParticle as XmlSchemaSequence;
                 if (sequence != null)
                 {
                     foreach (var childElement in sequence.Items)
                     {
                         var xmlSchemaElement = childElement as XmlSchemaElement;
                         if (xmlSchemaElement != null)
-                            if (xmlSchemaElement != null && xmlSchemaElement.RefName == null)
+                        {
+                            if (xmlSchemaElement.RefName == null)
                             {
                                 RecursiveElementAnalyser(prefix, xmlSchemaElement, ref node);
                             }
                             else if (xmlSchemaElement.RefName != null)
                             {
-                                var child = prefix + "-" + xmlSchemaElement.RefName;
-
-                                var childNode = new Node();
-                                childNode.Name = xmlSchemaElement.RefName.Name;
-                                childNode.DisplayName = xmlSchemaElement.RefName.Name;
-                                childNode.NodeType = NodeTypeEnum.Attribute;
-                                childNode.NodePath = node.NodePath + "/" + xmlSchemaElement.RefName;
+                                var childNode = new Node
+                                {
+                                    Name = xmlSchemaElement.RefName.Name,
+                                    DisplayName = xmlSchemaElement.RefName.Name,
+                                    NodeType = NodeTypeEnum.Element,
+                                    NodePath = node.NodePath + "/" + xmlSchemaElement.RefName
+                                };
 
                                 RecursiveElementAnalyser(prefix, xmlSchemaElement, ref childNode);
-                                childNodes.Add(childNode);
-
-                                children.Add(xmlSchemaElement.RefName.Name);
+                                children.Add(childNode);
                             }
                             else
                             {
@@ -110,11 +99,12 @@ namespace XsdToObjectTreeLibrary
                                     }
                                 }
                             }
+                        }
                     }
                 }
             }
 
-            node.Children = childNodes;
+            node.Children = children;
         }
     }
 }
