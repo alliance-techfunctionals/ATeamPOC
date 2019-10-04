@@ -30,14 +30,14 @@
                     "NodePath": "/shiporder/shipto/name",
                     "NodeType": "Element",
                     "Children": []
-                },                
-                {
-                    "Name": "address",
-                    "DisplayName": "orderperson",
-                    "NodePath": "/shiporder/shipto/address",
-                    "NodeType": "Element",
-                    "Children": []
-                },  
+                },
+              {
+                "Name": "address",
+                "DisplayName": "address",
+                "NodePath": "/shiporder/shipto/address",
+                "NodeType": "Element",
+                "Children": []
+              },  
                 {
                     "Name": "city",
                     "DisplayName": "city",
