@@ -38,7 +38,7 @@ namespace XUnitTestProject
         public void XsdToTree_Demo1()
         {
             var xss = GetXmlSchema("TestData\\Input\\demo1.xsd");
-            var expectedResult = GetExpectedResult("TestData\\Output\\demo2.example.json");
+            var expectedResult = GetExpectedResult("TestData\\Output\\demo1.example.json");
 
             var target = new XsdToTree();
             var result = target.GetTree(xss);
