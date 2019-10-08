@@ -38,7 +38,6 @@ namespace XUnitTestProject
         {
             var xss = GetXmlSchema("TestData\\Input\\demo1.xsd");
             var expectedResult = GetExpectedResult("TestData\\Output\\demo1.example.json");
-
             var target = new XsdToTree();
             var result = target.GetTree(xss);
             result.Should().BeEquivalentTo(expectedResult);
@@ -56,7 +55,6 @@ namespace XUnitTestProject
             var inputPath = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), path);
             string xml = File.ReadAllText(inputPath);
             var reader = XmlReader.Create(new StringReader(xml));
-
             var xur = new XmlUrlResolver { Credentials = System.Net.CredentialCache.DefaultCredentials };
             var xss = new XmlSchemaSet { XmlResolver = xur };
             xss.Add(null, reader);
