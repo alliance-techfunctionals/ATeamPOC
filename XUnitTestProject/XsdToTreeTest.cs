@@ -28,7 +28,6 @@ namespace XUnitTestProject
         {
             var xss = GetXmlSchema("TestData\\Input\\demo2.xsd");
             var expectedResult = GetExpectedResult("TestData\\Output\\demo2.example.json");
-
             var target = new XsdToTree();
             var result = target.GetTree(xss);
             result.Should().BeEquivalentTo(expectedResult);
@@ -62,7 +61,6 @@ namespace XUnitTestProject
             var xss = new XmlSchemaSet { XmlResolver = xur };
             xss.Add(null, reader);
             xss.Compile();
-
             return xss;
         }
     }
