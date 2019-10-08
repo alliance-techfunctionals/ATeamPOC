@@ -34,6 +34,7 @@ namespace XsdToObjectTreeLibrary
             string dataType = element.ElementSchemaType.TypeCode.ToString();
             node.Name = element.Name ?? element.RefName.ToString();
             node.DisplayName = elementName;
+            node.NodeDataType = dataType;
             node.NodeType = NodeTypeEnum.Element;
             node.NodePath = node.NodePath + element.Name;
 
@@ -52,6 +53,7 @@ namespace XsdToObjectTreeLibrary
                         {
                             Name = attribute.QualifiedName.Name,
                             DisplayName = attribute.QualifiedName.Name,
+                            NodeDataType = attrDataType,
                             NodeType = NodeTypeEnum.Attribute,
                             NodePath = node.NodePath + "/@" + attribute.QualifiedName.Name
                         };
@@ -73,10 +75,12 @@ namespace XsdToObjectTreeLibrary
                             }
                             else if (xmlSchemaElement.RefName != null)
                             {
+                                String seqDataType = sequence.GetType().ToString();
                                 var childNode = new Node
                                 {
                                     Name = xmlSchemaElement.RefName.Name,
                                     DisplayName = xmlSchemaElement.RefName.Name,
+                                    NodeDataType = seqDataType,
                                     NodeType = NodeTypeEnum.Element,
                                     NodePath = node.NodePath + "/" + xmlSchemaElement.RefName
                                 };
