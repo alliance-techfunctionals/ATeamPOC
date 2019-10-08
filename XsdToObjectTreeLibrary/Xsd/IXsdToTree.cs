@@ -1,7 +1,7 @@
 ﻿using System.Xml.Schema;
 using XsdToObjectTreeLibrary.Model;
 
-namespace XsdToObjectTreeLibrary
+namespace XsdToObjectTreeLibrary.Xsd
 {
     public interface IXsdToTree
     {

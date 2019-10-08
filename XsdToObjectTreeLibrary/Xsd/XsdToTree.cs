@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Xml.Schema;
 using XsdToObjectTreeLibrary.Model;
 
-namespace XsdToObjectTreeLibrary
+namespace XsdToObjectTreeLibrary.Xsd
 {
     public class XsdToTree : IXsdToTree
     {
@@ -75,7 +75,7 @@ namespace XsdToObjectTreeLibrary
                             }
                             else if (xmlSchemaElement.RefName != null)
                             {
-                                String seqDataType = sequence.GetType().ToString();
+                                string seqDataType = sequence.GetType().ToString();
                                 var childNode = new Node
                                 {
                                     Name = xmlSchemaElement.RefName.Name,
