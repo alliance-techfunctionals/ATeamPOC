@@ -1,6 +1,0 @@
-E:\Exate Work\XMLLibrary\bin\Debug\XMLLibrary.dll
-E:\Exate Work\XMLLibrary\bin\Debug\XMLLibrary.pdb
-E:\Exate Work\XMLLibrary\obj\Debug\XMLLibrary.csprojAssemblyReference.cache
-E:\Exate Work\XMLLibrary\obj\Debug\XMLLibrary.csproj.CoreCompileInputs.cache
-E:\Exate Work\XMLLibrary\obj\Debug\XMLLibrary.dll
-E:\Exate Work\XMLLibrary\obj\Debug\XMLLibrary.pdb

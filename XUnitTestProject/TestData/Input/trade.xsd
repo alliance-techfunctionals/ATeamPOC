@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+ <xs:element name="Trade">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="TradeHeader">
+          <xs:complexType>
+            <xs:sequence>
+                <xs:element name="TradeDate" type="xs:date"/>
+                <xs:element name="SettlementDate" type="xs:date"/>
+                <xs:element name="MatuarityDate" type="xs:date"/>
+                <xs:element name="Portfolio" type="xs:string"/>
+                <xs:element name="CounterParty" type="xs:string"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="FinancialData">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Notional" type="xs:decimal"/>
+              <xs:element name="SecondaryNotional" type="xs:decimal"/>
+              <xs:element name="TradePrice" type="xs:decimal"/>
+              <xs:element name="Leg" maxOccurs="2" minOccurs="1">         
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="Notional" type="xs:decimal"/>
+                      <xs:element name="FixedFloat" type="xs:string"/>
+                      <xs:element name="CouponRate" type="xs:decimal"/>
+                      <xs:element name="FloatingIndex" type="xs:string"/>
+                      <xs:element name="CashFlows">                       
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:element name="CashFlow" maxOccurs="unbounded">
+                                <xs:complexType>
+                                  <xs:sequence>
+                                    <xs:element name="AccrualStartDate" type="xs:date"/>
+                                    <xs:element name="AccrualEndDate" type="xs:date"/>
+                                    <xs:element name="SettlementDate" type="xs:date"/>
+                                    <xs:element name="FixingDate" type="xs:date"/>
+                                    <xs:element name="FixingRate" type="xs:decimal"/>
+                                    <xs:element name="DayCount" type="xs:string"/>
+                                    <xs:element name="AccruedAmount" type="xs:decimal"/>
+                                  </xs:sequence>
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:sequence>
+                          </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                  </xs:complexType>               
+              </xs:element>
+ 
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="tradeType" type="xs:string"/>
+      <xs:attribute name="Id" type="xs:integer"/>
+    </xs:complexType>
+ </xs:element>
+</xs:schema>
