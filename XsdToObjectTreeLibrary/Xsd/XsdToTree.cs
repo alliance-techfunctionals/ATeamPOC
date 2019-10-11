@@ -53,7 +53,7 @@ namespace XsdToObjectTreeLibrary.Xsd
                         {
                             Name = attribute.QualifiedName.Name,
                             DisplayName = attribute.QualifiedName.Name,
-                            NodeDataType = attrDataType,
+                            //NodeDataType = attrDataType,
                             NodeType = NodeTypeEnum.Attribute,
                             NodePath = node.NodePath + "/@" + attribute.QualifiedName.Name
                         };
@@ -80,7 +80,7 @@ namespace XsdToObjectTreeLibrary.Xsd
                                 {
                                     Name = xmlSchemaElement.RefName.Name,
                                     DisplayName = xmlSchemaElement.RefName.Name,
-                                    NodeDataType = seqDataType,
+                                    //NodeDataType = seqDataType,
                                     NodeType = NodeTypeEnum.Element,
                                     NodePath = node.NodePath + "/" + xmlSchemaElement.RefName
                                 };
