@@ -29,7 +29,7 @@ namespace XUnitTestProject.Xml
         public void XmlToTree_Mt300Example()
         {
             var xml = GetXml("mt300.example.xml");
-            var expectedResult = GetExpectedResult("mt300.example.json");
+            var expectedResult = GetExpectedResult("mt300.example..json");
             var target = new XmlToTree();
             var result = target.GetTree(xml);
             result.Should().BeEquivalentTo(expectedResult);
