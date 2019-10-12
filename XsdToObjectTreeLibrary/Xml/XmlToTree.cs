@@ -14,9 +14,10 @@ namespace XsdToObjectTreeLibrary.Xml
             var rootNode = new Node();
             XmlDocument document = new XmlDocument();
             document.Load(new StringReader(xml));
-            RecurseXmlDocument((XmlNode)document.DocumentElement, ref rootNode, null);
+            RecurseXmlDocument(document.DocumentElement, ref rootNode, null);
             return rootNode;
         }
+
         private static XmlNode RecurseXmlDocument(XmlNode nodeofxml, ref Node node, XmlNode previousnode)
         {
             node.Name = nodeofxml.Name;
@@ -24,40 +25,33 @@ namespace XsdToObjectTreeLibrary.Xml
             //node.NodeDataType = root.GetType().Name.ToString();
             node.NodeType = NodeTypeEnum.Element;
 
-
             var children = new List<Node>();
-            int CountSimilarChildren = 0, countskip = 0;
+            int countSimilarChildren = 0, countskip = 0;
 
             foreach (XmlNode similarchildren in nodeofxml.ParentNode.ChildNodes)
             {
                 if (similarchildren.Name == nodeofxml.Name)
                 {
-                    CountSimilarChildren++;
+                    countSimilarChildren++;
                 }
             }
 
+            var arrayXPath = (countSimilarChildren > 1) ? "[*]" : string.Empty;
+            node.NodePath = $"{node.NodePath}/{nodeofxml.Name}{arrayXPath}";                    
 
-            if (CountSimilarChildren > 1)
-                node.NodePath = node.NodePath + "/" + nodeofxml.Name + "[*]";
-            else
-                node.NodePath = node.NodePath + "/" + nodeofxml.Name;           
-
-            if (nodeofxml.Attributes.Count > 0)
+            for (int index = 0; index < nodeofxml.Attributes.Count; index++)
             {
-                for (int attr = 0; attr < nodeofxml.Attributes.Count; attr++)
+                if (countskip == 0)
                 {
-                    if (countskip == 0)
+                    var childNode = new Node
                     {
-                        var childNode = new Node
-                        {
-                            Name = nodeofxml.Attributes[attr].Name,
-                            DisplayName = nodeofxml.Attributes[attr].Name,
-                            //NodeDataType = root.GetType().Name.ToString(),
-                            NodeType = NodeTypeEnum.Attribute,
-                            NodePath = node.NodePath + "/@" + nodeofxml.Attributes[attr].Name
-                        };
-                        children.Add(childNode);
-                    }
+                        Name = nodeofxml.Attributes[index].Name,
+                        DisplayName = nodeofxml.Attributes[index].Name,
+                        //NodeDataType = root.GetType().Name.ToString(),
+                        NodeType = NodeTypeEnum.Attribute,
+                        NodePath = node.NodePath + "/@" + nodeofxml.Attributes[index].Name
+                    };
+                    children.Add(childNode);
                 }
             }
 
@@ -68,18 +62,7 @@ namespace XsdToObjectTreeLibrary.Xml
                 {
                     if (child.Name != "#text")
                     {
-                        if (previousnode != null)
-                        {
-                            if (previousnode.Name == child.Name)
-                                countskip = 1;
-                            else
-                                countskip = 0;
-                        }
-                        else
-                        {
-                            countskip = 0;
-                        }
-
+                        countskip = (previousnode != null && previousnode.Name == child.Name) ? 1 : 0;
                         if (countskip == 0)
                         {
                             var childNode = new Node
@@ -90,12 +73,14 @@ namespace XsdToObjectTreeLibrary.Xml
                                 NodeType = NodeTypeEnum.Element,
                                 NodePath = node.NodePath
                             };
+
                             previousnode = RecurseXmlDocument(child, ref childNode, previousnode);
                             children.Add(childNode);
                         }
                     }
                 }
             }
+
             node.Children = children;
             return nodeofxml;
         }
