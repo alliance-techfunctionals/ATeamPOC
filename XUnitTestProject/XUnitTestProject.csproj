@@ -75,6 +75,9 @@
     <None Update="TestData\Input\xml\mt300.example.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="TestData\Input\xml\trade-irs.example.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestData\Input\xsd\company.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -119,6 +122,9 @@
     </None>
     <None Update="TestData\Output\xml\mt300.example..json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Output\xml\trade-irs.example.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestData\Output\xsd\demo1.example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
