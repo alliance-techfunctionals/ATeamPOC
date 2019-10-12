@@ -14,63 +14,72 @@ namespace XsdToObjectTreeLibrary.Xml
             var rootNode = new Node();
             XmlDocument document = new XmlDocument();
             document.Load(new StringReader(xml));
-            RecurseXmlDocument((XmlNode)document.DocumentElement, ref rootNode, 0);
+            RecurseXmlDocument((XmlNode)document.DocumentElement, ref rootNode, null);
             return rootNode;
         }
-
-        private static int RecurseXmlDocument(XmlNode root, ref Node node, int countskip)
+        private static XmlNode RecurseXmlDocument(XmlNode nodeofxml, ref Node node, XmlNode previousnode)
         {
-            var children = new List<Node>();
-            int CountSimilarChild = 0;
-            foreach (XmlNode getsimilarchild in root.ParentNode.ChildNodes)
-            {
-                if (getsimilarchild.Name == root.Name)
-                {
-                    CountSimilarChild++;
-                }
-            }
-
-            node.Name = root.Name;
-            node.DisplayName = root.Name;
+            node.Name = nodeofxml.Name;
+            node.DisplayName = nodeofxml.Name;
             //node.NodeDataType = root.GetType().Name.ToString();
             node.NodeType = NodeTypeEnum.Element;
 
-            if (CountSimilarChild > 1)
+
+            var children = new List<Node>();
+            int CountSimilarChildren = 0, countskip = 0;
+
+            foreach (XmlNode similarchildren in nodeofxml.ParentNode.ChildNodes)
             {
-                node.NodePath = node.NodePath + "/" + root.Name + "[*]";
-            }
-            else
-            {
-                node.NodePath = node.NodePath + "/" + root.Name;
-                countskip = 0;
+                if (similarchildren.Name == nodeofxml.Name)
+                {
+                    CountSimilarChildren++;
+                }
             }
 
-            if (root.Attributes.Count > 0)
+
+            if (CountSimilarChildren > 1)
+                node.NodePath = node.NodePath + "/" + nodeofxml.Name + "[*]";
+            else
+                node.NodePath = node.NodePath + "/" + nodeofxml.Name;           
+
+            if (nodeofxml.Attributes.Count > 0)
             {
-                for (int attr = 0; attr < root.Attributes.Count; attr++)
+                for (int attr = 0; attr < nodeofxml.Attributes.Count; attr++)
                 {
                     if (countskip == 0)
                     {
                         var childNode = new Node
                         {
-                            Name = root.Attributes[attr].Name,
-                            DisplayName = root.Attributes[attr].Name,
+                            Name = nodeofxml.Attributes[attr].Name,
+                            DisplayName = nodeofxml.Attributes[attr].Name,
                             //NodeDataType = root.GetType().Name.ToString(),
                             NodeType = NodeTypeEnum.Attribute,
-                            NodePath = node.NodePath + "/@" + root.Attributes[attr].Name
+                            NodePath = node.NodePath + "/@" + nodeofxml.Attributes[attr].Name
                         };
                         children.Add(childNode);
                     }
                 }
             }
 
-            if (root is XmlElement)
+            if (nodeofxml is XmlElement)
             {
-                XmlNodeList getchildren = root.ChildNodes;
-                foreach (XmlNode child in getchildren)
+                XmlNodeList listofchildren = nodeofxml.ChildNodes;
+                foreach (XmlNode child in listofchildren)
                 {
                     if (child.Name != "#text")
                     {
+                        if (previousnode != null)
+                        {
+                            if (previousnode.Name == child.Name)
+                                countskip = 1;
+                            else
+                                countskip = 0;
+                        }
+                        else
+                        {
+                            countskip = 0;
+                        }
+
                         if (countskip == 0)
                         {
                             var childNode = new Node
@@ -81,18 +90,14 @@ namespace XsdToObjectTreeLibrary.Xml
                                 NodeType = NodeTypeEnum.Element,
                                 NodePath = node.NodePath
                             };
-                            countskip = RecurseXmlDocument(child, ref childNode, countskip);
+                            previousnode = RecurseXmlDocument(child, ref childNode, previousnode);
                             children.Add(childNode);
                         }
                     }
                 }
             }
-
-            if (CountSimilarChild > 1)
-                countskip++;
-
             node.Children = children;
-            return countskip;
+            return nodeofxml;
         }
     }
 }

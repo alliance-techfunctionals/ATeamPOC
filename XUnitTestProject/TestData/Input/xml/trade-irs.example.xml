@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<trade>
+  <tradeHeader>
+    <TradeDate>12-Oct-2019</TradeDate>
+    <MaturityDate>12-Oct-2025</MaturityDate>
+    <SettlementDate>12-Nov-2019</SettlementDate>
+    <Portfolio>MasterPortf</Portfolio>
+    <Counterpart>ABC Bank NewYork</Counterpart>
+  </tradeHeader>
+  <tradeType id="IRSVanillas">
+    <tradeBody>
+      <SecurityID>12</SecurityID>
+      <SecurityDescription>Pay 3.25% fixed Receive USD LIBOR 3M</SecurityDescription>
+      <legs>
+        <leg id="fixed">
+          <fixedRate>3.25%</fixedRate>
+          <floatRateIndex></floatRateIndex>
+          <fixingDate></fixingDate>
+          <notional>1000000</notional>
+          <notionalCcy>USD</notionalCcy>
+          <dayCountDescription>ACT/360</dayCountDescription>
+          <SettlementDate></SettlementDate>
+        </leg>
+        <leg id="float">
+          <fixedRate></fixedRate>
+          <floatRateIndex>USD LIBOR 3M</floatRateIndex>
+          <fixingDate>21-Nov-2019</fixingDate>
+          <notional>1000000</notional>
+          <notionalCcy>USD</notionalCcy>
+          <dayCountDescription>ACT/365</dayCountDescription>
+          <SettlementDate>23-Nov-2019</SettlementDate>
+        </leg>
+      </legs>
+    </tradeBody>
+  </tradeType>
+  <tradeType id="IRSBasisSwap">
+    <tradeBody>
+      <SecurityID>12</SecurityID>
+      <SecurityDescription>Pay 3.25% fixed Receive USD LIBOR 3M</SecurityDescription>
+      <legs>
+        <leg id="float">
+          <fixedRate></fixedRate>
+          <floatRateIndex>USD LIBOR 6M</floatRateIndex>
+          <fixingDate>12-Nov-2019</fixingDate>
+          <notional>1000000</notional>
+          <notionalCcy>USD</notionalCcy>
+          <dayCountDescription>ACT/360</dayCountDescription>
+          <SettlementDate>21-Nov-2019</SettlementDate>
+        </leg>
+        <leg id="float">
+          <fixedRate></fixedRate>
+          <floatRateIndex>USD LIBOR 3M</floatRateIndex>
+          <fixingDate>21-Nov-2019</fixingDate>
+          <notional>1000000</notional>
+          <notionalCcy>USD</notionalCcy>
+          <dayCountDescription>ACT/365</dayCountDescription>
+          <SettlementDate>23-Nov-2019</SettlementDate>
+        </leg>
+      </legs>
+    </tradeBody>
+  </tradeType>
+</trade>

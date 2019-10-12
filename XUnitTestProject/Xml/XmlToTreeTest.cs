@@ -35,6 +35,16 @@ namespace XUnitTestProject.Xml
             result.Should().BeEquivalentTo(expectedResult);
         }
 
+        [Fact]
+        public void XmlToTree_TradeExample()
+        {
+            var xml = GetXml("trade-irs.example.xml");
+            var expectedResult = GetExpectedResult("trade-irs.example.json");
+            var target = new XmlToTree();
+            var result = target.GetTree(xml);
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
         private Node GetExpectedResult(string path)
         {
             var outputPath = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), string.Format("{0}{1}", _outputRoot, path));

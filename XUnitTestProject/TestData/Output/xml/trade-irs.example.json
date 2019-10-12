@@ -1,0 +1,160 @@
+{
+  "Name": "trade",
+  "DisplayName": "trade",
+  "NodePath": "/trade",
+  "NodeType": "Element",
+  "Children": [
+    {
+      "Name": "tradeHeader",
+      "DisplayName": "tradeHeader",
+      "NodePath": "/trade/tradeHeader",
+      "NodeType": "Element",
+      "Children": [
+        {
+          "Name": "TradeDate",
+          "DisplayName": "TradeDate",
+          "NodePath": "/trade/tradeHeader/TradeDate",
+          "NodeType": "Element",
+          "Children": []
+        },
+        {
+          "Name": "MaturityDate",
+          "DisplayName": "MaturityDate",
+          "NodePath": "/trade/tradeHeader/MaturityDate",
+          "NodeType": "Element",
+          "Children": []
+        },
+        {
+          "Name": "SettlementDate",
+          "DisplayName": "SettlementDate",
+          "NodePath": "/trade/tradeHeader/SettlementDate",
+          "NodeType": "Element",
+          "Children": []
+        },
+        {
+          "Name": "Portfolio",
+          "DisplayName": "Portfolio",
+          "NodePath": "/trade/tradeHeader/Portfolio",
+          "NodeType": "Element",
+          "Children": []
+        },
+        {
+          "Name": "Counterpart",
+          "DisplayName": "Counterpart",
+          "NodePath": "/trade/tradeHeader/Counterpart",
+          "NodeType": "Element",
+          "Children": []
+        }
+      ]
+    },
+    {
+      "Name": "tradeType",
+      "DisplayName": "tradeType",
+      "NodePath": "/trade/tradeType[*]",
+      "NodeType": "Element",
+      "Children": [
+        {
+          "Name": "id",
+          "DisplayName": "id",
+          "NodePath": "/trade/tradeType[*]/@id",
+          "NodeType": "Attribute",
+          "Children": []
+        },
+        {
+          "Name": "tradeBody",
+          "DisplayName": "tradeBody",
+          "NodePath": "/trade/tradeType[*]/tradeBody",
+          "NodeType": "Element",
+          "Children": [
+            {
+              "Name": "SecurityID",
+              "DisplayName": "SecurityID",
+              "NodePath": "/trade/tradeType[*]/tradeBody/SecurityID",
+              "NodeType": "Element",
+              "Children": []
+            },
+            {
+              "Name": "SecurityDescription",
+              "DisplayName": "SecurityDescription",
+              "NodePath": "/trade/tradeType[*]/tradeBody/SecurityDescription",
+              "NodeType": "Element",
+              "Children": []
+            },
+            {
+              "Name": "legs",
+              "DisplayName": "legs",
+              "NodePath": "/trade/tradeType[*]/tradeBody/legs",
+              "NodeType": "Element",
+              "Children": [
+                {
+                  "Name": "leg",
+                  "DisplayName": "leg",
+                  "NodePath": "/trade/tradeType[*]/tradeBody/legs/leg[*]",
+                  "NodeType": "Element",
+                  "Children": [
+                    {
+                      "Name": "id",
+                      "DisplayName": "id",
+                      "NodePath": "/trade/tradeType[*]/tradeBody/legs/leg[*]/@id",
+                      "NodeType": "Attribute",
+                      "Children": []
+                    },
+                    {
+                      "Name": "fixedRate",
+                      "DisplayName": "fixedRate",
+                      "NodePath": "/trade/tradeType[*]/tradeBody/legs/leg[*]/fixedRate",
+                      "NodeType": "Element",
+                      "Children": []
+                    },
+                    {
+                      "Name": "floatRateIndex",
+                      "DisplayName": "floatRateIndex",
+                      "NodePath": "/trade/tradeType[*]/tradeBody/legs/leg[*]/floatRateIndex",
+                      "NodeType": "Element",
+                      "Children": []
+                    },
+                    {
+                      "Name": "fixingDate",
+                      "DisplayName": "fixingDate",
+                      "NodePath": "/trade/tradeType[*]/tradeBody/legs/leg[*]/fixingDate",
+                      "NodeType": "Element",
+                      "Children": []
+                    },
+                    {
+                      "Name": "notional",
+                      "DisplayName": "notional",
+                      "NodePath": "/trade/tradeType[*]/tradeBody/legs/leg[*]/notional",
+                      "NodeType": "Element",
+                      "Children": []
+                    },
+                    {
+                      "Name": "notionalCcy",
+                      "DisplayName": "notionalCcy",
+                      "NodePath": "/trade/tradeType[*]/tradeBody/legs/leg[*]/notionalCcy",
+                      "NodeType": "Element",
+                      "Children": []
+                    },
+                    {
+                      "Name": "dayCountDescription",
+                      "DisplayName": "dayCountDescription",
+                      "NodePath": "/trade/tradeType[*]/tradeBody/legs/leg[*]/dayCountDescription",
+                      "NodeType": "Element",
+                      "Children": []
+                    },
+                    {
+                      "Name": "SettlementDate",
+                      "DisplayName": "SettlementDate",
+                      "NodePath": "/trade/tradeType[*]/tradeBody/legs/leg[*]/SettlementDate",
+                      "NodeType": "Element",
+                      "Children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
