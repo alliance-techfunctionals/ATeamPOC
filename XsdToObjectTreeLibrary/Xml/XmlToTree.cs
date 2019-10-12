@@ -17,6 +17,7 @@ namespace XsdToObjectTreeLibrary.Xml
             RecurseXmlDocument((XmlNode)document.DocumentElement, ref rootNode, 0);
             return rootNode;
         }
+
         private static int RecurseXmlDocument(XmlNode root, ref Node node, int countskip)
         {
             var children = new List<Node>();
@@ -28,10 +29,12 @@ namespace XsdToObjectTreeLibrary.Xml
                     CountSimilarChild++;
                 }
             }
+
             node.Name = root.Name;
             node.DisplayName = root.Name;
             //node.NodeDataType = root.GetType().Name.ToString();
             node.NodeType = NodeTypeEnum.Element;
+
             if (CountSimilarChild > 1)
             {
                 node.NodePath = node.NodePath + "/" + root.Name + "[*]";
@@ -41,6 +44,7 @@ namespace XsdToObjectTreeLibrary.Xml
                 node.NodePath = node.NodePath + "/" + root.Name;
                 countskip = 0;
             }
+
             if (root.Attributes.Count > 0)
             {
                 for (int attr = 0; attr < root.Attributes.Count; attr++)
@@ -59,6 +63,7 @@ namespace XsdToObjectTreeLibrary.Xml
                     }
                 }
             }
+
             if (root is XmlElement)
             {
                 XmlNodeList getchildren = root.ChildNodes;
@@ -82,8 +87,10 @@ namespace XsdToObjectTreeLibrary.Xml
                     }
                 }
             }
+
             if (CountSimilarChild > 1)
                 countskip++;
+
             node.Children = children;
             return countskip;
         }
