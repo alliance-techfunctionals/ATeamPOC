@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
-using XsdToObjectTreeLibrary.Model;
+using XsdToObjectTreeLibrary.Tree.Model;
 
-namespace XsdToObjectTreeLibrary.Xml
+namespace XsdToObjectTreeLibrary.Tree.Xml
 {
     public class XmlToTree : IXmlToTree
     {
@@ -36,8 +36,8 @@ namespace XsdToObjectTreeLibrary.Xml
                 }
             }
 
-            var arrayXPath = (countSimilarChildren > 1) ? "[*]" : string.Empty;
-            node.NodePath = $"{node.NodePath}/{nodeofxml.Name}{arrayXPath}";                    
+            var arrayXPath = countSimilarChildren > 1 ? "[*]" : string.Empty;
+            node.NodePath = $"{node.NodePath}/{nodeofxml.Name}{arrayXPath}";
 
             for (int index = 0; index < nodeofxml.Attributes.Count; index++)
             {
@@ -62,7 +62,7 @@ namespace XsdToObjectTreeLibrary.Xml
                 {
                     if (child.Name != "#text")
                     {
-                        countskip = (previousnode != null && previousnode.Name == child.Name) ? 1 : 0;
+                        countskip = previousnode != null && previousnode.Name == child.Name ? 1 : 0;
                         if (countskip == 0)
                         {
                             var childNode = new Node

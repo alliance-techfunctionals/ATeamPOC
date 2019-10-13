@@ -4,16 +4,16 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using XsdToObjectTree.UnitTest.Helper;
-using XsdToObjectTreeLibrary.Model;
-using XsdToObjectTreeLibrary.Xml;
+using XsdToObjectTreeLibrary.Tree.Model;
+using XsdToObjectTreeLibrary.Tree.Xml;
 using Xunit;
 
-namespace XUnitTestProject.Xml
+namespace XUnitTestProject.Tree.Xml
 {
     public class XmlToTreeTest
     {
-        private const string _inputRoot = "TestData\\Input\\xml\\";
-        private const string _outputRoot = "TestData\\Output\\xml\\";
+        private const string _inputRoot = "TestData\\Tree\\Input\\xml\\";
+        private const string _outputRoot = "TestData\\Tree\\Output\\xml\\";
 
         [Fact]
         public void XmlToTree_BasicExample()
@@ -49,7 +49,7 @@ namespace XUnitTestProject.Xml
         {
             var outputPath = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), string.Format("{0}{1}", _outputRoot, path));
             string json = File.ReadAllText(outputPath);
-            return JsonSerialization.ParseJson<Node>(json);
+            return json.ParseJson<Node>();
         }
 
         private string GetXml(string path)

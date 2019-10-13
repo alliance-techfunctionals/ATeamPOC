@@ -69,72 +69,91 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
-    <None Update="TestData\Input\xml\basic.example.xml">
+    <None Update="TestData\Merge\Input\simple.input.part1.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Input\xml\mt300.example.xml">
+    <None Update="TestData\Merge\Input\simple.input.part2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Input\xml\trade-irs.example.xml">
+    <None Update="TestData\Merge\Input\simple.input.part3.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Input\xsd\company.xsd">
+    <None Update="TestData\Merge\Input\simple.input.part4.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Input\xsd\demo1.xsd">
+    <None Update="TestData\Merge\Output\expected.simple.output.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Input\xsd\demo2.xsd">
+    <None Update="TestData\Tree\Input\xml\basic.example.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Input\xsd\demo3.xsd">
+    <None Update="TestData\Tree\Input\xml\mt300.example.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Input\xsd\demo4.xsd">
+    <None Update="TestData\Tree\Input\xml\trade-irs.example.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Input\xsd\demo_schema.xsd">
+    <None Update="TestData\Tree\Input\xsd\company.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Input\xsd\fixml-allocation-base-4-4.xsd">
+    <None Update="TestData\Tree\Input\xsd\demo1.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Input\xsd\fixml-components-impl-4-4.xsd">
+    <None Update="TestData\Tree\Input\xsd\demo2.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Input\xsd\fixml-main-4-4.xsd">
+    <None Update="TestData\Tree\Input\xsd\demo3.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Input\xsd\fixml-posttrade-4-4.xsd">
+    <None Update="TestData\Tree\Input\xsd\demo4.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Input\xsd\fixml-pretrade-4-4.xsd">
+    <None Update="TestData\Tree\Input\xsd\demo_schema.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Input\xsd\fixml-trade-4-4.xsd">
+    <None Update="TestData\Tree\Input\xsd\fixml-allocation-base-4-4.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Input\xsd\trade.xsd">
+    <None Update="TestData\Tree\Input\xsd\fixml-components-impl-4-4.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Output\xml\basic.example.json">
+    <None Update="TestData\Tree\Input\xsd\fixml-main-4-4.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Output\xml\mt300.example..json">
+    <None Update="TestData\Tree\Input\xsd\fixml-posttrade-4-4.xsd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Tree\Input\xsd\fixml-pretrade-4-4.xsd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Tree\Input\xsd\fixml-trade-4-4.xsd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Tree\Input\xsd\trade.xsd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Tree\Output\xml\basic.example.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Tree\Output\xml\mt300.example..json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Output\xml\trade-irs.example.json">
+    <None Update="TestData\Tree\Output\xml\trade-irs.example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Output\xsd\demo1.example.json">
+    <None Update="TestData\Tree\Output\xsd\demo1.example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Output\xsd\demo2.example.json">
+    <None Update="TestData\Tree\Output\xsd\demo2.example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Output\xsd\demo3.example.json">
+    <None Update="TestData\Tree\Output\xsd\demo3.example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TestData\Merge\Input\" />
   </ItemGroup>
 
 </Project>

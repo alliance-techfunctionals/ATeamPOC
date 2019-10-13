@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XsdToObjectTreeLibrary.Model
+namespace XsdToObjectTreeLibrary.Tree.Model
 {
     public enum NodeTypeEnum
     {

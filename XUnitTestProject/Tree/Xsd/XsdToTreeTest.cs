@@ -5,16 +5,16 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
 using XsdToObjectTree.UnitTest.Helper;
-using XsdToObjectTreeLibrary.Xsd;
-using XsdToObjectTreeLibrary.Model;
 using Xunit;
+using XsdToObjectTreeLibrary.Tree.Model;
+using XsdToObjectTreeLibrary.Tree.Xsd;
 
-namespace XUnitTestProject.Xsd
+namespace XUnitTestProject.Tree.Xsd
 {
     public class XsdToTreeTest
     {
-        private const string _inputRoot = "TestData\\Input\\xsd\\";
-        private const string _outputRoot = "TestData\\Output\\xsd\\";
+        private const string _inputRoot = "TestData\\Tree\\Input\\xsd\\";
+        private const string _outputRoot = "TestData\\Tree\\Output\\xsd\\";
 
         [Fact]
         public void XsdToTree_Demo3()
@@ -50,7 +50,7 @@ namespace XUnitTestProject.Xsd
         {
             var outputPath = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), string.Format("{0}{1}", _outputRoot, path));
             string json = File.ReadAllText(outputPath);
-            return JsonSerialization.ParseJson<Node>(json);
+            return json.ParseJson<Node>();
         }
 
         private XmlSchemaSet GetXmlSchema(string path)
