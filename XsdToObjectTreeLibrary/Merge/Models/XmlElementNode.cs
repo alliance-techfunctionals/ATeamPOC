@@ -9,6 +9,8 @@ namespace XsdToObjectTreeLibrary.Merge.Models
         public string Name { get; set; }
         public long Count { get; set; }
         public int Depth { get; set; }
+        public string Value { get; set; }
+        public string NodeType { get; set; }
         public XmlElementNode Parent { get; set; }
         public List<XmlElementNode> Children { get; set; } = new List<XmlElementNode>();
     }
