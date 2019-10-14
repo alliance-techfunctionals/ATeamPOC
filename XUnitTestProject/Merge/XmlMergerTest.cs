@@ -19,11 +19,11 @@ namespace XUnitTestProject.Merge
         {
             var inputPaths = GetAbsolutePaths(_inputRoot, new List<string> { "simple.input.part1.xml", "simple.input.part2.xml", "simple.input.part3.xml", "simple.input.part4.xml" });
             var targetPath = GetAbsolutePaths(_inputRoot, new List<string> { "actual.simple.output.xml" }).Single();
-            var expectedResult = GetExpectedResult("expected.simple.output.xml");
 
             var target = new XmlMerger();
             target.Merge(inputPaths, targetPath);
 
+            var expectedResult = GetExpectedResult("expected.simple.output.xml");
             var actualResult = GetXmlBody(targetPath);
             actualResult.Should().BeEquivalentTo(expectedResult); //string equals should be suffient for now but may want to improve later
         }
