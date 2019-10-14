@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using XsdToObjectTree.UnitTest.Helper;
+using XsdToObjectTreeLibrary;
 using XsdToObjectTreeLibrary.Merge;
 using Xunit;
 
@@ -20,12 +21,12 @@ namespace XUnitTestProject.Merge
             var inputPaths = GetAbsolutePaths(_inputRoot, new List<string> { "simple.input.part1.xml", "simple.input.part2.xml", "simple.input.part3.xml", "simple.input.part4.xml" });
             var targetPath = GetAbsolutePaths(_inputRoot, new List<string> { "actual.simple.output.xml" }).Single();
 
-            var target = new XmlMerger();
+            var target = new XmlMerger(new XmlElementInfo());
             target.Merge(inputPaths, targetPath);
 
             var expectedResult = GetExpectedResult("expected.simple.output.xml");
             var actualResult = GetXmlBody(targetPath);
-            actualResult.Should().BeEquivalentTo(expectedResult); //string equals should be suffient for now but may want to improve later
+            actualResult.Should().BeEquivalentTo(expectedResult); //string equals fails. Can you try fixing? Perhaps load both into XmlDocument or XDocument and comparing properties of both
         }
 
         private string GetExpectedResult(string path)
