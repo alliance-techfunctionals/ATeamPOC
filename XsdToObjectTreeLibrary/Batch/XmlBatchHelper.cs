@@ -4,62 +4,59 @@ using System.Text;
 
 namespace XsdToObjectTreeLibrary.Batch
 {
-    public static class XmlBatchHelper
+    public class XmlBatchHelper
     {
-        internal static int GetBatchMaxElementCount(long fileSizeInBytes, int elementCount)
+        public static int GetBatchMaxElementCount(long fileSizeInBytes, int elementCount)
         {
-            if (fileSizeInBytes <= 500 * 1024)
+            var number = Getdividenumber(fileSizeInBytes);
+            return elementCount / number;
+        }      
+
+        private static int Getdividenumber(long fileSizeInByte)
+        {
+            long y0=0, y1=0;
+            long x0=0, x1=0;
+            Dictionary<long, long> dataPoints = new Dictionary<long, long>();
+            dataPointsAdd(ref dataPoints);           
+            foreach(var findmaxkey in dataPoints)
             {
-                return elementCount;
+                if (findmaxkey.Key > fileSizeInByte)
+                {
+                    x1 = findmaxkey.Key;
+                    y1 = findmaxkey.Value;
+                    break;
+                }
+                else if (findmaxkey.Key == fileSizeInByte)
+                {
+                    return (int)findmaxkey.Value;
+                }
+                else
+                {
+                    x0 = findmaxkey.Key;
+                    y0 = findmaxkey.Value;
+                }
             }
-            else if (fileSizeInBytes <= 1024 * 1024)
+            if(x0 == 820000 && x1==0)
             {
-                return elementCount / 2;
+                return 240;
             }
-            else if (fileSizeInBytes <= 4096 * 1024)
-            {
-                return elementCount / 4;
-            }
-            else if (fileSizeInBytes <= 16384 * 1024)
-            {
-                return elementCount / 8;
-            }
-            else if (fileSizeInBytes <= 32768 * 1024)
-            {
-                return elementCount / 12;
-            }
-            else if (fileSizeInBytes <= 65536 * 1024)
-            {
-                return elementCount / 20;
-            }
-            else if (fileSizeInBytes <= 98304 * 1024)
-            {
-                return elementCount / 28;
-            }
-            else if (fileSizeInBytes <= 196608 * 1024)
-            {
-                return elementCount / 56;
-            }
-            else if (fileSizeInBytes <= 294912 * 1024)
-            {
-                return elementCount / 84;
-            }
-            else if (fileSizeInBytes <= 393216 * 1024)
-            {
-                return elementCount / 112;
-            }
-            else if (fileSizeInBytes <= 589824 * 1024)
-            {
-                return elementCount / 168;
-            }
-            else if (fileSizeInBytes <= 820000 * 1024)
-            {
-                return elementCount / 200;
-            }
-            else
-            {
-                return elementCount / 240;
-            }
+            decimal y =(y0 * (fileSizeInByte - x1) / (decimal)(x0 - x1) + y1 * (fileSizeInByte - x0) / (decimal)(x1 - x0));
+            return (int)Math.Round(y,0,MidpointRounding.AwayFromZero);          
+        }
+        private static void dataPointsAdd(ref Dictionary<long, long> dataPoints)
+        {
+            dataPoints.Add(500, 1);
+            dataPoints.Add(1024, 2);
+            dataPoints.Add(4096, 4);
+            dataPoints.Add(16384, 8);
+            dataPoints.Add(32768, 12);
+            dataPoints.Add(65536, 20);
+            dataPoints.Add(98304, 28);
+            dataPoints.Add(196608, 56);
+            dataPoints.Add(294912, 84);
+            dataPoints.Add(393216, 112);
+            dataPoints.Add(589824, 168);
+            dataPoints.Add(820000, 200);
         }
     }
 }
