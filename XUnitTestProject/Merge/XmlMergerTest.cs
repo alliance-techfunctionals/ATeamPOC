@@ -21,15 +21,13 @@ namespace XUnitTestProject.Merge
             var inputPaths = GetAbsolutePaths(_inputRoot, new List<string> { "simple.input.part1.xml", "simple.input.part2.xml", "simple.input.part3.xml", "simple.input.part4.xml" });
             var targetPath = GetAbsolutePaths(_outputRoot, new List<string> { "actual.simple.output.xml" }).Single();
 
-            var target = new XmlMerger();
+            var target = new XmlMerger(new XmlElementInfo());
             target.Merge(inputPaths, targetPath);
             var strLibOuput = GetXmlBody(targetPath);
 
 
             var expectedResult = GetExpectedResult("expected.simple.output.xml");
             strLibOuput.Should().BeEquivalentTo(expectedResult); 
-            // it should be working now. test case is running and I have checked that. Please still verify
-            // just changed the variable name so that we know that we checking the library output with expected results
         }
 
         private string GetExpectedResult(string path)
