@@ -1,122 +1,100 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Text;
 using System.Xml;
-using System.IO;
-using XsdToObjectTreeLibrary;
-using XsdToObjectTreeLibrary.Merge.Models;
 using System.Xml.Linq;
+using XsdToObjectTreeLibrary.Merge.Models;
+using System.Linq;
 
 namespace XsdToObjectTreeLibrary.Merge
 {
     public class XmlMerger : IXmlMerger
     {
-        private IXmlElementInfo _elementInfo;
-
-        public XmlMerger(IXmlElementInfo elementInfo)
-        {
-            _elementInfo = elementInfo;
-        }
-
         public void Merge(IEnumerable<string> sourcePaths, string targetPath)
         {
-            IEnumerable<XElement> repeatingElements = new List<XElement>();
-            var firstPath = sourcePaths.First();
-
-            var parentNode = _elementInfo.GetRepeatingElementParent(firstPath);
-            if (parentNode != null)
-            {
-                var parentElements = ReadAncestorsAndSelf(firstPath, parentNode);
-
-                foreach (var path in sourcePaths)
-                {
-                    repeatingElements = repeatingElements.Concat(ReadRepeatingElements(path, parentNode));
-                }
-
-                WriteElementsToFile(targetPath, parentElements, repeatingElements);
-            }
+            XmlElementInfo oXmlInfo = new XmlElementInfo();
+            XmlElementNode root = oXmlInfo.GetElementTree(sourcePaths.First());
+            XmlElementNode node = oXmlInfo.GetRepeatingElementParent(sourcePaths.First());
+            string mergeElementName = node.Name;
+            IEnumerable<XAttribute> mergeAttribute = XmlFileMergeAttributeReader(sourcePaths.First(), mergeElementName);
+            IEnumerable<XElement> mergeElements = XmlFileMergeReader(sourcePaths, mergeElementName);
+            XStreamingElement mergeXml = new XStreamingElement(root.Name, new XStreamingElement(mergeElementName, mergeAttribute, mergeElements));
+            mergeXml.Save(targetPath);
         }
-
-        internal IEnumerable<XElement> ReadAncestorsAndSelf(string sourcePath, XmlElementNode selectedNode)
+        private static IEnumerable<XAttribute> XmlFileMergeAttributeReader(string inputFile, string mergeElementName)
         {
-            var settings = new XmlReaderSettings { Async = false };
-            using (var reader = XmlReader.Create(sourcePath, settings))
+            using (XmlReader reader = XmlReader.Create(inputFile))
             {
-                while (reader.Read() && reader.Depth <= selectedNode.Depth)
+                do
                 {
-                    switch (reader.NodeType)
+                    if (reader.NodeType == XmlNodeType.Element && reader.Name == mergeElementName)
                     {
-                        case XmlNodeType.Element:
-
-                            var elementName = reader.Name;
-                            var elementValue = reader.Value;
-
-                            var attributes = new List<XAttribute>();
+                        if (reader.HasAttributes)
+                        {
                             while (reader.MoveToNextAttribute())
                             {
-                                var attribute = new XAttribute(reader.Name, reader.Value);
-                                attributes.Add(attribute);
+                                yield return new XAttribute(reader.Name, reader.Value);
                             }
-
-                            yield return new XElement(elementName, attributes, elementValue);
-                            break;
-                    }
-                }
-            }
-        }
-
-        internal IEnumerable<XElement> ReadRepeatingElements(string sourcePath, XmlElementNode parentNode)
-        {
-            var settings = new XmlReaderSettings { Async = false };
-            using (var reader = XmlReader.Create(sourcePath, settings))
-            {
-                reader.ReadToDescendant(parentNode.Name);
-
-                while (reader.Read())
-                {
-                    if (reader.NodeType == XmlNodeType.Element && reader.Depth > parentNode.Depth)
-                    {
-                        using (var elementReader = reader.ReadSubtree())
-                        {
-                            yield return XElement.Load(elementReader);
                         }
-
-                        reader.Skip();
+                        break;
                     }
+                } while (reader.Read());
+
+                reader.Close();
+            }
+        }
+        private static IEnumerable<XElement> XmlFileMergeReader(IEnumerable<string> inputFiles, string mergeElementName)
+        {
+            foreach (string inputFile in inputFiles)
+            {
+                using (XmlReader reader = XmlReader.Create(inputFile))
+                {
+                    XmlReader subReader = XmlFileMergeElementsReader(reader, mergeElementName);
+                    if (subReader != null)
+                    {
+                        do
+                        {
+                            if (subReader.NodeType == XmlNodeType.Element && subReader.Name != mergeElementName)
+                            {
+                                XElement el = XElement.ReadFrom(subReader) as XElement;
+                                if (el != null)
+                                {
+                                    yield return el;
+                                }
+                            }
+                            else
+                            {
+                                subReader.Read();
+                            }
+                        } while (!subReader.EOF);
+                        subReader.Close();
+                    }
+                    reader.Close();
                 }
             }
         }
-
-        internal void WriteElementsToFile(string fullPath, IEnumerable<XElement> parentElements, IEnumerable<XElement> repeatingElements)
+        private static XmlReader XmlFileMergeElementsReader(XmlReader reader, string mergeElementName)
         {
-            var elements = parentElements.ToList();
-            var xws = new XmlWriterSettings { Indent = true };
-            using (XmlWriter xw = XmlWriter.Create(fullPath, xws))
+            XmlReader subReader = null;
+
+            if (reader == null || mergeElementName == "")
             {
-                foreach (var element in elements)
-                {
-                    xw.WriteStartElement(element.Name.LocalName);
-
-                    foreach (var attribute in element.Attributes())
-                    {
-                        xw.WriteAttributeString(attribute.Name.LocalName, attribute.Value);
-                    }
-                }
-
-                foreach (var childElement in repeatingElements)
-                {
-                    childElement.WriteTo(xw);
-                }
-
-                foreach (var element in elements)
-                {
-                    xw.WriteEndElement();
-                }
-
-                xw.Flush();
+                return subReader;
             }
+
+            do
+            {
+                if (reader.NodeType == XmlNodeType.Element && reader.Name == mergeElementName)
+                {
+                    subReader = reader.ReadSubtree();
+                    break;
+                }
+                else
+                {
+                    reader.Read();
+                }
+            } while (!reader.EOF);
+            return subReader;
         }
     }
 }
