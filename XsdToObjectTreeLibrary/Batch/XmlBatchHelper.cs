@@ -6,57 +6,54 @@ namespace XsdToObjectTreeLibrary.Batch
 {
     public class XmlBatchHelper
     {
+
+        static Dictionary<long, int> dataPoints = new Dictionary<long, int>
+        {
+            {500,1},
+            {1024,2},
+            {4096,4 },
+            {16384, 8},
+            {32768, 12},
+            {65536, 20},
+            {98304, 28},
+            {196608, 56},
+            {294912, 84},
+            {393216, 112},
+            {589824, 168},
+            {820000, 200}
+        };
+
+
         public static int GetBatchMaxElementCount(long fileSizeInBytes, int elementCount)
         {
-            var number = Getdividenumber(fileSizeInBytes);
+            var number = retrieveDivisor(fileSizeInBytes);
             return elementCount / number;
         }      
 
-        private static int Getdividenumber(long fileSizeInByte)
-        {
-            long y0=0, y1=0;
-            long x0=0, x1=0;
-            Dictionary<long, long> dataPoints = new Dictionary<long, long>();
-            dataPointsAdd(ref dataPoints);           
-            foreach(var findmaxkey in dataPoints)
+        private static int retrieveDivisor(long fileSizeInBytes)
+        { 
+            long y0 = 0, y1 = 0;
+            long x0 = 0, x1 = 0;
+            foreach (var adjacentpoint in dataPoints)
             {
-                if (findmaxkey.Key > fileSizeInByte)
+                if (adjacentpoint.Key > fileSizeInBytes)
                 {
-                    x1 = findmaxkey.Key;
-                    y1 = findmaxkey.Value;
+                    x1 = adjacentpoint.Key;
+                    y1 = adjacentpoint.Value;
                     break;
-                }
-                else if (findmaxkey.Key == fileSizeInByte)
-                {
-                    return (int)findmaxkey.Value;
                 }
                 else
                 {
-                    x0 = findmaxkey.Key;
-                    y0 = findmaxkey.Value;
+                    x0 = adjacentpoint.Key;
+                    y0 = adjacentpoint.Value;
                 }
             }
-            if(x0 == 820000 && x1==0)
+            if (x1 == 0)
             {
                 return 240;
             }
-            decimal y =(y0 * (fileSizeInByte - x1) / (decimal)(x0 - x1) + y1 * (fileSizeInByte - x0) / (decimal)(x1 - x0));
-            return (int)Math.Round(y,0,MidpointRounding.AwayFromZero);          
-        }
-        private static void dataPointsAdd(ref Dictionary<long, long> dataPoints)
-        {
-            dataPoints.Add(500, 1);
-            dataPoints.Add(1024, 2);
-            dataPoints.Add(4096, 4);
-            dataPoints.Add(16384, 8);
-            dataPoints.Add(32768, 12);
-            dataPoints.Add(65536, 20);
-            dataPoints.Add(98304, 28);
-            dataPoints.Add(196608, 56);
-            dataPoints.Add(294912, 84);
-            dataPoints.Add(393216, 112);
-            dataPoints.Add(589824, 168);
-            dataPoints.Add(820000, 200);
-        }
+            decimal y = (y0 * (fileSizeInBytes - x1) / (decimal)(x0 - x1) + y1 * (fileSizeInBytes - x0) / (decimal)(x1 - x0));
+            return (int)Math.Round(y, 0, MidpointRounding.AwayFromZero) == 0 ? 1 : (int)Math.Round(y, 0, MidpointRounding.AwayFromZero);
+        }      
     }
 }
