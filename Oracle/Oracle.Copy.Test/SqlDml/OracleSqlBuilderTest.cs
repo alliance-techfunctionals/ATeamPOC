@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Oracle.Copy.Model.DatabaseJobManifest;
 using Oracle.Copy.Model.UnitOfWork;
+using Oracle.Copy.SqlDml;
 using Oracle.Copy.Test.Helper;
 using System;
 using System.IO;

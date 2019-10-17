@@ -6,7 +6,7 @@ using System.Text;
 using Oracle.Copy.Model.DatabaseJobManifest;
 using Oracle.Copy.Model.UnitOfWork;
 
-namespace Oracle.Copy
+namespace Oracle.Copy.SqlDml
 {
     public class OracleSqlBuilder : ISqlBuilder
     {
@@ -87,7 +87,7 @@ namespace Oracle.Copy
         {
             var selectDmlBuilder = new StringBuilder();
             selectDmlBuilder.AppendLine(selectDml);
-            selectDmlBuilder.AppendLine($"where rownum between {((pageCount - 1) * pageSize) + 1 } and {pageCount * pageSize}");
+            selectDmlBuilder.AppendLine($"where rownum between {(pageCount - 1) * pageSize + 1 } and {pageCount * pageSize}");
             selectDmlBuilder.AppendLine($"order by {pkColumn}");
 
             return selectDmlBuilder.ToString();

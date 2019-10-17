@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Oracle.Copy
+namespace Oracle.Copy.SqlDml
 {
     public interface ISqlBuilder
     {
