@@ -8,7 +8,7 @@
 
         public DatabaseTypeEnum databaseType { get; set; }
 
-        public int jobInstanceId { get; set; }
+        public string jobInstanceId { get; set; }
 
 
         public string sourceConnectionString { get; set; }
