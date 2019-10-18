@@ -14,14 +14,26 @@ namespace Oracle.Copy.Test
 {
     public class SourceTableServiceTest
     {
-        private const string _inputRoot = "TestData\\";
-        private const string _outputRoot = "TestData\\";
+        private const string _inputRoot = "TestData\\Input\\";
+        private const string _outputRoot = "TestData\\Output\\";
 
         [Fact]
         public void Can_SetTableManifestData()
         {
             var input = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");
             var expectedResult = GetJsonFile<DatabaseJobManifest>(_outputRoot, "xepdb1.table.manifest.json"); //TODO create file
+
+            var target = new SourceTableService(new SqlBuilderSelector(new List<ISqlBuilder> { new OracleSqlBuilder() }));
+            target.SetTableManifestData(input);
+
+            input.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [Fact]
+        public void Can_SetTestData()
+        {
+            var input = GetJsonFile<DatabaseJobManifest>(_inputRoot, "test.json");
+            var expectedResult = GetJsonFile<DatabaseJobManifest>(_outputRoot, "testOutput.manifest.json"); //TODO create file
 
             var target = new SourceTableService(new SqlBuilderSelector(new List<ISqlBuilder> { new OracleSqlBuilder() }));
             target.SetTableManifestData(input);
