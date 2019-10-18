@@ -1,9 +1,0 @@
-{
-  "ClearTempDml": "TRUNCATE TABLE ex8_temp_Person",
-  "SelectDml": "SELECT , first_name , last_name\n from TEST_USER.Person  ",
-  "SetupTempDml": [
-    "declare v_sql LONG; begin v_sql:='truncate table ex8_temp_Person'; execute immediate v_sql; v_sql:='drop table ex8_temp_Person'; execute immediate v_sql; EXCEPTION WHEN OTHERS THEN IF SQLCODE = -942 THEN NULL; ELSE RAISE; END IF; END; ",
-    "create global temporary table ex8_temp_Person on commit preserve rows as select , first_name , last_name\n from TEST_USER.Person where rownum <= 0; "
-  ],
-  "UpdateFromTempDml": "UPDATE TEST_USER.Person \r\n SET TEST_USER.Person.first_name = tempupdate.first_name,TEST_USER.Person.last_name = tempupdate.last_name from TEST_USER.Person  inner join ex8_temp_Person tempupdate on (tempupdate. = TEST_USER.Person. ) "
-}

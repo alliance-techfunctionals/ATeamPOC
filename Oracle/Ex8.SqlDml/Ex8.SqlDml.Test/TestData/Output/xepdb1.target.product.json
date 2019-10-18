@@ -1,0 +1,9 @@
+{
+  "ClearTempDml": "TRUNCATE TABLE ex8_temp_Product",
+  "SelectDml": "SELECT PRODUCT_ID, name , description\n from TEST_USER.Product  ",
+  "SetupTempDml": [
+    "declare v_sql LONG; begin v_sql:='truncate table ex8_temp_Product'; execute immediate v_sql; v_sql:='drop table ex8_temp_Product'; execute immediate v_sql; EXCEPTION WHEN OTHERS THEN IF SQLCODE = -942 THEN NULL; ELSE RAISE; END IF; END; ",
+    "create global temporary table ex8_temp_Product on commit preserve rows as select PRODUCT_ID, name , description\n from TEST_USER.Product where rownum <= 0; "
+  ],
+  "UpdateFromTempDml": "UPDATE TEST_USER.Product \r\n SET TEST_USER.Product.name = tempupdate.name,TEST_USER.Product.description = tempupdate.description from TEST_USER.Product  inner join ex8_temp_Product tempupdate on (tempupdate.PRODUCT_ID = TEST_USER.Product.PRODUCT_ID ) "
+}
