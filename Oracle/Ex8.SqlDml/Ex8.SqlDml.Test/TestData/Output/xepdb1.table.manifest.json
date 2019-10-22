@@ -8,6 +8,7 @@
     "tables": [
       {
         "pk_column_name": "PERSON_ID",
+        "pk_data_type": "NUMBER",
         "qualified_table_name": "TEST_USER.Person",
         "record_count": 4,
         "schema_name": "TEST_USER",
@@ -31,6 +32,7 @@
       },
       {
         "pk_column_name": "PRODUCT_ID",
+        "pk_data_type": "NUMBER",
         "qualified_table_name": "TEST_USER.Product",
         "record_count": 7,
         "schema_name": "TEST_USER",

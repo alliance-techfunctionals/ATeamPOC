@@ -45,9 +45,6 @@
     <None Update="TestData\Output\adventureWorks.target.customer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\Output\testOutput.manifest.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="TestData\Output\xepdb1.source.person.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
