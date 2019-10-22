@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Dapper;
-using Ex8.EtlModel;
 using Ex8.EtlModel.DatabaseJobManifest;
 using Ex8.EtlModel.UnitOfWork;
 using Ex8.Helper.Serialization;
@@ -17,8 +16,9 @@ namespace Ex8.SqlDml.Builder.TextSql
         public SourceSql BuildSourceSql(Table table)
         {
             var selectPkDml =
-                 "SELECT coalesce(cc.column_name,'') as PkCol " +
+                 "SELECT coalesce(cc.column_name,'') as ColumnName, uc.data_type as DataType " +
                  "FROM ALL_CONS_COLUMNS cc JOIN ALL_CONSTRAINTS c ON ( cc.owner = c.owner AND cc.table_name = c.table_name AND c.constraint_name = cc.constraint_name ) " +
+                 "JOIN USER_TAB_COLUMNS uc ON cc.table_name = uc.table_name AND cc.column_name = uc.column_name " +
                 $"WHERE c.CONSTRAINT_TYPE = 'P' AND cc.table_name = '{table.table_name.ToUpper()}' AND cc.Owner = '{table.schema_name.ToUpper()}'";
 
             var selectRowCountDml = $"select count(*) from {table.schema_name}.{table.table_name}";

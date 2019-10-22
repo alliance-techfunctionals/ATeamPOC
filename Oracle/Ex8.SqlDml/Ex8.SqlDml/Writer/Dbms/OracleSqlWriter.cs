@@ -36,7 +36,7 @@ namespace Ex8.SqlDml.Writer.Dbms
             }
         }
 
-        public int BulkCopy(string connectionString, string destinationTableName, DataTable data)
+        public int BulkCopy(string connectionString, string destinationTableName, Table tableInfo, DataTable data)
         {
             int noOfRecord = 0;
             using (var connection = new OracleConnection(connectionString))

@@ -16,10 +16,14 @@ namespace Ex8.SqlDml.Builder.TextSql
 
         public SourceSql BuildSourceSql(Table table)
         {
-            var selectPkDml = "SELECT isnull(COLUMN_NAME,'') as PkCol " +
-                                 "FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE " +
+            var selectPkDml = "SELECT isnull(cu.COLUMN_NAME,'') as ColumnName, c.data_type as DataType " +
+                                 "FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE cu " +
+                                 "JOIN INFORMATION_SCHEMA.COLUMNS c " +
+                                 "  ON cu.table_schema = c.table_schema " +
+                                 "  AND cu.TABLE_NAME = c.table_name " +
+                                 "  AND cu.COLUMN_NAME = c.COLUMN_NAME " +
                                 "WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_SCHEMA + '.' + QUOTENAME(CONSTRAINT_NAME)), 'IsPrimaryKey') = 1 " +
-                                 $"AND TABLE_NAME = '{table.table_name}' AND TABLE_SCHEMA = '{table.schema_name}'";
+                                 $"AND cu.TABLE_NAME = '{table.table_name}' AND cu.TABLE_SCHEMA = '{table.schema_name}'";
 
             var selectRowCountDml = $"select count(*) from {table.schema_name}.{table.table_name} WITH (NOLOCK) ";
 

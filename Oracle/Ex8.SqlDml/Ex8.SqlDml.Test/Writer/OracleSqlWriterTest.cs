@@ -32,18 +32,17 @@ namespace Ex8.SqlDml.Test.Writer
         [Fact]
         public void Can_BulkCopy()
         {
-            var input = GetJsonFile<TargetSql>(_inputRoot, "xepdb1.target.person.json");
-            OracleSqlWriter target = new OracleSqlWriter();            
-            var dataTable = target.GetData(connectionString, input.SelectDml);
-            DataTable data = dataTable.Tables[0];           
-            var outputnoOfRecord = target.BulkCopy(connectionString, destinationTableName, data);
-            Assert.Equal(data.Rows.Count, outputnoOfRecord);
+            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");
 
+            OracleSqlWriter target = new OracleSqlWriter();            
+            var dataTable = target.GetData(connectionString, "SELECT PERSON_ID, first_name , last_name\n from TEST_USER.Person  ");
+            DataTable data = dataTable.Tables[0];
+            var outputnoOfRecord = target.BulkCopy(connectionString, destinationTableName, manifestObject.manifest.tables[0], data);
+
+            Assert.Equal(data.Rows.Count, outputnoOfRecord);
             var result = target.GetData(connectionString, "select * from EX8_TEMP_PERSON");
             Assert.NotEmpty(result.Tables);
         }
-
-
 
         private T GetJsonFile<T>(string root, string file)
         {

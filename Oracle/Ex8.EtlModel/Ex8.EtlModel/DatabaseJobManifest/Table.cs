@@ -10,6 +10,8 @@
 
         public string pk_column_name { get; set; }
 
+        public string pk_data_type { get; set; }
+
         public long record_count { get; set; }
 
         public string temp_name { get; set; }

@@ -1,7 +1,9 @@
 ﻿using Ex8.EtlModel.DatabaseJobManifest;
+using Ex8.EtlModel.UnitOfWork;
 using Ex8.SqlDml.Builder;
 using Ex8.SqlDml.Reader;
 using System;
+using System.Linq;
 
 namespace Ex8.SqlDml
 {
@@ -26,7 +28,13 @@ namespace Ex8.SqlDml
             {
                 var sourceSql = builder.BuildSourceSql(table);
                 table.record_count = reader.ExecuteScalar<long>(sourceConnectionString, sourceSql.SelectRowCountDml);
-                table.pk_column_name = reader.ExecuteScalar<string>(sourceConnectionString, sourceSql.SelectPkDml);
+                var pkInfo = reader.ExecuteQuery<PrimaryKey>(sourceConnectionString, sourceSql.SelectPkDml).SingleOrDefault();
+                if (pkInfo != null)
+                {
+                    table.pk_column_name = pkInfo.ColumnName;
+                    table.pk_data_type = pkInfo.DataType;
+                }
+                
             }
         }
     }

@@ -36,7 +36,7 @@ namespace Ex8.SqlDml.Writer.Dbms
             }
         }
 
-        public int BulkCopy(string connectionString, string destinationTableName, DataTable data)
+        public int BulkCopy(string connectionString, string destinationTableName, Table tableInfo, DataTable data)
         {
             using (var connection = new SqlConnection(connectionString))
             {

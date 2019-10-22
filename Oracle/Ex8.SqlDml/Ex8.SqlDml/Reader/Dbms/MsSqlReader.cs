@@ -18,5 +18,13 @@ namespace Ex8.SqlDml.Reader.Dbms
                 return targetConn.ExecuteScalar<T>(sql);
             }
         }
+
+        public IEnumerable<T> ExecuteQuery<T>(string connectionString, string sql)
+        {
+            using (var targetConn = new SqlConnection(connectionString))
+            {
+                return targetConn.Query<T>(sql);
+            }
+        }
     }
 }

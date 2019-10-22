@@ -10,6 +10,7 @@
         "schema_name": "TEST_USER",
         "table_name": "Person",
         "pk_column_name": "PERSON_ID",
+        "pk_data_type": "NUMBER",
         "record_count": 4,
         "columns": [
           {
@@ -42,6 +43,7 @@
         "schema_name": "TEST_USER",
         "table_name": "Product",
         "pk_column_name": "PRODUCT_ID",
+        "pk_data_type": "NUMBER",
         "record_count": 7,
         "columns": [
           {

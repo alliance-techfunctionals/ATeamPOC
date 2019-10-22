@@ -14,6 +14,7 @@
         "schema_name": "SalesLT",
         "table_name": "Address",
         "pk_column_name": "AddressID",
+        "pk_data_type": "int",
         "record_count": 450,
         "columns": [
           {
@@ -30,6 +31,7 @@
         "schema_name": "SalesLT",
         "table_name": "Customer",
         "pk_column_name": "CustomerID",
+        "pk_data_type": "int",
         "record_count": 847,
         "columns": [
           {
