@@ -36,7 +36,7 @@ namespace Ex8.SqlDml.Writer.Dbms
             }
         }
 
-        public void BulkCopy(string connectionString, string destinationTableName, DataTable data)
+        public int BulkCopy(string connectionString, string destinationTableName, DataTable data)
         {
             using (var connection = new SqlConnection(connectionString))
             {
@@ -49,6 +49,7 @@ namespace Ex8.SqlDml.Writer.Dbms
                     bulkCopy.Close();
                 }
             }
+            return 0;
         }
     }
 }

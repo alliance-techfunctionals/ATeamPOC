@@ -69,7 +69,7 @@ namespace Ex8.SqlDml.Builder.TextSql
             var builderTempTable = new SqlBuilder();
             var tempTableCreate = builderTempTable.AddTemplate(
                 $"create global temporary table {table.temp_name} on commit preserve rows as " +
-                $"select {table.pk_column_name}, /**select**/ from {table.schema_name}.{table.table_name} where rownum <= 0; ");
+                $"select {table.pk_column_name}, /**select**/ from {table.schema_name}.{table.table_name} where rownum <= 0 ");
 
             foreach (var col in table.columns)
             {
