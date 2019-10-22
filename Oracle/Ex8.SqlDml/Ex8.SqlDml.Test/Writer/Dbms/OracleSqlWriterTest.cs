@@ -2,6 +2,7 @@
 using Ex8.EtlModel.UnitOfWork;
 using Ex8.Helper.Assembly;
 using Ex8.Helper.Serialization;
+using Ex8.SqlDml.Reader.Dbms;
 using Ex8.SqlDml.Writer.Dbms;
 using System;
 using System.Collections.Generic;
@@ -20,28 +21,18 @@ namespace Ex8.SqlDml.Test.Writer
         // private const string _outputRoot = "TestData\\Output\\";
 
         [Fact]
-        public void Can_GetData()
-        {           
-            var input = GetJsonFile<TargetSql>(_inputRoot, "xepdb1.target.person.json");
-            OracleSqlWriter target = new OracleSqlWriter();
-            target.ExecuteSqlText(connectionString, input.SetupTempDml);
-            var dataTable = target.GetData(connectionString, input.SelectDml);                        
-            Assert.NotEmpty(dataTable.Tables);            
-        }
-
-        [Fact]
         public void Can_BulkCopy()
         {
             var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");
+            var data = CreateTable();
 
-            OracleSqlWriter target = new OracleSqlWriter();            
-            var dataTable = target.GetData(connectionString, "SELECT PERSON_ID, first_name , last_name\n from TEST_USER.Person  ");
-            DataTable data = dataTable.Tables[0];
+            OracleSqlWriter target = new OracleSqlWriter();
             var outputnoOfRecord = target.BulkCopy(connectionString, destinationTableName, manifestObject.manifest.tables[0], data);
 
             Assert.Equal(data.Rows.Count, outputnoOfRecord);
-            var result = target.GetData(connectionString, "select * from EX8_TEMP_PERSON");
-            Assert.NotEmpty(result.Tables);
+            var reader = new OracleSqlReader();
+            var result = reader.GetData(connectionString, $"select * from {destinationTableName}");
+            Assert.NotEmpty(result.Tables[0].Rows);
         }
 
         private T GetJsonFile<T>(string root, string file)
@@ -49,6 +40,21 @@ namespace Ex8.SqlDml.Test.Writer
             var outputPath = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), string.Format("{0}{1}", root, file));
             string json = File.ReadAllText(outputPath);
             return json.ParseJson<T>();
+        }
+
+        public DataTable CreateTable()
+        {
+            var table = new DataTable();
+            table.Columns.Add("PERSON_ID", typeof(decimal));
+            table.Columns.Add("FIRST_NAME", typeof(string));
+            table.Columns.Add("LAST_NAME", typeof(string));
+
+            table.Rows.Add(1, "Daniel", "Saunders");
+            table.Rows.Add(2, "Sonal", "Rattan");
+            table.Rows.Add(3, "Peter", "Lancos");
+            table.Rows.Add(4, "Suraj", "Nittoor");
+
+            return table;
         }
     }
 }

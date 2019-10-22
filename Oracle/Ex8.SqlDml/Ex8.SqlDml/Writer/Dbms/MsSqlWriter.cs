@@ -24,18 +24,6 @@ namespace Ex8.SqlDml.Writer.Dbms
             }
         }
 
-        public DataSet GetData(string connectionString, string selectSql)
-        {
-            var ds = new DataSet();
-
-            using (var connection = new SqlConnection(connectionString))
-            using (var adapter = new SqlDataAdapter(selectSql, connectionString))
-            {
-                adapter.Fill(ds);
-                return ds;
-            }
-        }
-
         public int BulkCopy(string connectionString, string destinationTableName, Table tableInfo, DataTable data)
         {
             using (var connection = new SqlConnection(connectionString))

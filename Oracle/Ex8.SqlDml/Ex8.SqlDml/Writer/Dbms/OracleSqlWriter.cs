@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-
 
 namespace Ex8.SqlDml.Writer.Dbms
 {
@@ -25,20 +23,8 @@ namespace Ex8.SqlDml.Writer.Dbms
             }
         }
 
-        public DataSet GetData(string connectionString, string selectSql)
-        {
-            var ds = new DataSet();
-            using (var connection = new OracleConnection(connectionString))
-            using (var adapter = new OracleDataAdapter(selectSql, connectionString))
-            {
-                adapter.Fill(ds);
-                return ds;
-            }
-        }
-
         public int BulkCopy(string connectionString, string destinationTableName, Table tableInfo, DataTable data)
         {
-            int noOfRecord = 0;
             using (var connection = new OracleConnection(connectionString))
             {
                 connection.Open();
@@ -65,10 +51,8 @@ namespace Ex8.SqlDml.Writer.Dbms
                 cmd.Parameters.Add(name);
                 cmd.Parameters.Add(lname);
 
-                noOfRecord = cmd.ExecuteNonQuery();
+                return cmd.ExecuteNonQuery();
             }
-
-            return noOfRecord;
         } 
     }
 }
