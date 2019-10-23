@@ -1,4 +1,4 @@
 {
-  "SelectPkDml": "SELECT coalesce(cc.column_name,'') as PkCol FROM ALL_CONS_COLUMNS cc JOIN ALL_CONSTRAINTS c ON ( cc.owner = c.owner AND cc.table_name = c.table_name AND c.constraint_name = cc.constraint_name ) WHERE c.CONSTRAINT_TYPE = 'P' AND cc.table_name = 'PERSON' AND cc.Owner = 'TEST_USER'",
+  "SelectPkDml": "SELECT coalesce(cc.column_name,'') as ColumnName, uc.data_type as DataType FROM ALL_CONS_COLUMNS cc JOIN ALL_CONSTRAINTS c ON ( cc.owner = c.owner AND cc.table_name = c.table_name AND c.constraint_name = cc.constraint_name ) JOIN USER_TAB_COLUMNS uc ON cc.table_name = uc.table_name AND cc.column_name = uc.column_name WHERE c.CONSTRAINT_TYPE = 'P' AND cc.table_name = 'PERSON' AND cc.Owner = 'TEST_USER'",
   "SelectRowCountDml": "select count(*) from TEST_USER.Person"
 }
