@@ -29,36 +29,22 @@ namespace Ex8.SqlDml.Writer.Dbms
         {
             using (var connection = new OracleConnection(connectionString))
             {
-                connection.Open();
-                int[] ids = new int[data.Rows.Count];              
+                int[] ids = new int[data.Rows.Count]; //TODO type could be any type. Should be based on tableInfo.pk_data_type
+                //TODO create other arrays here. Type should be based on tableInfo.columns[0].dataType
 
                 for (int j = 0; j < data.Rows.Count; j++)
                 {
-                    ids[j] = Convert.ToInt32(data.Rows[j][tableInfo.pk_column_name]);                    
+                    ids[j] = Convert.ToInt32(data.Rows[j][tableInfo.pk_column_name]);
+                    //TODO initialise other array values here so we only loop through data.Rows.Count once
                 }
-             
-                StringBuilder sql = new StringBuilder("INSERT INTO " + destinationTableName + " (" + tableInfo.pk_column_name);
-                StringBuilder values = new StringBuilder("VALUES ( :"+ tableInfo.pk_column_name);
 
-                foreach (var col in tableInfo.columns)
-                {
-                    sql.Append(","+col.columnName);  
-                    values.Append(",:" + col.columnName);
-                }
-                sql.Append(") ");
-                sql.Append(values.ToString());
-                sql.Append(")");
-              
                 // create command and set properties  
-                OracleCommand cmd = connection.CreateCommand();              
-                cmd.CommandText = sql.ToString();
+                OracleCommand cmd = connection.CreateCommand();
+                cmd.CommandText = GetCommandText(destinationTableName, tableInfo);
                 cmd.ArrayBindCount = ids.Length;
 
-                //get primary column name and its data type                
-                var pkColumnName = tableInfo.pk_column_name;
-                var pkColumntype = tableInfo.pk_data_type;
+                cmd.Parameters.Add(new OracleParameter { OracleDbType = OracleDbType.Int32, Value = ids });  //TODO type could be any type. Should be based on tableInfo.pk_data_type
 
-                cmd.Parameters.Add(new OracleParameter { OracleDbType = OracleDbType.Int32, Value = ids });
                 // for datatable columns
                 foreach (var tabinfocol in tableInfo.columns)
                 {
@@ -99,10 +85,37 @@ namespace Ex8.SqlDml.Writer.Dbms
                     cmd.Parameters.Add(p);
                 }
 
+                connection.Open();
                 return cmd.ExecuteNonQuery();
             }
-
         }
+
+
+        /// <summary>
+        /// Expected command text = INSERT INTO {destinationTableName} (PERSON_ID, FIRST_NAME, LAST_NAME) VALUES (:1, :2, :3)
+        /// </summary>
+        /// <param name="destinationTableName"></param>
+        /// <param name="tableInfo"></param>
+        /// <returns></returns>
+        internal string GetCommandText(string destinationTableName, Table tableInfo)
+        {
+            var sql = new StringBuilder("INSERT INTO " + destinationTableName + " (" + tableInfo.pk_column_name);
+            var values = new StringBuilder("VALUES ( :" + tableInfo.pk_column_name); // TODO does this match expected result? Eg: VALUES (:1, :2, :3)??
+
+            foreach (var col in tableInfo.columns)
+            {
+                sql.Append($",{col.columnName}");
+                values.Append($",:{col.columnName}");
+            }
+
+            sql.Append(") ");
+            sql.Append(values.ToString());
+            sql.Append(")");
+
+            return sql.ToString();
+        }
+
+
         //public int UpdateBulkData(string connectionString,string UpdateFromTempDml)
         //{
         //    using (var connection = new OracleConnection(connectionString))
