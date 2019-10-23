@@ -46,7 +46,7 @@ namespace Ex8.SqlDml.Writer.Dbms
                 cmd.Parameters.Add(new OracleParameter { OracleDbType = OracleDbType.Int32, Value = ids });  //TODO type could be any type. Should be based on tableInfo.pk_data_type
 
                 // for datatable columns
-                foreach (var tabinfocol in tableInfo.columns)
+                foreach (var tabinfocol in tableInfo.columns) //TODO avoid nested for loop. O(n)2 performance
                 {
                     // get other columns name and its data type exclude primary key column
                     var columnName = tabinfocol.columnName;
@@ -54,7 +54,7 @@ namespace Ex8.SqlDml.Writer.Dbms
                     // for datatable rows
                     OracleParameter p = new OracleParameter();                                        
                     List<dynamic> colValueArr = new List<dynamic>(data.Rows.Count);
-                    foreach (DataRow dr in data.Rows)
+                    foreach (DataRow dr in data.Rows) //TODO avoid nested for loop. O(n)2 performance
                     {
                         var colValue = dr[columnName].ToString();                       
                        // case type switch
