@@ -16,7 +16,7 @@ namespace Ex8.SqlDml.Test.Writer
     public class OracleSqlWriterTest
     {
         private const string _inputRoot = "TestData\\Input\\";
-        private const string connectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=tcp)(HOST=oracle1.sql.exatebot.com)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=xepdb1)));User Id=TEST_USER;Password=ExateDbUser123!;";
+        //private const string connectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=tcp)(HOST=oracle1.sql.exatebot.com)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=xepdb1)));User Id=TEST_USER;Password=ExateDbUser123!;";
         private const string destinationTableName = "EX8_TEMP_PERSON";
         // private const string _outputRoot = "TestData\\Output\\";
 
@@ -27,13 +27,27 @@ namespace Ex8.SqlDml.Test.Writer
             var data = CreateTable();
 
             OracleSqlWriter target = new OracleSqlWriter();
-            var outputnoOfRecord = target.BulkCopy(connectionString, destinationTableName, manifestObject.manifest.tables[0], data);
+            var outputnoOfRecord = target.BulkCopy(manifestObject.manifest.sourceConnectionString, destinationTableName, manifestObject.manifest.tables[0], data);
 
             Assert.Equal(data.Rows.Count, outputnoOfRecord);
+
             var reader = new OracleSqlReader();
-            var result = reader.GetData(connectionString, $"select * from {destinationTableName}");
+            var result = reader.GetData(manifestObject.manifest.sourceConnectionString, $"select * from {destinationTableName}");
             Assert.NotEmpty(result.Tables[0].Rows);
         }
+
+
+        //[Fact]
+        //public void Can_BulkUpdate()
+        //{
+        //    var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");
+        //    var queryFiles = GetJsonFile<TargetSql>(_inputRoot, "xepdb1.target.person.json");
+        //    var data = CreateTable();
+
+        //    OracleSqlWriter target = new OracleSqlWriter();
+        //    var outputnoOfRecord = target.BulkCopy(manifestObject.manifest.sourceConnectionString, destinationTableName, manifestObject.manifest.tables[0], data);
+        //    int outputUpdateRecordCount = target.UpdateBulkData(manifestObject.manifest.sourceConnectionString,queryFiles.UpdateFromTempDml);
+        //}
 
         private T GetJsonFile<T>(string root, string file)
         {
