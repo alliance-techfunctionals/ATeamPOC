@@ -5,5 +5,5 @@
     "declare v_sql LONG; begin v_sql:='truncate table ex8_temp_Person'; execute immediate v_sql; v_sql:='drop table ex8_temp_Person'; execute immediate v_sql; EXCEPTION WHEN OTHERS THEN IF SQLCODE = -942 THEN NULL; ELSE RAISE; END IF; END; ",
     "create global temporary table ex8_temp_Person on commit preserve rows as select PERSON_ID, first_name , last_name\n from TEST_USER.Person where rownum <= 0 "
   ],
-  "UpdateFromTempDml":  "UPDATE ( SELECT p.first_name, p.last_name, c.first_name AS P_fname, c.last_name AS P_lname FROM ex8_temp_PERSON c INNER JOIN PERSON p ON c.PERSON_ID = p.PERSON_ID ) x SET FIRST_NAME = P_fname, LAST_NAME = P_lname "
+  "UpdateFromTempDml": "UPDATE ( SELECT ActualTable.first_name As ActualTable_first_name,ActualTable.last_name As ActualTable_last_name,TempTable.first_name As TempTable_first_name,TempTable.last_name As TempTable_last_name FROM TEST_USER.Person ActualTable INNER JOIN ex8_temp_Person TempTable on TempTable.PERSON_ID = ActualTable.PERSON_ID ) t SET t.ActualTable_first_name = t.TempTable_first_name,t.ActualTable_last_name = t.TempTable_last_name"
 }
