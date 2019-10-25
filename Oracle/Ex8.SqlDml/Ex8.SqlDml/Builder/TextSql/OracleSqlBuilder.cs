@@ -38,19 +38,38 @@ namespace Ex8.SqlDml.Builder.TextSql
                 builder.Select(col.columnName);
             }
 
-            var updateFromTempDml = $"UPDATE {table.schema_name}.{table.table_name} {Environment.NewLine} SET ";
-
-            foreach (var col in table.columns)
+            string tempTable="",lastPart="";
+            var updateFromTempDml = "UPDATE ( SELECT ";
+             foreach (var col in table.columns)
             {
-                updateFromTempDml += $"{table.schema_name}.{table.table_name}.{col.columnName} = tempupdate.{col.columnName}";
+                updateFromTempDml += $"ActualTable.{col.columnName} As ActualTable_{col.columnName},";
+                tempTable += $"TempTable.{col.columnName} As TempTable_{col.columnName}";
+                lastPart += $"t.ActualTable_{col.columnName} = t.TempTable_{col.columnName}";               
                 if (table.columns[table.columns.Length - 1].columnName != col.columnName)
-                {
-                    updateFromTempDml += ",";
+                {                    
+                    tempTable += ",";
+                    lastPart += ",";
                 }
             }
+            updateFromTempDml += tempTable;
+            updateFromTempDml += $" FROM {table.schema_name}.{table.table_name} ActualTable INNER JOIN {table.temp_name} TempTable on TempTable.{table.pk_column_name} = ActualTable.{table.pk_column_name} ) t ";
+            updateFromTempDml += "SET "+lastPart;
 
-            updateFromTempDml += $" from {table.schema_name}.{table.table_name} ";
-            updateFromTempDml += $" inner join {table.temp_name} tempupdate on (tempupdate.{table.pk_column_name} = {table.schema_name}.{table.table_name}.{table.pk_column_name} ) ";
+
+
+           //var updateFromTempDml = $"UPDATE {table.schema_name}.{table.table_name} {Environment.NewLine} SET ";
+
+           // foreach (var col in table.columns)
+           // {
+           //     updateFromTempDml += $"{table.schema_name}.{table.table_name}.{col.columnName} = tempupdate.{col.columnName}";
+           //     if (table.columns[table.columns.Length - 1].columnName != col.columnName)
+           //     {
+           //         updateFromTempDml += ",";
+           //     }
+           // }
+
+           // updateFromTempDml += $" from {table.schema_name}.{table.table_name} ";
+           // updateFromTempDml += $" inner join {table.temp_name} tempupdate on (tempupdate.{table.pk_column_name} = {table.schema_name}.{table.table_name}.{table.pk_column_name} ) ";
 
             var clearTempDml = $"TRUNCATE TABLE {table.temp_name}";
 
