@@ -39,5 +39,12 @@ namespace Ex8.SqlDml.Writer.Dbms
             }
             return 0;
         }
+
+        public int executeUpdateQuery(string connectionString, string UpdateQuery)
+        {
+            //TO DO for MS-SQL server 
+            return 0;
+        }
+
     }
 }
