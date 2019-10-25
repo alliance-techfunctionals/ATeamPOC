@@ -1,6 +1,6 @@
 ﻿using Dapper;
-using Ex8.EtlModel;
 using Ex8.EtlModel.DatabaseJobManifest;
+using Ex8.SqlDml.Reader.Dbms;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
@@ -29,66 +29,64 @@ namespace Ex8.SqlDml.Writer.Dbms
         {
             using (var connection = new OracleConnection(connectionString))
             {
-                int[] ids = new int[data.Rows.Count]; //TODO type could be any type. Should be based on tableInfo.pk_data_type
-                //TODO create other arrays here. Type should be based on tableInfo.columns[0].dataType
+                var pk_colname  = tableInfo.pk_column_name;
+                var pk_datatype = tableInfo.pk_data_type;
 
-                for (int j = 0; j < data.Rows.Count; j++)
-                {
-                    ids[j] = Convert.ToInt32(data.Rows[j][tableInfo.pk_column_name]);
-                    //TODO initialise other array values here so we only loop through data.Rows.Count once
-                }
-
-                // create command and set properties  
+                List<dynamic> colValueArrr = new List<dynamic>(data.Rows.Count);
                 OracleCommand cmd = connection.CreateCommand();
                 cmd.CommandText = GetCommandText(destinationTableName, tableInfo);
-                cmd.ArrayBindCount = ids.Length;
+                cmd.ArrayBindCount = data.Rows.Count;
 
-                cmd.Parameters.Add(new OracleParameter { OracleDbType = OracleDbType.Int32, Value = ids });  //TODO type could be any type. Should be based on tableInfo.pk_data_type
+                // for primary key column Values
+                colValueArrr = data.AsEnumerable().Select(r => r.Field<dynamic>(pk_colname)).ToList();
+                cmd.Parameters.Add(_OracleParameter(pk_datatype, colValueArrr));
 
-                // for datatable columns
-                foreach (var tabinfocol in tableInfo.columns) //TODO avoid nested for loop. O(n)2 performance
+                // Foreach - Looping for All columns except PK col
+                foreach (var tableCol in tableInfo.columns) //TODO avoid nested for loop. O(n)2 performance
                 {
-                    // get other columns name and its data type exclude primary key column
-                    var columnName = tabinfocol.columnName;
-                    var columntype = tabinfocol.dataType;
-                    // for datatable rows
-                    OracleParameter p = new OracleParameter();                                        
-                    List<dynamic> colValueArr = new List<dynamic>(data.Rows.Count);
-                    foreach (DataRow dr in data.Rows) //TODO avoid nested for loop. O(n)2 performance
-                    {
-                        var colValue = dr[columnName].ToString();                       
-                       // case type switch
-                        switch (columntype.ToLower())
-                        {
-                            case "number":
-                                p.OracleDbType = OracleDbType.Decimal;
-                                colValueArr.Add(Convert.ToInt32(colValue));
-                                break;
-                            case "varchar2":
-                                p.DbType = DbType.String;
-                                colValueArr.Add(Convert.ToString(colValue));
-                                break;                           
-                            case "datetime":
-                            case "date":
-                                p.DbType = DbType.DateTime;
-                                colValueArr.Add(Convert.ToDateTime(colValue));
-                                break;                            
-                            case "text":
-                                p.DbType = DbType.String;
-                                colValueArr.Add(Convert.ToString(colValue));
-                                break;
-                            default:
-                                break;
-                        }                                             
-                    }
-                    p.Value = colValueArr.ToArray();                   
-                    cmd.Parameters.Add(p);
+                    colValueArrr = data.AsEnumerable().Select(r => r.Field<dynamic>(tableCol.columnName)).ToList();
+                    cmd.Parameters.Add(_OracleParameter(tableCol.dataType, colValueArrr));
                 }
-
                 connection.Open();
                 return cmd.ExecuteNonQuery();
+
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataType"></param>
+        /// <param name="colValueArrr"></param>
+        /// <returns>
+        ///    oracleParam
+        /// </returns>
+        internal OracleParameter _OracleParameter(string dataType, List<dynamic> colValueArrr)
+        {
+            OracleParameter oracleParam = new OracleParameter();
+            switch (dataType.ToLower())
+            {
+                case "number":
+                case "Decimal":
+                    oracleParam.OracleDbType = OracleDbType.Decimal;
+                    break;
+                case "varchar2":
+                case "text":
+                    oracleParam.OracleDbType = OracleDbType.NVarchar2;
+                    break;
+                case "datetime":
+                case "date":
+                    oracleParam.OracleDbType = OracleDbType.Date;
+                    break;
+                // To Do: by Neha - I have to add more datatypes..for now I am just testing this for the above 4 only..
+                default:
+                    break;
+            }
+
+            oracleParam.Value = colValueArrr.ToArray();
+            return oracleParam;
+        }
+
 
 
         /// <summary>
@@ -99,32 +97,55 @@ namespace Ex8.SqlDml.Writer.Dbms
         /// <returns></returns>
         internal string GetCommandText(string destinationTableName, Table tableInfo)
         {
-            var sql = new StringBuilder("INSERT INTO " + destinationTableName + " (" + tableInfo.pk_column_name);
-            var values = new StringBuilder("VALUES ( :" + tableInfo.pk_column_name); // TODO does this match expected result? Eg: VALUES (:1, :2, :3)??
+            int i = 1;
+            var sql = new StringBuilder("INSERT INTO " + destinationTableName + " (" + tableInfo.pk_column_name); // handling Primary Key col.
+            var values = new StringBuilder("VALUES ( :" + i); // TODO does this match expected result? Eg: VALUES (:1, :2, :3)??, yes it does! we have tested
 
             foreach (var col in tableInfo.columns)
             {
                 sql.Append($",{col.columnName}");
-                values.Append($",:{col.columnName}");
+                i++;
+                values.Append($",:{i}");
             }
-
             sql.Append(") ");
             sql.Append(values.ToString());
             sql.Append(")");
-
             return sql.ToString();
         }
 
 
-        //public int UpdateBulkData(string connectionString,string UpdateFromTempDml)
-        //{
-        //    using (var connection = new OracleConnection(connectionString))
-        //    {
-        //        connection.Open();
-        //        OracleCommand cmd = connection.CreateCommand();
-        //        cmd.CommandText = UpdateFromTempDml;
-        //        return cmd.ExecuteNonQuery();
-        //    }               
-        //}
-    }
+        /// <summary>
+        /// This function expects two params and returns rows affected from after running update.query
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="UpdateFromTempDml"></param>
+        /// <returns>
+        ///    <int>AffectedRows</int>
+        /// </returns>
+        public int executeUpdateQuery(string connectionString, string UpdateQuery)
+        {
+            try
+            {
+                using (var connection = new OracleConnection(connectionString))
+                {
+                    connection.Open();
+                    using (OracleCommand cmd = connection.CreateCommand())
+                    {
+                        using (OracleTransaction transaction = connection.BeginTransaction())
+                        {
+                            cmd.CommandText = UpdateQuery;
+                            cmd.Transaction = transaction;
+                            var affectedRows = cmd.ExecuteNonQuery();
+                            transaction.Commit();
+                            return affectedRows;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return -1;  // if exception then just return -1 since no rows affected at all
+            }           
+        }
+    }  
 }
