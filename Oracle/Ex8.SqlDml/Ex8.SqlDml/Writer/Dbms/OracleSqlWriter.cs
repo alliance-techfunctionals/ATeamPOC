@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using Ex8.EtlModel.DatabaseJobManifest;
-using Ex8.SqlDml.Reader.Dbms;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
@@ -14,6 +13,26 @@ namespace Ex8.SqlDml.Writer.Dbms
     {
         public DatabaseTypeEnum DatabaseType => DatabaseTypeEnum.Oracle;
 
+        public void UploadTable(string connectionString, List<string> setupSql, Table tableInfo, DataTable uploadData, List<string> postSql)
+        {
+            using (var connection = new OracleConnection(connectionString))
+            {
+                connection.Open();
+
+                foreach (var sql in setupSql)
+                {
+                    connection.Execute(sql);
+                }
+
+                BulkCopy(connection, tableInfo.temp_name, tableInfo, uploadData);
+
+                foreach (var sql in postSql)
+                {
+                    connection.Execute(sql);
+                }
+            }
+        }
+
         public void ExecuteSqlText(string connectionString, List<string> sqlList)
         {
             using (var targetConn = new OracleConnection(connectionString))
@@ -25,32 +44,37 @@ namespace Ex8.SqlDml.Writer.Dbms
             }
         }
 
-        public int BulkCopy(string connectionString, string destinationTableName, Table tableInfo, DataTable data)
+        public int BulkCopy(string connectionString, Table tableInfo, DataTable data)
         {
             using (var connection = new OracleConnection(connectionString))
             {
-                var pk_colname  = tableInfo.pk_column_name;
-                var pk_datatype = tableInfo.pk_data_type;
-
-                List<dynamic> colValueArrr = new List<dynamic>(data.Rows.Count);
-                OracleCommand cmd = connection.CreateCommand();
-                cmd.CommandText = GetCommandText(destinationTableName, tableInfo);
-                cmd.ArrayBindCount = data.Rows.Count;
-
-                // for primary key column Values
-                colValueArrr = data.AsEnumerable().Select(r => r.Field<dynamic>(pk_colname)).ToList();
-                cmd.Parameters.Add(_OracleParameter(pk_datatype, colValueArrr));
-
-                // Foreach - Looping for All columns except PK col
-                foreach (var tableCol in tableInfo.columns) //TODO avoid nested for loop. O(n)2 performance
-                {
-                    colValueArrr = data.AsEnumerable().Select(r => r.Field<dynamic>(tableCol.columnName)).ToList();
-                    cmd.Parameters.Add(_OracleParameter(tableCol.dataType, colValueArrr));
-                }
                 connection.Open();
-                return cmd.ExecuteNonQuery();
-
+                return BulkCopy(connection, tableInfo.temp_name, tableInfo, data);
             }
+        }
+
+        internal int BulkCopy(OracleConnection connection, string destinationTableName, Table tableInfo, DataTable data)
+        {
+            var pk_colname  = tableInfo.pk_column_name;
+            var pk_datatype = tableInfo.pk_data_type;
+
+            List<dynamic> colValueArrr = new List<dynamic>(data.Rows.Count);
+            OracleCommand cmd = connection.CreateCommand();
+            cmd.CommandText = GetCommandText(destinationTableName, tableInfo);
+            cmd.ArrayBindCount = data.Rows.Count;
+
+            // for primary key column Values
+            colValueArrr = data.AsEnumerable().Select(r => r.Field<dynamic>(pk_colname)).ToList();
+            cmd.Parameters.Add(_OracleParameter(pk_datatype, colValueArrr));
+
+            // Foreach - Looping for All columns except PK col
+            foreach (var tableCol in tableInfo.columns) //TODO avoid nested for loop. O(n)2 performance
+            {
+                colValueArrr = data.AsEnumerable().Select(r => r.Field<dynamic>(tableCol.columnName)).ToList();
+                cmd.Parameters.Add(_OracleParameter(tableCol.dataType, colValueArrr));
+            }
+
+            return cmd.ExecuteNonQuery();
         }
 
         /// <summary>
@@ -99,7 +123,7 @@ namespace Ex8.SqlDml.Writer.Dbms
         {
             int i = 1;
             var sql = new StringBuilder("INSERT INTO " + destinationTableName + " (" + tableInfo.pk_column_name); // handling Primary Key col.
-            var values = new StringBuilder("VALUES ( :" + i); // TODO does this match expected result? Eg: VALUES (:1, :2, :3)??, yes it does! we have tested
+            var values = new StringBuilder($"VALUES ( :{i}");
 
             foreach (var col in tableInfo.columns)
             {
@@ -111,41 +135,6 @@ namespace Ex8.SqlDml.Writer.Dbms
             sql.Append(values.ToString());
             sql.Append(")");
             return sql.ToString();
-        }
-
-
-        /// <summary>
-        /// This function expects two params and returns rows affected from after running update.query
-        /// </summary>
-        /// <param name="connectionString"></param>
-        /// <param name="UpdateFromTempDml"></param>
-        /// <returns>
-        ///    <int>AffectedRows</int>
-        /// </returns>
-        public int executeUpdateQuery(string connectionString, string UpdateQuery)
-        {
-            try
-            {
-                using (var connection = new OracleConnection(connectionString))
-                {
-                    connection.Open();
-                    using (OracleCommand cmd = connection.CreateCommand())
-                    {
-                        using (OracleTransaction transaction = connection.BeginTransaction())
-                        {
-                            cmd.CommandText = UpdateQuery;
-                            cmd.Transaction = transaction;
-                            var affectedRows = cmd.ExecuteNonQuery();
-                            transaction.Commit();
-                            return affectedRows;
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                return -1;  // if exception then just return -1 since no rows affected at all
-            }           
         }
     }  
 }

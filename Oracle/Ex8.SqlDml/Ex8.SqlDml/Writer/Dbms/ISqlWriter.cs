@@ -7,10 +7,8 @@ namespace Ex8.SqlDml.Writer.Dbms
     public interface ISqlWriter
     {
         DatabaseTypeEnum DatabaseType { get; }
+        void UploadTable(string connectionString, List<string> setupSql, Table tableInfo, DataTable uploadData, List<string> postSql);
         void ExecuteSqlText(string connectionString, List<string> sqlList);
-        int BulkCopy(string connectionString, string destinationTableName, Table tableInfo, DataTable data);
-        int executeUpdateQuery(string connectionString, string UpdateQuery);
-
-
+        int BulkCopy(string connectionString, Table tableInfo, DataTable data);
     }
 }

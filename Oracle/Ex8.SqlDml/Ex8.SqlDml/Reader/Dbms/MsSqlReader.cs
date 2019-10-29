@@ -10,7 +10,7 @@ namespace Ex8.SqlDml.Reader.Dbms
 {
     public class MsSqlReader : ISqlReader
     {
-        public DatabaseTypeEnum DatabaseType => DatabaseTypeEnum.MsSql;
+        public DatabaseTypeEnum DatabaseType => DatabaseTypeEnum.SqlServer;
 
         public T ExecuteScalar<T>(string connectionString, string sql)
         {

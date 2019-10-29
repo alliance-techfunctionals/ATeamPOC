@@ -11,7 +11,27 @@ namespace Ex8.SqlDml.Writer.Dbms
 {
     public class MsSqlWriter : ISqlWriter
     {
-        public DatabaseTypeEnum DatabaseType => DatabaseTypeEnum.MsSql;
+        public DatabaseTypeEnum DatabaseType => DatabaseTypeEnum.SqlServer;
+
+        public void UploadTable(string connectionString, List<string> setupSql, Table tableInfo, DataTable uploadData, List<string> postSql)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                foreach (var sql in setupSql)
+                {
+                    connection.Execute(sql);
+                }
+
+                BulkCopy(connection, tableInfo.temp_name, uploadData);
+
+                foreach (var sql in postSql)
+                {
+                    connection.Execute(sql);
+                }
+            }
+        }
 
         public void ExecuteSqlText(string connectionString, List<string> sqlList)
         {
@@ -24,27 +44,25 @@ namespace Ex8.SqlDml.Writer.Dbms
             }
         }
 
-        public int BulkCopy(string connectionString, string destinationTableName, Table tableInfo, DataTable data)
+        internal void BulkCopy(SqlConnection connection, string destinationTableName, DataTable data)
+        {
+            using (var bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.KeepIdentity, null))
+            {
+                bulkCopy.BulkCopyTimeout = 0;
+                bulkCopy.DestinationTableName = destinationTableName;
+                bulkCopy.WriteToServer(data);
+                bulkCopy.Close();
+            }
+        }
+
+        public int BulkCopy(string connectionString, Table tableInfo, DataTable data)
         {
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                using (var bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.KeepIdentity, null))
-                {
-                    bulkCopy.BulkCopyTimeout = 0;
-                    bulkCopy.DestinationTableName = destinationTableName;
-                    bulkCopy.WriteToServer(data);
-                    bulkCopy.Close();
-                }
+                BulkCopy(connection, tableInfo.temp_name, data);
+                return 0;
             }
-            return 0;
         }
-
-        public int executeUpdateQuery(string connectionString, string UpdateQuery)
-        {
-            //TO DO for MS-SQL server 
-            return 0;
-        }
-
     }
 }

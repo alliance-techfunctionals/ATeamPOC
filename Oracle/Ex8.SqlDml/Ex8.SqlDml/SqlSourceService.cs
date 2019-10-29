@@ -34,7 +34,6 @@ namespace Ex8.SqlDml
                     table.pk_column_name = pkInfo.ColumnName;
                     table.pk_data_type = pkInfo.DataType;
                 }
-                
             }
         }
     }
