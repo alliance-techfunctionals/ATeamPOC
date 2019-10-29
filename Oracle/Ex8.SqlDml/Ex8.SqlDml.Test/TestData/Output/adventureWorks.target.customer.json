@@ -4,5 +4,5 @@
   "SetupTempDml": [
     "SELECT top 0 CustomerID, EmailAddress , Phone , LastName , CompanyName\n into  #Customer from SalesLT.Customer WITH (NOLOCK); "
   ],
-  "UpdateFromTempDml": "UPDATE SalesLT.Customer \r\n SET SalesLT.Customer.EmailAddress = tempupdate.EmailAddress,SalesLT.Customer.Phone = tempupdate.Phone,SalesLT.Customer.LastName = tempupdate.LastName,SalesLT.Customer.CompanyName = tempupdate.CompanyName from SalesLT.Customer  inner join #Customer tempupdate on (tempupdate.CustomerID = SalesLT.Customer.CustomerID ) "
+  "UpdateFromTempDml": "UPDATE SalesLT.Customer SET SalesLT.Customer.EmailAddress = tempupdate.EmailAddress,SalesLT.Customer.Phone = tempupdate.Phone,SalesLT.Customer.LastName = tempupdate.LastName,SalesLT.Customer.CompanyName = tempupdate.CompanyName from SalesLT.Customer  inner join #Customer tempupdate on (tempupdate.CustomerID = SalesLT.Customer.CustomerID ) "
 }

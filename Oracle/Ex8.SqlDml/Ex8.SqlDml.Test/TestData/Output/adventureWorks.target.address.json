@@ -4,5 +4,5 @@
   "SetupTempDml": [
     "SELECT top 0 AddressID, AddressLine1\n into  #Address from SalesLT.Address WITH (NOLOCK); "
   ],
-  "UpdateFromTempDml": "UPDATE SalesLT.Address \r\n SET SalesLT.Address.AddressLine1 = tempupdate.AddressLine1 from SalesLT.Address  inner join #Address tempupdate on (tempupdate.AddressID = SalesLT.Address.AddressID ) "
+  "UpdateFromTempDml": "UPDATE SalesLT.Address SET SalesLT.Address.AddressLine1 = tempupdate.AddressLine1 from SalesLT.Address  inner join #Address tempupdate on (tempupdate.AddressID = SalesLT.Address.AddressID ) "
 }

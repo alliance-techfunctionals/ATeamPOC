@@ -13,8 +13,8 @@ namespace Ex8.SqlDml.Test.Builder.TextSql
 {
     public class MsSqlBuilderTest
     {
-        private const string _inputRoot = "TestData\\Input\\";
-        private const string _outputRoot = "TestData\\Output\\";
+        private const string _inputRoot = "TestData/Input/";
+        private const string _outputRoot = "TestData/Output/";
 
         [Fact]
         public void Can_BuildSourceSql()

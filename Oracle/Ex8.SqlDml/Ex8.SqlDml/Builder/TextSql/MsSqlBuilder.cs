@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Dapper;
-using Ex8.EtlModel;
 using Ex8.EtlModel.DatabaseJobManifest;
 using Ex8.EtlModel.UnitOfWork;
 using Ex8.Helper.Serialization;
@@ -12,7 +11,7 @@ namespace Ex8.SqlDml.Builder.TextSql
 {
     public class MsSqlBuilder : ISqlBuilder
     {
-        public DatabaseTypeEnum DatabaseType => DatabaseTypeEnum.MsSql;
+        public DatabaseTypeEnum DatabaseType => DatabaseTypeEnum.SqlServer;
 
         public SourceSql BuildSourceSql(Table table)
         {
@@ -42,7 +41,7 @@ namespace Ex8.SqlDml.Builder.TextSql
                 builder.Select(col.columnName);
             }
 
-            var updateFromTempDml = $"UPDATE {table.schema_name}.{table.table_name} {Environment.NewLine} SET ";
+            var updateFromTempDml = $"UPDATE {table.schema_name}.{table.table_name} SET ";
 
             foreach (var col in table.columns)
             {
@@ -74,19 +73,6 @@ namespace Ex8.SqlDml.Builder.TextSql
                 UpdateFromTempDml = updateFromTempDml,
                 ClearTempDml = clearTempDml
             };
-
-            //return new SqlUnitOfWork
-            //{
-            //    SourceDatabase = manifestObject.manifest.sourceConnectionString,
-            //    TargetDatabase = manifestObject.manifest.targetConnectionString,
-            //    ColumnsMeta = table.columns.ToJsonString(),
-            //    SelectDml = template.RawSql,
-            //    SetupTempDml = new List<string> { templateTempTable.RawSql },
-            //    UpdateFromTempDml = updateFromTempDml,
-            //    ClearTempDml = clearTempDml,
-            //    Table = table,
-            //    JobType = manifestObject.manifest.jobType == 0 ? JobTypeEnum.Anonymise : manifestObject.manifest.jobType
-            //};
         }
 
         public string SelectDmlPageBuilder(string selectDml, string pkColumn, int pageSize, int pageCount)
