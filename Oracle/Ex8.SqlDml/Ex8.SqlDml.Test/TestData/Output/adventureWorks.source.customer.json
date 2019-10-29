@@ -1,4 +1,4 @@
 {
-  "SelectPkDml": "SELECT isnull(COLUMN_NAME,'') as PkCol FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_SCHEMA + '.' + QUOTENAME(CONSTRAINT_NAME)), 'IsPrimaryKey') = 1 AND TABLE_NAME = 'Customer' AND TABLE_SCHEMA = 'SalesLT'",
+  "SelectPkDml": "SELECT isnull(cu.COLUMN_NAME,'') as ColumnName, c.data_type as DataType FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE cu JOIN INFORMATION_SCHEMA.COLUMNS c   ON cu.table_schema = c.table_schema   AND cu.TABLE_NAME = c.table_name   AND cu.COLUMN_NAME = c.COLUMN_NAME WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_SCHEMA + '.' + QUOTENAME(CONSTRAINT_NAME)), 'IsPrimaryKey') = 1 AND cu.TABLE_NAME = 'Customer' AND cu.TABLE_SCHEMA = 'SalesLT'",
   "SelectRowCountDml": "select count(*) from SalesLT.Customer WITH (NOLOCK) "
 }
