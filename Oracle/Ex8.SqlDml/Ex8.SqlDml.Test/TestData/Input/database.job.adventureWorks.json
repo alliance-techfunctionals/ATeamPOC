@@ -1,0 +1,73 @@
+{
+  "manifest": {
+    "manifestType": "Database",
+    "manifestName": "AdventureWorksLT2016",
+    "manifiestFriendlyName": "AdventureWorksLT2016",
+    "applicationId": "Test",
+    "databaseType": "SqlServer",
+    "anonymisationKey": "F60B9147-FB66-4699-9662-FDF7BF853F39",
+    "sourceConnectionString": "Data Source=ukbld01.exatetechnology.com; Initial Catalog=AdventureWorksLT2016; User ID=etlWorker; Password=JsWJzcr0fpkE;",
+    "targetConnectionString": "Data Source=ukbld01.exatetechnology.com; Initial Catalog=AdventureWorksLT2016; User ID=etlWorker; Password=JsWJzcr0fpkE;",
+    "countryOfOrigination": "GB",
+    "tables": [
+      {
+        "schema_name": "SalesLT",
+        "table_name": "Address",
+        "pk_column_name": "AddressID",
+        "pk_data_type": "int",
+        "record_count": 450,
+        "columns": [
+          {
+            "columnName": "AddressLine1",
+            "dataType": "nvarchar",
+            "maxLength": 60,
+            "attributeTypeEnum": "FN",
+            "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+            "subjectEntityMappingId": null
+          }
+        ]
+      },
+      {
+        "schema_name": "SalesLT",
+        "table_name": "Customer",
+        "pk_column_name": "CustomerID",
+        "pk_data_type": "int",
+        "record_count": 847,
+        "columns": [
+          {
+            "columnName": "EmailAddress",
+            "dataType": "nvarchar",
+            "maxLength": 50,
+            "attributeTypeEnum": "FN",
+            "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+            "subjectEntityMappingId": null
+          },
+          {
+            "columnName": "Phone",
+            "dataType": "nvarchar",
+            "maxLength": 25,
+            "attributeTypeEnum": "FN",
+            "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+            "subjectEntityMappingId": null
+          },
+          {
+            "columnName": "LastName",
+            "dataType": "nvarchar",
+            "maxLength": 50,
+            "attributeTypeEnum": "FN",
+            "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+            "subjectEntityMappingId": null
+          },
+          {
+            "columnName": "CompanyName",
+            "dataType": "nvarchar",
+            "maxLength": 128,
+            "attributeTypeEnum": "FN",
+            "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+            "subjectEntityMappingId": null
+          }
+        ]
+      }
+    ]
+  }
+}

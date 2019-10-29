@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper.SqlBuilder" Version="1.60.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.50" />
+    <PackageReference Include="SqlKata" Version="1.1.7" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Ex8.EtlModel\Ex8.EtlModel\Ex8.EtlModel.csproj" />
+    <ProjectReference Include="..\..\Ex8.Helper\Ex8.Helper\Ex8.Helper.csproj" />
+  </ItemGroup>
+
+</Project>
