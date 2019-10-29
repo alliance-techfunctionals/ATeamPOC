@@ -12,14 +12,15 @@ using System.Linq;
 using Xunit;
 using Ex8.SqlDml.Builder;
 
-namespace Ex8.SqlDml.Test
+namespace Ex8.SqlDml.Integration.Test
 {
     public class SqlSourceServiceTest
     {
         private const string _inputRoot = "TestData\\Input\\";
         private const string _outputRoot = "TestData\\Output\\";
 
-        [Fact]
+        //TODO should not be run in CI-CD pipeline
+        //[Fact]
         public void Can_SetTableManifestData()
         {
             var input = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");
