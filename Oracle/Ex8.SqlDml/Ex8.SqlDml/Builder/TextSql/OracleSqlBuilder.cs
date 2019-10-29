@@ -31,7 +31,7 @@ namespace Ex8.SqlDml.Builder.TextSql
             table.temp_name = $"ex8_temp_{table.table_name}";
 
             var builder = new SqlBuilder();
-            var template = builder.AddTemplate($"SELECT {table.pk_column_name}, /**select**/ from {table.schema_name}.{table.table_name} /**where**/ ");
+            var selectTemplate = builder.AddTemplate($"SELECT {table.pk_column_name}, /**select**/ from {table.schema_name}.{table.table_name} /**where**/ ");
 
             foreach (var col in table.columns)
             {
@@ -55,22 +55,6 @@ namespace Ex8.SqlDml.Builder.TextSql
             updateFromTempDml += $" FROM {table.schema_name}.{table.table_name} ActualTable INNER JOIN {table.temp_name} TempTable on TempTable.{table.pk_column_name} = ActualTable.{table.pk_column_name} ) t ";
             updateFromTempDml += "SET "+lastPart;
 
-
-
-           //var updateFromTempDml = $"UPDATE {table.schema_name}.{table.table_name} {Environment.NewLine} SET ";
-
-           // foreach (var col in table.columns)
-           // {
-           //     updateFromTempDml += $"{table.schema_name}.{table.table_name}.{col.columnName} = tempupdate.{col.columnName}";
-           //     if (table.columns[table.columns.Length - 1].columnName != col.columnName)
-           //     {
-           //         updateFromTempDml += ",";
-           //     }
-           // }
-
-           // updateFromTempDml += $" from {table.schema_name}.{table.table_name} ";
-           // updateFromTempDml += $" inner join {table.temp_name} tempupdate on (tempupdate.{table.pk_column_name} = {table.schema_name}.{table.table_name}.{table.pk_column_name} ) ";
-
             var clearTempDml = $"TRUNCATE TABLE {table.temp_name}";
 
             var tempTableDrop = "declare v_sql LONG; " +
@@ -90,6 +74,8 @@ namespace Ex8.SqlDml.Builder.TextSql
                 $"create global temporary table {table.temp_name} on commit preserve rows as " +
                 $"select {table.pk_column_name}, /**select**/ from {table.schema_name}.{table.table_name} where rownum <= 0 ");
 
+            var addPrimaryKey = $"alter table {table.temp_name} add constraint {table.temp_name}_pk primary key({table.pk_column_name})";
+
             foreach (var col in table.columns)
             {
                 builderTempTable.Select(col.columnName);
@@ -97,8 +83,8 @@ namespace Ex8.SqlDml.Builder.TextSql
 
             return new TargetSql
             {
-                SelectDml = template.RawSql,
-                SetupTempDml = new List<string> { tempTableDrop, tempTableCreate.RawSql },
+                SelectDml = selectTemplate.RawSql,
+                SetupTempDml = new List<string> { tempTableDrop, tempTableCreate.RawSql, addPrimaryKey },
                 UpdateFromTempDml = updateFromTempDml,
                 ClearTempDml = clearTempDml
             };
