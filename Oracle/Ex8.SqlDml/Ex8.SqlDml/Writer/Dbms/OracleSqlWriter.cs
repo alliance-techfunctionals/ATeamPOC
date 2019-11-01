@@ -92,6 +92,7 @@ namespace Ex8.SqlDml.Writer.Dbms
             {
                 case "number":
                 case "Decimal":
+                case "Int32":
                     oracleParam.OracleDbType = OracleDbType.Decimal;
                     break;
                 case "varchar2":
