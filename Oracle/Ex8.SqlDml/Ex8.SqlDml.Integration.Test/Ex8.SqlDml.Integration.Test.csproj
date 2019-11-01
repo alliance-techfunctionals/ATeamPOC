@@ -25,8 +25,11 @@
   <ItemGroup>
     <None Update="TestData\Input\database.manifest.xepdb1.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </None>   
     <None Update="TestData\Input\xepdb1.target.person.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Input\xepdb1.target.product.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestData\Output\xepdb1.table.manifest.json">
