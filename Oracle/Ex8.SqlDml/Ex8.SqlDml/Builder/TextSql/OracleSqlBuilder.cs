@@ -30,13 +30,11 @@ namespace Ex8.SqlDml.Builder.TextSql
         {
             table.temp_name = $"ex8_temp_{table.table_name}";
 
-            var builder = new SqlBuilder();
-            var selectTemplate = builder.AddTemplate($"SELECT {table.pk_column_name}, /**select**/ from {table.schema_name}.{table.table_name} /**where**/ ");
+            var columnNameCsv = string.Join(", ", table.columns.Select(c => c.columnName));
 
-            foreach (var col in table.columns)
-            {
-                builder.Select(col.columnName);
-            }
+            var selectSql = $"select {table.pk_column_name}, {columnNameCsv} " +
+                             $" from ( select {table.pk_column_name}, {columnNameCsv}, row_number() over(order by {table.pk_column_name}) as seqnum " +
+                                      $" from {table.schema_name}.{table.table_name} ) q ";
 
             string tempTable="",lastPart="";
             var updateFromTempDml = "UPDATE ( SELECT ";
@@ -83,7 +81,7 @@ namespace Ex8.SqlDml.Builder.TextSql
 
             return new TargetSql
             {
-                SelectDml = selectTemplate.RawSql,
+                SelectDml = selectSql,
                 SetupTempDml = new List<string> { tempTableDrop, tempTableCreate.RawSql, addPrimaryKey },
                 UpdateFromTempDml = updateFromTempDml,
                 ClearTempDml = clearTempDml
@@ -94,8 +92,7 @@ namespace Ex8.SqlDml.Builder.TextSql
         {
             var selectDmlBuilder = new StringBuilder();
             selectDmlBuilder.AppendLine(selectDml);
-            selectDmlBuilder.AppendLine($"where rownum between {(pageCount - 1) * pageSize + 1 } and {pageCount * pageSize}");
-            selectDmlBuilder.AppendLine($"order by {pkColumn}");
+            selectDmlBuilder.AppendLine($"where seqnum between {(pageCount - 1) * pageSize + 1 } and {pageCount * pageSize}");
 
             return selectDmlBuilder.ToString();
         }

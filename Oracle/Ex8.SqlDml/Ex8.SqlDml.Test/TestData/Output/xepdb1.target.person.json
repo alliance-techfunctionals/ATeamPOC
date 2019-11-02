@@ -1,6 +1,6 @@
 {
   "ClearTempDml": "TRUNCATE TABLE ex8_temp_Person",
-  "SelectDml": "SELECT PERSON_ID, first_name , last_name\n from TEST_USER.Person  ",
+  "SelectDml": "select PERSON_ID, first_name, last_name  from ( select PERSON_ID, first_name, last_name, row_number() over(order by PERSON_ID) as seqnum  from TEST_USER.Person ) q ",
   "SetupTempDml": [
     "declare v_sql LONG; begin v_sql:='truncate table ex8_temp_Person'; execute immediate v_sql; v_sql:='drop table ex8_temp_Person'; execute immediate v_sql; EXCEPTION WHEN OTHERS THEN IF SQLCODE = -942 THEN NULL; ELSE RAISE; END IF; END; ",
     "create global temporary table ex8_temp_Person on commit preserve rows as select PERSON_ID, first_name , last_name\n from TEST_USER.Person where rownum <= 0 ",
