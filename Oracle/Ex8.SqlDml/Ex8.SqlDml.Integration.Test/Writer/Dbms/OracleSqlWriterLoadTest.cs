@@ -11,22 +11,34 @@ using System.IO;
 using Xunit;
 using System.Diagnostics;
 using CsvHelper;
-using Ex8.SqlDml.Reader.Dbms;
 
 namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
 {
-    public class PerformanceTesting
+    public class OracleSqlWriterLoadTest
     {
         private const string _inputRoot = "TestData\\Input\\";
         private const string _outputRoot = "TestData\\Output\\";
 
         private const string connectionString = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=oracle1.sql.exatebot.com)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=xepdb1)));User Id=TEST_USER;Password=ExateDbUser123!;";
 
-        [Fact]
-        public void MeasureUploadTableCall()
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
+        public void UploadTable_SetupSource()
         {
-            int RecordsCount = 500000;
-            var data = CreateTable(RecordsCount);
+            var data = CreateTable("Pre", 60000); 
+            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");
+            manifestObject.manifest.tables[0].temp_name = manifestObject.manifest.tables[0].table_name; //initializing Table-TempName with Person Table
+
+            var target = new OracleSqlWriter();
+            target.ExecuteSqlText(connectionString, new List<string> { $"truncate table {manifestObject.manifest.tables[0].temp_name}" }); // Cleaning the Person Table first before adding these records with data
+            var outputnoOfRecord = target.BulkCopy(connectionString, manifestObject.manifest.tables[0], data); // This call should copy records from data to Persons directly. 
+            data.Rows.Count.Should().Be(outputnoOfRecord);
+        }
+
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
+        public void UploadTable_LoadTest()
+        {
+            int recordCount = 500000;
+            var data = CreateTable("Post", recordCount);
 
             var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");
             var sql = GetJsonFile<TargetSql>(_inputRoot, "xepdb1.target.person.json");
@@ -45,7 +57,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             var ElapsedDuration = stopwatch.Elapsed; // this is the elapsed duration now for updating RecordsCount records in table database
 
             // simply log the value in a csv file output
-            WriteLogCsvFile(new CsvLogger {TestDate = DateTime.Now, NoOfRecords = RecordsCount, TimeElapsed = ElapsedDuration});
+            WriteLogCsvFile(new CsvLogger {TestDate = DateTime.Now, NoOfRecords = recordCount, TimeElapsed = ElapsedDuration});
 
           
         }
@@ -57,19 +69,22 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             return json.ParseJson<T>();
         }
 
-        public DataTable CreateTable(int NoOfRecords = 1000)
+        // This funtion would create a datatable with a specific no. of records
+        // by default - I have set this up for 500,000 but could be changed 
+        // it keeps appending FirstName and LastName strings with a counter
+        public DataTable CreateTable(string runState, int RecordsToBeAdded = 500000)
         {
-            var table = new DataTable();
-            string FName = "Daniel", LName = "Saunders";
-                  
-            table.Columns.Add("PERSON_ID", typeof(Int32));
-            table.Columns.Add("FIRST_NAME", typeof(string));
-            table.Columns.Add("LAST_NAME", typeof(string));
-            for (int counter=1; counter <= NoOfRecords; counter++)
+            var dt = new DataTable();
+            string fName = "Daniel", lName = "Saunders";
+
+            dt.Columns.Add("PERSON_ID", typeof(Int32));
+            dt.Columns.Add("FIRST_NAME", typeof(string));
+            dt.Columns.Add("LAST_NAME", typeof(string));
+            for (int counter = 1; counter <= RecordsToBeAdded; counter++)
             {
-                table.Rows.Add(counter, FName + counter, LName + counter);
-            }          
-            return table;
+                dt.Rows.Add(counter, $"{runState}{fName}_{counter}", $"{runState}{lName}_{counter}");
+            }
+            return dt;
         }
 
         private void WriteLogCsvFile(CsvLogger data)
