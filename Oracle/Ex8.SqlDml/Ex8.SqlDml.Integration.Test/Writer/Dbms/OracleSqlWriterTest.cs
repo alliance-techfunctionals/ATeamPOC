@@ -18,10 +18,8 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
     {
         private const string _inputRoot = "TestData\\Input\\";
         private const string connectionString = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=oracle1.sql.exatebot.com)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=xepdb1)));User Id=TEST_USER;Password=ExateDbUser123!;";
-        // private const string _outputRoot = "TestData\\Output\\";  // Its not being used here.
 
-        //TODO should not be run in CI-CD pipeline
-        //[Fact]
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void Can_BulkCopy()
         {
             var data = CreateTable();
@@ -33,8 +31,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             data.Rows.Count.Should().Be(outputnoOfRecord);
         }
 
-        //TODO should not be run in CI-CD pipeline
-        //[Fact]
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void CanUploadTable()
         {
             var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");
@@ -61,7 +58,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             return json.ParseJson<T>();
         }
 
-        public DataTable CreateTable()
+        private DataTable CreateTable()
         {
             var table = new DataTable();
             table.Columns.Add("PERSON_ID", typeof(decimal));

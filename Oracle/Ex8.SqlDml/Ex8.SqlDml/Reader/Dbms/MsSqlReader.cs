@@ -32,7 +32,7 @@ namespace Ex8.SqlDml.Reader.Dbms
         {
             var ds = new DataSet();
 
-            using (var connection = new SqlConnection(connectionString))
+            //using (var connection = new SqlConnection(connectionString))
             using (var adapter = new SqlDataAdapter(selectSql, connectionString))
             {
                 adapter.Fill(ds);

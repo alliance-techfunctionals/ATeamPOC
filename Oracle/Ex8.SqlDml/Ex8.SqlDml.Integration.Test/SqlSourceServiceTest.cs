@@ -19,8 +19,7 @@ namespace Ex8.SqlDml.Integration.Test
         private const string _inputRoot = "TestData\\Input\\";
         private const string _outputRoot = "TestData\\Output\\";
 
-        //TODO should not be run in CI-CD pipeline
-        //[Fact]
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void Can_SetTableManifestData()
         {
             var input = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");

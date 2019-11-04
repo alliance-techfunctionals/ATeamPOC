@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
+[assembly: InternalsVisibleTo("Ex8.SqlDml.Integration.Test")]
 namespace Ex8.SqlDml.Writer.Dbms
 {
     public class MsSqlWriter : ISqlWriter
@@ -55,13 +57,14 @@ namespace Ex8.SqlDml.Writer.Dbms
             }
         }
 
-        public int BulkCopy(string connectionString, Table tableInfo, DataTable data)
+        public int BulkCopy(string connectionString, Table tableInfo, DataTable sourceTable)
         {
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                BulkCopy(connection, tableInfo.temp_name, data);
-                return 0;
+                BulkCopy(connection, tableInfo.temp_name, sourceTable);
+                var recordsCount = connection.ExecuteScalar<int>($"select count(*) from {tableInfo.temp_name}");
+                return recordsCount;
             }
         }
     }
