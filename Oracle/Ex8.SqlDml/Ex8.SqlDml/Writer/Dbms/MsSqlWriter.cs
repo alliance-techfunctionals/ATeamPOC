@@ -11,6 +11,10 @@ namespace Ex8.SqlDml.Writer.Dbms
 {
     public class MsSqlWriter : ISqlWriter
     {
+
+        // This is because the scope of a Local Temporary table is only bounded with the current connection of the current user
+        SqlConnection _sqlConnection = new SqlConnection();
+
         public DatabaseTypeEnum DatabaseType => DatabaseTypeEnum.SqlServer;
 
         public void UploadTable(string connectionString, List<string> setupSql, Table tableInfo, DataTable uploadData, List<string> postSql)
@@ -35,34 +39,46 @@ namespace Ex8.SqlDml.Writer.Dbms
 
         public void ExecuteSqlText(string connectionString, List<string> sqlList)
         {
-            using (var targetConn = new SqlConnection(connectionString))
+            _sqlConnection.ConnectionString = connectionString;
+
+            // Neha@ATeam - I commented these lines as I dont want to open a connection everytime to execute a sql-query.
+            // I have a property _sqlConnection which I can reuse.
+
+            //using (var targetConn = new SqlConnection(connectionString))
+            //{
+            //    targetConn.Open();
+
+            _sqlConnection.Open();
+            foreach (var sql in sqlList)
             {
-                foreach (var sql in sqlList)
-                {
-                    targetConn.Execute(sql);
-                }
-            }
+                _sqlConnection.Execute(sql);
+            }               
         }
 
-        internal void BulkCopy(SqlConnection connection, string destinationTableName, DataTable data)
+        internal void BulkCopy(SqlConnection connection, string destinationTableName, DataTable sourceTable)
         {
             using (var bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.KeepIdentity, null))
             {
                 bulkCopy.BulkCopyTimeout = 0;
-                bulkCopy.DestinationTableName = destinationTableName;
-                bulkCopy.WriteToServer(data);
+                bulkCopy.DestinationTableName = destinationTableName;                             
+                bulkCopy.WriteToServer(sourceTable);              
                 bulkCopy.Close();
             }
         }
 
-        public int BulkCopy(string connectionString, Table tableInfo, DataTable data)
+        public int BulkCopy(string connectionString, Table tableInfo, DataTable sourceTable)
         {
-            using (var connection = new SqlConnection(connectionString))
+            if (_sqlConnection.State != ConnectionState.Open)
             {
-                connection.Open();
-                BulkCopy(connection, tableInfo.temp_name, data);
-                return 0;
+                _sqlConnection.ConnectionString = connectionString;
+                _sqlConnection.Open();
             }
+
+            BulkCopy(_sqlConnection, tableInfo.temp_name, sourceTable); // call this function to bulkcopy the data from source dt to dest. dt
+
+            var recordsCount = _sqlConnection.ExecuteScalar($"select Count(*) from {tableInfo.temp_name}"); // check #records in dest Table
+            _sqlConnection.Close();    // close the connection as you are done with copying..
+            return (int)recordsCount;  // this returns the number of records inserted in dest.table
         }
     }
 }
