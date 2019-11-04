@@ -19,12 +19,11 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
         private const string _inputRoot = "TestData\\Input\\";
         private const string connectionString = "Data Source=winserver1.vm.exatebot.com; Initial Catalog=AdventureWorksLT2016; User ID=ex8ExecuteUser; Password=lbv9hFlO9s1j;";
 
-        [Fact]
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void Can_BulkCopy()
         {
             var data = CreateTable();
-            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.job.adventureWorks.json");
-           
+            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.job.adventureWorks.json");         
             var inputSqlQueries = GetJsonFile<TargetSql>(_inputRoot, "adventureWorks.target.customer.json");
            
             MsSqlWriter target = new MsSqlWriter();
@@ -34,7 +33,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             data.Rows.Count.Should().Be(outputnoOfRecord);
         }
 
-        [Fact]
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void CanUploadTable()
         {
             var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.job.adventureWorks.json");

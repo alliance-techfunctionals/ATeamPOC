@@ -18,7 +18,6 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
     {
         private const string _inputRoot = "TestData\\Input\\";
         private const string connectionString = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=oracle1.sql.exatebot.com)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=xepdb1)));User Id=TEST_USER;Password=ExateDbUser123!;";
-        // private const string _outputRoot = "TestData\\Output\\";  // Its not being used here.
 
         [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void Can_BulkCopy()

@@ -26,11 +26,13 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
         {
             var data = CreateTable("Pre", 60000); 
             var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");
-            manifestObject.manifest.tables[0].temp_name = manifestObject.manifest.tables[0].table_name; //initializing Table-TempName with Person Table
+            var table = manifestObject.manifest.tables[0];
+            table.temp_name = table.qualified_table_name; //initializing Table-TempName with Person Table
 
             var target = new OracleSqlWriter();
-            target.ExecuteSqlText(connectionString, new List<string> { $"truncate table {manifestObject.manifest.tables[0].temp_name}" }); // Cleaning the Person Table first before adding these records with data
-            var outputnoOfRecord = target.BulkCopy(connectionString, manifestObject.manifest.tables[0], data); // This call should copy records from data to Persons directly. 
+            target.ExecuteSqlText(connectionString, new List<string> { $"truncate table {table.temp_name}" }); // Cleaning the Person Table first before adding these records with data
+
+            var outputnoOfRecord = target.BulkCopy(connectionString, table, data); // This call should copy records from data to Persons directly. 
             data.Rows.Count.Should().Be(outputnoOfRecord);
         }
 
@@ -56,10 +58,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             stopwatch.Stop();  // end timer
             var ElapsedDuration = stopwatch.Elapsed; // this is the elapsed duration now for updating RecordsCount records in table database
 
-            // simply log the value in a csv file output
-            WriteLogCsvFile(new CsvLogger {TestDate = DateTime.Now, NoOfRecords = recordCount, TimeElapsed = ElapsedDuration});
-
-          
+            WriteLogCsvFile(new CsvLogger {TestDate = DateTime.Now, NoOfRecords = recordCount, TimeElapsed = ElapsedDuration});         
         }
 
         private T GetJsonFile<T>(string root, string file)

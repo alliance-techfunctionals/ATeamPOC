@@ -22,21 +22,22 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
 
         private const string connectionString = "Data Source=winserver1.vm.exatebot.com; Initial Catalog=AdventureWorksLT2016; User ID=ex8ExecuteUser; Password=lbv9hFlO9s1j;";
 
-        [Fact]
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void UploadTable_SetupSource()
         {
             var data = CreateTable("Pre", 500000);
             var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.job.adventureWorks.json");
+            var table = manifestObject.manifest.tables[1];
+            table.temp_name = table.qualified_table_name; //initializing Table-TempName with CustomerATeam Table
 
-            manifestObject.manifest.tables[1].temp_name = $"{manifestObject.manifest.tables[1].schema_name}.{manifestObject.manifest.tables[1].table_name}"; //initializing Table-TempName with CustomerATeam Table
             var target = new MsSqlWriter();
+            target.ExecuteSqlText(connectionString, new List<string> { $"truncate table {table.temp_name}" }); // Cleaning the CustomerATeam Table first before adding these records with data
 
-            target.ExecuteSqlText(connectionString, new List<string> { $"truncate table {manifestObject.manifest.tables[1].temp_name}" }); // Cleaning the CustomerATeam Table first before adding these records with data
-            var outputnoOfRecord = target.BulkCopy(connectionString, manifestObject.manifest.tables[1], data); // This call should copy records from data to CustomerATeam directly. 
+            var outputnoOfRecord = target.BulkCopy(connectionString, table, data); // This call should copy records from data to CustomerATeam directly. 
             data.Rows.Count.Should().Be(outputnoOfRecord);
         }
 
-        [Fact]
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void UploadTable_LoadTest()
         {
             int recordCount = 500000;
@@ -59,10 +60,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             stopwatch.Stop();  // end timer
             var ElapsedDuration = stopwatch.Elapsed; // this is the elapsed duration now for updating RecordsCount records in table database
 
-            // simply log the value in a csv file output
             WriteLogCsvFile(new CsvLogger { TestDate = DateTime.Now, NoOfRecords = recordCount, TimeElapsed = ElapsedDuration });
-
-
         }
 
         private T GetJsonFile<T>(string root, string file)

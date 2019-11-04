@@ -9,6 +9,5 @@ namespace Ex8.SqlDml.Writer.Dbms
         DatabaseTypeEnum DatabaseType { get; }
         void UploadTable(string connectionString, List<string> setupSql, Table tableInfo, DataTable uploadData, List<string> postSql);
         void ExecuteSqlText(string connectionString, List<string> sqlList);
-        int BulkCopy(string connectionString, Table tableInfo, DataTable data);
     }
 }
