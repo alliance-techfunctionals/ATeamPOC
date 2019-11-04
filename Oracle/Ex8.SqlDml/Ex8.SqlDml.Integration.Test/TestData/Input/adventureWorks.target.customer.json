@@ -1,0 +1,8 @@
+{
+  "ClearTempDml": "DROP TABLE #CustomerATeam",
+  "SelectDml": "SELECT CustomerID, FirstName , MiddleName , LastName , FullName , CompanyName , EmailAddress , Phone\n from SalesLT.CustomerATeam WITH (NOLOCK)  ",
+  "SetupTempDml": [
+    "SELECT top 0 CustomerID, FirstName , MiddleName , LastName , FullName , CompanyName , EmailAddress , Phone\n into  #CustomerATeam from SalesLT.CustomerATeam WITH (NOLOCK); "
+  ],
+  "UpdateFromTempDml": "UPDATE SalesLT.CustomerATeam SET SalesLT.CustomerATeam.FirstName = tempupdate.FirstName,SalesLT.CustomerATeam.MiddleName = tempupdate.MiddleName,SalesLT.CustomerATeam.LastName = tempupdate.LastName,SalesLT.CustomerATeam.FullName = tempupdate.FullName,SalesLT.CustomerATeam.CompanyName = tempupdate.CompanyName,SalesLT.CustomerATeam.EmailAddress = tempupdate.EmailAddress,SalesLT.CustomerATeam.Phone = tempupdate.Phone from SalesLT.CustomerATeam  inner join #CustomerATeam tempupdate on (tempupdate.CustomerID = SalesLT.CustomerATeam.CustomerID ) "
+}
