@@ -70,7 +70,7 @@ namespace Ex8.SqlDml.Writer.Dbms
             // Foreach - Looping for All columns except PK col
             foreach (var tableCol in tableInfo.columns) //TODO avoid nested for loop. O(n)2 performance
             {
-                colValueArrr = data.AsEnumerable().Select(r => r.Field<dynamic>(tableCol.columnName)).ToList();
+                colValueArrr = data.AsEnumerable().Select(r => r.Field<dynamic>(tableCol.name)).ToList();
                 cmd.Parameters.Add(_OracleParameter(tableCol.dataType, colValueArrr));
             }
 
@@ -128,7 +128,7 @@ namespace Ex8.SqlDml.Writer.Dbms
 
             foreach (var col in tableInfo.columns)
             {
-                sql.Append($",{col.columnName}");
+                sql.Append($",{col.name}");
                 i++;
                 values.Append($",:{i}");
             }

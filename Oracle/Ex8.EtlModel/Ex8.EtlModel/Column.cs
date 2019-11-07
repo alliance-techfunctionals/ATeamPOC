@@ -2,7 +2,7 @@
 {
     public class Column
     {
-        public string columnName { get; set; }
+        public string name { get; set; }
 
         public string dataType { get; set; }
 

@@ -15,7 +15,7 @@
         "temp_name" :"EX8_TEMP_PERSON",
         "columns": [
           {
-            "columnName": "first_name",
+            "name": "first_name",
             "dataType": "VARCHAR2",
             "maxLength": 50,
             "attributeName": "Firstname",
@@ -27,7 +27,7 @@
             "composition": null
           },
           {
-            "columnName": "last_name",
+            "name": "last_name",
             "dataType": "VARCHAR2",
             "maxLength": 50,
             "attributeName": "Lastname",
@@ -49,7 +49,7 @@
         "temp_name": "EX8_TEMP_PRODUCT",
         "columns": [
           {
-            "columnName": "name",
+            "name": "name",
             "dataType": "VARCHAR2",
             "maxLength": 50,
             "attributeName": "Name",
@@ -61,7 +61,7 @@
             "composition": null
           },
           {
-            "columnName": "description",
+            "name": "description",
             "dataType": "VARCHAR2",
             "maxLength": 150,
             "attributeName": "Description",

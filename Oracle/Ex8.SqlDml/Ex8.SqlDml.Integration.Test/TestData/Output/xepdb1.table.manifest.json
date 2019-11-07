@@ -15,14 +15,14 @@
         "table_name": "Person",
         "columns": [
           {
-            "columnName": "first_name",
+            "name": "first_name",
             "dataType": "VARCHAR2",
             "maxLength": 50,
             "attributeName": "Firstname",
             "attributeTypeEnum": "FINA"
           },
           {
-            "columnName": "last_name",
+            "name": "last_name",
             "dataType": "VARCHAR2",
             "maxLength": 50,
             "attributeName": "Lastname",
@@ -39,14 +39,14 @@
         "table_name": "Product",
         "columns": [
           {
-            "columnName": "name",
+            "name": "name",
             "dataType": "VARCHAR2",
             "maxLength": 50,
             "attributeName": "Name",
             "attributeTypeEnum": "NA"
           },
           {
-            "columnName": "description",
+            "name": "description",
             "dataType": "VARCHAR2",
             "maxLength": 150,
             "attributeName": "Description",

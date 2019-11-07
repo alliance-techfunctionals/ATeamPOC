@@ -38,15 +38,15 @@ namespace Ex8.SqlDml.Builder.TextSql
 
             foreach (var col in table.columns)
             {
-                builder.Select(col.columnName);
+                builder.Select(col.name);
             }
 
             var updateFromTempDml = $"UPDATE {table.schema_name}.{table.table_name} SET ";
 
             foreach (var col in table.columns)
             {
-                updateFromTempDml += $"{table.schema_name}.{table.table_name}.{col.columnName} = tempupdate.{col.columnName}";
-                if (table.columns[table.columns.Length - 1].columnName != col.columnName)
+                updateFromTempDml += $"{table.schema_name}.{table.table_name}.{col.name} = tempupdate.{col.name}";
+                if (table.columns[table.columns.Length - 1].name != col.name)
                 {
                     updateFromTempDml += ",";
                 }
@@ -63,7 +63,7 @@ namespace Ex8.SqlDml.Builder.TextSql
 
             foreach (var col in table.columns)
             {
-                builderTempTable.Select(col.columnName);
+                builderTempTable.Select(col.name);
             }
 
             return new TargetSql

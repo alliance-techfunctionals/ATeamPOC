@@ -18,7 +18,7 @@
         "record_count": 450,
         "columns": [
           {
-            "columnName": "AddressLine1",
+            "name": "AddressLine1",
             "dataType": "nvarchar",
             "maxLength": 60,
             "attributeTypeEnum": "FN",
@@ -35,7 +35,7 @@
         "record_count": 847,
         "columns": [
           {
-            "columnName": "EmailAddress",
+            "name": "EmailAddress",
             "dataType": "nvarchar",
             "maxLength": 50,
             "attributeTypeEnum": "FN",
@@ -43,7 +43,7 @@
             "subjectEntityMappingId": null
           },
           {
-            "columnName": "Phone",
+            "name": "Phone",
             "dataType": "nvarchar",
             "maxLength": 25,
             "attributeTypeEnum": "FN",
@@ -51,7 +51,7 @@
             "subjectEntityMappingId": null
           },
           {
-            "columnName": "LastName",
+            "name": "LastName",
             "dataType": "nvarchar",
             "maxLength": 50,
             "attributeTypeEnum": "FN",
@@ -59,7 +59,7 @@
             "subjectEntityMappingId": null
           },
           {
-            "columnName": "CompanyName",
+            "name": "CompanyName",
             "dataType": "nvarchar",
             "maxLength": 128,
             "attributeTypeEnum": "FN",
