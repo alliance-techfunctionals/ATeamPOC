@@ -30,7 +30,7 @@ namespace Ex8.SqlDml.Builder.TextSql
         {
             table.temp_name = $"ex8_temp_{table.table_name}";
 
-            var columnNameCsv = string.Join(", ", table.columns.Select(c => c.columnName));
+            var columnNameCsv = string.Join(", ", table.columns.Select(c => c.name));
 
             var selectSql = $"select {table.pk_column_name}, {columnNameCsv} " +
                              $" from ( select {table.pk_column_name}, {columnNameCsv}, row_number() over(order by {table.pk_column_name}) as seqnum " +
@@ -40,10 +40,10 @@ namespace Ex8.SqlDml.Builder.TextSql
             var updateFromTempDml = "UPDATE ( SELECT ";
              foreach (var col in table.columns)
             {
-                updateFromTempDml += $"ActualTable.{col.columnName} As ActualTable_{col.columnName},";
-                tempTable += $"TempTable.{col.columnName} As TempTable_{col.columnName}";
-                lastPart += $"t.ActualTable_{col.columnName} = t.TempTable_{col.columnName}";               
-                if (table.columns[table.columns.Length - 1].columnName != col.columnName)
+                updateFromTempDml += $"ActualTable.{col.name} As ActualTable_{col.name},";
+                tempTable += $"TempTable.{col.name} As TempTable_{col.name}";
+                lastPart += $"t.ActualTable_{col.name} = t.TempTable_{col.name}";               
+                if (table.columns[table.columns.Length - 1].name != col.name)
                 {                    
                     tempTable += ",";
                     lastPart += ",";
@@ -76,7 +76,7 @@ namespace Ex8.SqlDml.Builder.TextSql
 
             foreach (var col in table.columns)
             {
-                builderTempTable.Select(col.columnName);
+                builderTempTable.Select(col.name);
             }
 
             return new TargetSql
