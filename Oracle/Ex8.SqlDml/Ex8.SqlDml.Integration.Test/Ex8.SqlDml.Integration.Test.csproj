@@ -29,13 +29,22 @@
     <None Update="TestData\Input\database.job.adventureWorks.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="TestData\Input\database.manifest.mysql.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestData\Input\database.manifest.xepdb1.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Input\mysql.target.ateam.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>   
     <None Update="TestData\Input\xepdb1.target.person.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestData\Input\xepdb1.target.product.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Output\mysql.table.manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestData\Output\xepdb1.table.manifest.json">

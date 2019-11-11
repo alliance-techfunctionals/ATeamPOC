@@ -1,0 +1,4 @@
+{
+  "SelectPkDml": "select cu.column_name as columnname, c.data_type as datatype from information_schema.key_column_usage cu join information_schema.columns c on cu.table_schema = c.table_schema and cu.table_name = c.table_name and cu.column_name = c.column_name where cu.table_schema = 'ex8db1' and constraint_name = 'primary' and cu.TABLE_NAME = 'ATeam';",
+  "SelectRowCountDml": "select count(*) from ex8db1.ATeam"
+}

@@ -1,0 +1,44 @@
+{
+  "manifest": {
+    "manifestType": "Database",
+    "manifestName": "ex8db1",
+    "databaseType": "MySql",
+    "sourceConnectionString": "server=localhost;port=3306;user='root';password='';database=ex8db1",
+    "targetConnectionString": "server=localhost;port=3306;user='root';password='';database=ex8db1",
+    "tables": [
+      {
+        "schema_name": "ex8db1",
+        "table_name": "ATeam",
+        "pk_column_name": "Id",
+        "pk_data_type": "int",
+        "record_count": 4,
+        "columns": [
+          {
+            "name": "First_Name",
+            "dataType": "Varchar",
+            "maxLength": 50,
+            "attributeName": "Firstname",
+            "attributeTypeEnum": "FINA",
+            "subjectEntityMappingId": null,
+            "isReconstructable": false,
+            "isComposite": false,
+            "formatType": null,
+            "composition": null
+          },
+          {
+            "name": "Last_Name",
+            "dataType": "Varchar",
+            "maxLength": 50,
+            "attributeName": "Lastname",
+            "attributeTypeEnum": "LN",
+            "subjectEntityMappingId": null,
+            "isReconstructable": false,
+            "isComposite": false,
+            "formatType": null,
+            "composition": null
+          }
+        ]
+      }
+    ]
+  }
+}
