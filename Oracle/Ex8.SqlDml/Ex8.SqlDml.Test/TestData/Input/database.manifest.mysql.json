@@ -1,17 +1,18 @@
 {
   "manifest": {
     "manifestType": "Database",
-    "manifestName": "ex8db1",
+    "manifestName": "ex8_db1",
     "databaseType": "MySql",
-    "sourceConnectionString": "server=localhost;port=3306;user='root';password='';database=ex8db1",
-    "targetConnectionString": "server=localhost;port=3306;user='root';password='';database=ex8db1",
+    "sourceConnectionString": "server=182.50.133.84;port=3306;user='ex8db1';password='ex8db1@123';database=ex8_db1",
+    "targetConnectionString": "server=182.50.133.84;port=3306;user='ex8db1';password='ex8db1@123';database=ex8_db1",
     "tables": [
       {
-        "schema_name": "ex8db1",
+        "schema_name": "ex8_db1",
         "table_name": "ATeam",
         "pk_column_name": "Id",
         "pk_data_type": "int",
-        "record_count": 4,
+        "record_count": 500000,
+        "temp_name": "ex8_temp_ATeam",
         "columns": [
           {
             "name": "First_Name",
