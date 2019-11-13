@@ -55,18 +55,17 @@ namespace Ex8.SqlDml.Writer.Dbms
         {
             try
             {
-                string tmpcsvfilepath = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), string.Format("{0}{1}", "TestData\\Output\\", "TmpBulkfile.csv"));
-
+                string tmpcsvfilepath = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), string.Format("{0}{1}", "TestData\\Output\\", "TmpBulkfile.csv"));               
                 datatocsvfile(tmpcsvfilepath, sourceTable); // copy records into a temp csv
-
+                
                 var msbl = new MySqlBulkLoader(connection);
                 msbl.TableName = destinationTableName;
                 msbl.FileName = tmpcsvfilepath;
                 msbl.FieldTerminator = ",";
                 msbl.FieldQuotationCharacter = '"';
                 msbl.NumberOfLinesToSkip = 1;
+                msbl.Local = true;  //for pushing the data from local.csv to remote
                 msbl.Load(); // load from csv into the destination table
-
                 System.IO.File.Delete(tmpcsvfilepath); // delete the temp file
             }
             catch(Exception ex) { 
@@ -79,6 +78,7 @@ namespace Ex8.SqlDml.Writer.Dbms
             using (var connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
+                
                 BulkCopy(connection, tableInfo.temp_name, sourceTable);
                 var recordsCount = connection.ExecuteScalar<int>($"select count(*) from {tableInfo.temp_name}");
                 return recordsCount;
