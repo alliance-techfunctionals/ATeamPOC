@@ -20,7 +20,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
         private const string _inputRoot = "TestData\\Input\\";
         private const string _outputRoot = "TestData\\Output\\";
 
-        private const string connectionString = "server=localhost;port=3306;user='root';password='';database=ex8db1;";
+        private const string connectionString = "server=182.50.133.84;port=3306;user='ex8db1';password='ex8db1@123';database=ex8_db1;AllowLoadLocalInfile='true'";
 
         [Fact]
         public void UploadTable_SetupSource()

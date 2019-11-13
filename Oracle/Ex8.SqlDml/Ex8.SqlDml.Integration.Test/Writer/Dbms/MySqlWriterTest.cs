@@ -18,7 +18,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
     public class MySqlWriterTest
     {
         private const string _inputRoot = "TestData\\Input\\";
-        private const string connectionString = "server=localhost;port=3306;user='root';password='';database=ex8db1";
+        private const string connectionString = "server=182.50.133.84;port=3306;user='ex8db1';password='ex8db1@123';database=ex8_db1;AllowLoadLocalInfile='true'";
 
         [Fact]
         public void Can_BulkCopy()
@@ -29,7 +29,9 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             var inputSqlQueries = GetJsonFile<TargetSql>(_inputRoot, "mysql.target.ateam.json");
 
             MySqlWriter target = new MySqlWriter();
+                      
             target.ExecuteSqlText(connectionString, inputSqlQueries.SetupTempDml);  //Temp Table Created at this stage {ex8_temp_ATeam}
+
             var outputNOfRecords = target.BulkCopy(connectionString, manifestObject.manifest.tables[0], data); // copy records into temp. table {ex8_temp_ATeam}
             data.Rows.Count.Should().Be(outputNOfRecords);
         }
@@ -52,7 +54,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             var reader = new MySqlReader();
 
             // Only get the records what you have Updated in database on the basis of Ids {Primary Keys}
-            var result = reader.GetData(connectionString, $"select * from ex8db1.ATeam where Id in ({string.Join(",",data.AsEnumerable().Select(r => r.Field<dynamic>("Id")))})"); 
+            var result = reader.GetData(connectionString, $"select * from ex8_db1.ATeam where Id in ({string.Join(",",data.AsEnumerable().Select(r => r.Field<dynamic>("Id")))})"); 
             result.Tables.Should().NotBeEmpty();
             result.Tables[0].Rows.Should().NotBeEmpty();
             result.Tables[0].Should().Equals(data);
