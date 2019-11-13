@@ -1,8 +1,8 @@
 {
   "ClearTempDml": "DROP TEMPORARY TABLE ex8_temp_ATeam;",
-  "SelectDml": "SELECT Id, First_Name, Last_Name from ex8db1.ATeam;",
-  "SetupTempDml": [
-    "CREATE TEMPORARY TABLE ex8_temp_ATeam SELECT Id, First_Name, Last_Name FROM ex8db1.ATeam LIMIT 0;"
+  "SelectDml": "SELECT Id, First_Name, Last_Name from ex8_db1.ATeam;",
+  "SetupTempDml": [    
+    "CREATE TEMPORARY TABLE ex8_temp_ATeam SELECT Id, First_Name, Last_Name FROM ex8_db1.ATeam LIMIT 0;"
   ],
-  "UpdateFromTempDml": "UPDATE ex8db1.ATeam actualTable INNER JOIN ex8_temp_ATeam tmpTable on actualTable.Id = tmpTable.Id SET actualTable.First_Name = tmpTable.First_Name, actualTable.Last_Name = tmpTable.Last_Name"
+  "UpdateFromTempDml": "UPDATE ex8_db1.ATeam actualTable INNER JOIN ex8_temp_ATeam tmpTable on actualTable.Id = tmpTable.Id SET actualTable.First_Name = tmpTable.First_Name, actualTable.Last_Name = tmpTable.Last_Name"
 }
