@@ -1,0 +1,81 @@
+{
+  "manifest": {
+    "manifestType": "Database",
+    "manifestName": "ex8db1",
+    "databaseType": "Postgres",
+    "sourceConnectionString": "User ID=postgres;Password=India@123;Host=localhost;Port=5432;Database=Ex8db1;",
+    "targetConnectionString": "User ID=postgres;Password=India@123;Host=localhost;Port=5432;Database=Ex8db1;",
+    "tables": [
+      {
+        "schema_name": "sales",
+        "table_name": "Customer",
+        "pk_column_name": "Id",
+        "pk_data_type": "integer",
+        "record_count": 1,
+        "temp_name": "ex8_temp_Customer",
+        "columns": [
+          {
+            "name": "FirstName",
+            "dataType": "Varchar",
+            "maxLength": 50,
+            "attributeName": "Firstname",
+            "attributeTypeEnum": "FINA",
+            "subjectEntityMappingId": null,
+            "isReconstructable": false,
+            "isComposite": false,
+            "formatType": null,
+            "composition": null
+          },
+          {
+            "name": "LastName",
+            "dataType": "Varchar",
+            "maxLength": 50,
+            "attributeName": "Lastname",
+            "attributeTypeEnum": "LN",
+            "subjectEntityMappingId": null,
+            "isReconstructable": false,
+            "isComposite": false,
+            "formatType": null,
+            "composition": null
+          },
+          {
+            "name": "email",
+            "dataType": "Varchar",
+            "maxLength": 355,
+            "attributeName": "Email",
+            "attributeTypeEnum": "Em",
+            "subjectEntityMappingId": null,
+            "isReconstructable": false,
+            "isComposite": false,
+            "formatType": null,
+            "composition": null
+          },
+          {
+            "name": "contact",
+            "dataType": "Varchar",
+            "maxLength": 10,
+            "attributeName": "Contact",
+            "attributeTypeEnum": "Cont",
+            "subjectEntityMappingId": null,
+            "isReconstructable": false,
+            "isComposite": false,
+            "formatType": null,
+            "composition": null
+          },
+          {
+            "name": "age",
+            "dataType": "integer",
+            "maxLength": 10,
+            "attributeName": "Age",
+            "attributeTypeEnum": "AG",
+            "subjectEntityMappingId": null,
+            "isReconstructable": false,
+            "isComposite": false,
+            "formatType": null,
+            "composition": null
+          }
+        ]
+      }
+    ]
+  }
+}

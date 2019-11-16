@@ -1,0 +1,10 @@
+{
+  "ClearTempDml": "TRUNCATE TABLE ex8_temp_Customer",
+  "SelectDml": "select Id, FirstName, LastName, email, contact, age  from ( select Id, FirstName, LastName, email, contact, age, row_number() over(order by Id) as seqnum  from sales.Customer ) q",
+  "SetupTempDml": [
+    "create temp TABLE ex8_temp_Customer as select Id, FirstName, LastName, email, contact, age from sales.Customer limit 0;"
+   
+   // "alter table ex8_temp_Customer add constraint ex8_temp_Customer_pk primary key(Id)"
+  ],
+  "UpdateFromTempDml": "UPDATE sales.Customer SET FirstName = tmpTable.FirstName, LastName = tmpTable.LastName, email = tmpTable.email, contact = tmpTable.contact, age = tmpTable.age FROM ex8_temp_Customer tmpTable WHERE sales.Customer.Id = tmpTable.Id;"
+}
