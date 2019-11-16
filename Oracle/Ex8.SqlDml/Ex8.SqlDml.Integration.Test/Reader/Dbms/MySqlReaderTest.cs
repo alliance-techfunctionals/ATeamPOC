@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace Ex8.SqlDml.Integration.Test
+namespace Ex8.SqlDml.Integration.Test.Reader.Dbms
 {
     public class MySqlReaderTest
     {
