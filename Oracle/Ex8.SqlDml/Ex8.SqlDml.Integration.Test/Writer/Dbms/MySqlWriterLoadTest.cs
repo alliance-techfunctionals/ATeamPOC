@@ -22,7 +22,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
 
         private const string connectionString = "server=182.50.133.84;port=3306;user='ex8db1';password='ex8db1@123';database=ex8_db1;AllowLoadLocalInfile='true'";
 
-        [Fact]
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void UploadTable_SetupSource()
         {
             var data = CreateTable("Pre", 500000);
@@ -37,7 +37,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             data.Rows.Count.Should().Be(outputnoOfRecord);
         }
 
-        [Fact]
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void UploadTable_LoadTest()
         {
             int recordCount = 500000;

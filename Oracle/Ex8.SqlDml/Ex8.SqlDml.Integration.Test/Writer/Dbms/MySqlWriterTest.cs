@@ -20,7 +20,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
         private const string _inputRoot = "TestData\\Input\\";
         private const string connectionString = "server=182.50.133.84;port=3306;user='ex8db1';password='ex8db1@123';database=ex8_db1;AllowLoadLocalInfile='true'";
 
-        [Fact]
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void Can_BulkCopy()
         {
             var data = CreateTable();
@@ -37,7 +37,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
         }
 
 
-        [Fact]
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void CanUploadTable()
         {
             var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.mysql.json");

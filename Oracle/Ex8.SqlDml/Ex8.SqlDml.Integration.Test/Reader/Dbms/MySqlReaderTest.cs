@@ -11,7 +11,7 @@ namespace Ex8.SqlDml.Integration.Test.Reader.Dbms
     {
         private const string connectionString = "server=182.50.133.84;port=3306;user='ex8db1';password='ex8db1@123';database=ex8_db1";
 
-        [Fact]
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void Can_GetData()
         {
             var target = new MySqlReader();
