@@ -1,0 +1,524 @@
+{
+  "Name": "MessageMT300",
+  "DisplayName": "MessageMT300",
+  "NodePath": "/ns:MessageMT300",
+  "NodeType": "Element",
+  "Namespace": {
+    "Prefix": "ns",
+    "Value": "http://www.tracegroup.com/transformer/swift2018"
+  },
+  "Children": [
+    {
+      "Name": "xmlns",
+      "DisplayName": "xmlns",
+      "NodePath": "/ns:MessageMT300/@xmlns",
+      "NodeType": "Attribute",
+      "Children": []
+    },
+    {
+      "Name": "Blocks123",
+      "DisplayName": "Blocks123",
+      "NodePath": "/ns:MessageMT300/ns:Blocks123",
+      "NodeType": "Element",
+      "Children": [
+        {
+          "Name": "Block1",
+          "DisplayName": "Block1",
+          "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block1",
+          "NodeType": "Element",
+          "Children": [
+            {
+              "Name": "ApplicationIdentifier",
+              "DisplayName": "ApplicationIdentifier",
+              "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block1/ns:ApplicationIdentifier",
+              "NodeType": "Element",
+              "Children": [
+                {
+                  "Name": "exate",
+                  "DisplayName": "exate",
+                  "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block1/ns:ApplicationIdentifier/@exate",
+                  "NodeType": "Attribute",
+                  "Children": []
+                }
+              ]
+            },
+            {
+              "Name": "ServiceIdentifier",
+              "DisplayName": "ServiceIdentifier",
+              "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block1/ns:ServiceIdentifier",
+              "NodeType": "Element",
+              "Children": []
+            },
+            {
+              "Name": "OurAddress",
+              "DisplayName": "OurAddress",
+              "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block1/ns:OurAddress",
+              "NodeType": "Element",
+              "Children": [
+                {
+                  "Name": "IdCode",
+                  "DisplayName": "IdCode",
+                  "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block1/ns:OurAddress/ns:IdCode",
+                  "NodeType": "Element",
+                  "Children": []
+                },
+                {
+                  "Name": "LT",
+                  "DisplayName": "LT",
+                  "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block1/ns:OurAddress/ns:LT",
+                  "NodeType": "Element",
+                  "Children": []
+                },
+                {
+                  "Name": "Branch",
+                  "DisplayName": "Branch",
+                  "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block1/ns:OurAddress/ns:Branch",
+                  "NodeType": "Element",
+                  "Children": []
+                }
+              ]
+            },
+            {
+              "Name": "SessionNumber",
+              "DisplayName": "SessionNumber",
+              "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block1/ns:SessionNumber",
+              "NodeType": "Element",
+              "Children": []
+            },
+            {
+              "Name": "SequenceNumber",
+              "DisplayName": "SequenceNumber",
+              "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block1/ns:SequenceNumber",
+              "NodeType": "Element",
+              "Children": []
+            }
+          ]
+        },
+        {
+          "Name": "Block2",
+          "DisplayName": "Block2",
+          "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block2",
+          "NodeType": "Element",
+          "Children": [
+            {
+              "Name": "Block2_Output",
+              "DisplayName": "Block2_Output",
+              "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block2/ns:Block2_Output",
+              "NodeType": "Element",
+              "Children": [
+                {
+                  "Name": "MessageType",
+                  "DisplayName": "MessageType",
+                  "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block2/ns:Block2_Output/ns:MessageType",
+                  "NodeType": "Element",
+                  "Children": []
+                },
+                {
+                  "Name": "InputTime",
+                  "DisplayName": "InputTime",
+                  "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block2/ns:Block2_Output/ns:InputTime",
+                  "NodeType": "Element",
+                  "Children": []
+                },
+                {
+                  "Name": "MIR",
+                  "DisplayName": "MIR",
+                  "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block2/ns:Block2_Output/ns:MIR",
+                  "NodeType": "Element",
+                  "Children": []
+                },
+                {
+                  "Name": "OutputDate",
+                  "DisplayName": "OutputDate",
+                  "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block2/ns:Block2_Output/ns:OutputDate",
+                  "NodeType": "Element",
+                  "Children": []
+                },
+                {
+                  "Name": "OutputTime",
+                  "DisplayName": "OutputTime",
+                  "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block2/ns:Block2_Output/ns:OutputTime",
+                  "NodeType": "Element",
+                  "Children": []
+                },
+                {
+                  "Name": "MessagePriority",
+                  "DisplayName": "MessagePriority",
+                  "NodePath": "/ns:MessageMT300/ns:Blocks123/ns:Block2/ns:Block2_Output/ns:MessagePriority",
+                  "NodeType": "Element",
+                  "Children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Block4",
+      "DisplayName": "Block4",
+      "NodePath": "/ns:MessageMT300/ns:Block4",
+      "NodeType": "Element",
+      "Children": [
+        {
+          "Name": "GeneralInfo",
+          "DisplayName": "GeneralInfo",
+          "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo",
+          "NodeType": "Element",
+          "Children": [
+            {
+              "Name": "SendersReference_20",
+              "DisplayName": "SendersReference_20",
+              "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:SendersReference_20",
+              "NodeType": "Element",
+              "Children": []
+            },
+            {
+              "Name": "TypeOfOperation",
+              "DisplayName": "TypeOfOperation",
+              "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:TypeOfOperation",
+              "NodeType": "Element",
+              "Children": []
+            },
+            {
+              "Name": "ScopeOfOperation",
+              "DisplayName": "ScopeOfOperation",
+              "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:ScopeOfOperation",
+              "NodeType": "Element",
+              "Children": []
+            },
+            {
+              "Name": "CommonReference_22C",
+              "DisplayName": "CommonReference_22C",
+              "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:CommonReference_22C",
+              "NodeType": "Element",
+              "Children": [
+                {
+                  "Name": "BankCode1",
+                  "DisplayName": "BankCode1",
+                  "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:CommonReference_22C/ns:BankCode1",
+                  "NodeType": "Element",
+                  "Children": []
+                },
+                {
+                  "Name": "LocationCode1",
+                  "DisplayName": "LocationCode1",
+                  "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:CommonReference_22C/ns:LocationCode1",
+                  "NodeType": "Element",
+                  "Children": []
+                },
+                {
+                  "Name": "ReferenceCode",
+                  "DisplayName": "ReferenceCode",
+                  "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:CommonReference_22C/ns:ReferenceCode",
+                  "NodeType": "Element",
+                  "Children": []
+                },
+                {
+                  "Name": "BankCode2",
+                  "DisplayName": "BankCode2",
+                  "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:CommonReference_22C/ns:BankCode2",
+                  "NodeType": "Element",
+                  "Children": []
+                },
+                {
+                  "Name": "LocationCode2",
+                  "DisplayName": "LocationCode2",
+                  "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:CommonReference_22C/ns:LocationCode2",
+                  "NodeType": "Element",
+                  "Children": []
+                }
+              ]
+            },
+            {
+              "Name": "PartyA",
+              "DisplayName": "PartyA",
+              "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:PartyA",
+              "NodeType": "Element",
+              "Children": [
+                {
+                  "Name": "OptionA",
+                  "DisplayName": "OptionA",
+                  "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:PartyA/ns:OptionA",
+                  "NodeType": "Element",
+                  "Children": [
+                    {
+                      "Name": "IdCode",
+                      "DisplayName": "IdCode",
+                      "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:PartyA/ns:OptionA/ns:IdCode",
+                      "NodeType": "Element",
+                      "Children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Name": "PartyB",
+              "DisplayName": "PartyB",
+              "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:PartyB",
+              "NodeType": "Element",
+              "Children": [
+                {
+                  "Name": "OptionD",
+                  "DisplayName": "OptionD",
+                  "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:PartyB/ns:OptionD",
+                  "NodeType": "Element",
+                  "Children": [
+                    {
+                      "Name": "PartyIdentifier",
+                      "DisplayName": "PartyIdentifier",
+                      "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:PartyB/ns:OptionD/ns:PartyIdentifier",
+                      "NodeType": "Element",
+                      "Children": []
+                    },
+                    {
+                      "Name": "NameAndAddress",
+                      "DisplayName": "NameAndAddress",
+                      "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:PartyB/ns:OptionD/ns:NameAndAddress",
+                      "NodeType": "Element",
+                      "Children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Name": "FundOrBeneCust",
+              "DisplayName": "FundOrBeneCust",
+              "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:FundOrBeneCust",
+              "NodeType": "Element",
+              "Children": [
+                {
+                  "Name": "OptionJ",
+                  "DisplayName": "OptionJ",
+                  "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:FundOrBeneCust/ns:OptionJ",
+                  "NodeType": "Element",
+                  "Children": [
+                    {
+                      "Name": "PartyIdentification",
+                      "DisplayName": "PartyIdentification",
+                      "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:FundOrBeneCust/ns:OptionJ/ns:PartyIdentification",
+                      "NodeType": "Element",
+                      "Children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Name": "TermsConditions",
+              "DisplayName": "TermsConditions",
+              "NodePath": "/ns:MessageMT300/ns:Block4/ns:GeneralInfo/ns:TermsConditions",
+              "NodeType": "Element",
+              "Children": []
+            }
+          ]
+        },
+        {
+          "Name": "TransactionDets",
+          "DisplayName": "TransactionDets",
+          "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets",
+          "NodeType": "Element",
+          "Children": [
+            {
+              "Name": "TradeDate",
+              "DisplayName": "TradeDate",
+              "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:TradeDate",
+              "NodeType": "Element",
+              "Children": []
+            },
+            {
+              "Name": "ValueDate",
+              "DisplayName": "ValueDate",
+              "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:ValueDate",
+              "NodeType": "Element",
+              "Children": []
+            },
+            {
+              "Name": "ExchangeRate",
+              "DisplayName": "ExchangeRate",
+              "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:ExchangeRate",
+              "NodeType": "Element",
+              "Children": []
+            },
+            {
+              "Name": "AmountBought",
+              "DisplayName": "AmountBought",
+              "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:AmountBought",
+              "NodeType": "Element",
+              "Children": [
+                {
+                  "Name": "CurrencyAmount",
+                  "DisplayName": "CurrencyAmount",
+                  "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:AmountBought/ns:CurrencyAmount",
+                  "NodeType": "Element",
+                  "Children": [
+                    {
+                      "Name": "Currency",
+                      "DisplayName": "Currency",
+                      "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:AmountBought/ns:CurrencyAmount/ns:Currency",
+                      "NodeType": "Element",
+                      "Children": []
+                    },
+                    {
+                      "Name": "Amount",
+                      "DisplayName": "Amount",
+                      "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:AmountBought/ns:CurrencyAmount/ns:Amount",
+                      "NodeType": "Element",
+                      "Children": []
+                    }
+                  ]
+                },
+                {
+                  "Name": "ReceivingAgent",
+                  "DisplayName": "ReceivingAgent",
+                  "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:AmountBought/ns:ReceivingAgent",
+                  "NodeType": "Element",
+                  "Children": [
+                    {
+                      "Name": "OptionA",
+                      "DisplayName": "OptionA",
+                      "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:AmountBought/ns:ReceivingAgent/ns:OptionA",
+                      "NodeType": "Element",
+                      "Children": [
+                        {
+                          "Name": "IdCode",
+                          "DisplayName": "IdCode",
+                          "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:AmountBought/ns:ReceivingAgent/ns:OptionA/ns:IdCode",
+                          "NodeType": "Element",
+                          "Children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Name": "AmountSold",
+              "DisplayName": "AmountSold",
+              "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:AmountSold",
+              "NodeType": "Element",
+              "Children": [
+                {
+                  "Name": "CcyAmount",
+                  "DisplayName": "CcyAmount",
+                  "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:AmountSold/ns:CcyAmount",
+                  "NodeType": "Element",
+                  "Children": [
+                    {
+                      "Name": "Currency",
+                      "DisplayName": "Currency",
+                      "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:AmountSold/ns:CcyAmount/ns:Currency",
+                      "NodeType": "Element",
+                      "Children": []
+                    },
+                    {
+                      "Name": "Amount",
+                      "DisplayName": "Amount",
+                      "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:AmountSold/ns:CcyAmount/ns:Amount",
+                      "NodeType": "Element",
+                      "Children": []
+                    }
+                  ]
+                },
+                {
+                  "Name": "ReceivingAgent",
+                  "DisplayName": "ReceivingAgent",
+                  "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:AmountSold/ns:ReceivingAgent",
+                  "NodeType": "Element",
+                  "Children": [
+                    {
+                      "Name": "OptionA",
+                      "DisplayName": "OptionA",
+                      "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:AmountSold/ns:ReceivingAgent/ns:OptionA",
+                      "NodeType": "Element",
+                      "Children": [
+                        {
+                          "Name": "IdCode",
+                          "DisplayName": "IdCode",
+                          "NodePath": "/ns:MessageMT300/ns:Block4/ns:TransactionDets/ns:AmountSold/ns:ReceivingAgent/ns:OptionA/ns:IdCode",
+                          "NodeType": "Element",
+                          "Children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Name": "OptionalGeneralInfo",
+          "DisplayName": "OptionalGeneralInfo",
+          "NodePath": "/ns:MessageMT300/ns:Block4/ns:OptionalGeneralInfo",
+          "NodeType": "Element",
+          "Children": [
+            {
+              "Name": "DealingMethod",
+              "DisplayName": "DealingMethod",
+              "NodePath": "/ns:MessageMT300/ns:Block4/ns:OptionalGeneralInfo/ns:DealingMethod",
+              "NodeType": "Element",
+              "Children": [
+                {
+                  "Name": "Method",
+                  "DisplayName": "Method",
+                  "NodePath": "/ns:MessageMT300/ns:Block4/ns:OptionalGeneralInfo/ns:DealingMethod/ns:Method",
+                  "NodeType": "Element",
+                  "Children": []
+                }
+              ]
+            },
+            {
+              "Name": "BrokerId",
+              "DisplayName": "BrokerId",
+              "NodePath": "/ns:MessageMT300/ns:Block4/ns:OptionalGeneralInfo/ns:BrokerId",
+              "NodeType": "Element",
+              "Children": [
+                {
+                  "Name": "OptionD",
+                  "DisplayName": "OptionD",
+                  "NodePath": "/ns:MessageMT300/ns:Block4/ns:OptionalGeneralInfo/ns:BrokerId/ns:OptionD",
+                  "NodeType": "Element",
+                  "Children": [
+                    {
+                      "Name": "NameAndAddress",
+                      "DisplayName": "NameAndAddress",
+                      "NodePath": "/ns:MessageMT300/ns:Block4/ns:OptionalGeneralInfo/ns:BrokerId/ns:OptionD/ns:NameAndAddress",
+                      "NodeType": "Element",
+                      "Children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Name": "SenderToRcvrInfo",
+              "DisplayName": "SenderToRcvrInfo",
+              "NodePath": "/ns:MessageMT300/ns:Block4/ns:OptionalGeneralInfo/ns:SenderToRcvrInfo",
+              "NodeType": "Element",
+              "Children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Block5",
+      "DisplayName": "Block5",
+      "NodePath": "/ns:MessageMT300/ns:Block5",
+      "NodeType": "Element",
+      "Children": [
+        {
+          "Name": "ChecksumTrailer",
+          "DisplayName": "ChecksumTrailer",
+          "NodePath": "/ns:MessageMT300/ns:Block5/ns:ChecksumTrailer",
+          "NodeType": "Element",
+          "Children": []
+        }
+      ]
+    }
+  ]
+}

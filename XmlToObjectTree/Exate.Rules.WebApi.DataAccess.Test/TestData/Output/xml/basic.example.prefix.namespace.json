@@ -1,0 +1,71 @@
+{
+  "Name": "test",
+  "DisplayName": "test",
+  "NodeDataType": "None",
+  "NodePath": "/ns:test",
+  "NodeType": "Element",
+  "Namespace": {
+    "Prefix": "ns",
+    "Value": "http://www.exatetechnology.com/test"
+  },
+  "Children": [
+    {
+      "Name": "elements",
+      "DisplayName": "elements",
+      "NodeDataType": "none",
+      "NodePath": "/ns:test/ns:elements",
+      "NodeType": "Element",
+      "Children": [
+        {
+          "Name": "id",
+          "DisplayName": "id",
+          "NodeDataType": "string",
+          "NodePath": "/ns:test/ns:elements/@id",
+          "NodeType": "Attribute",
+          "Children": []
+        },
+        {
+          "Name": "element",
+          "DisplayName": "element",
+          "NodeDataType": "none",
+          "NodePath": "/ns:test/ns:elements/ns:element[*]",
+          "NodeType": "Element",
+          "Children": [
+            {
+              "Name": "code",
+              "DisplayName": "code",
+              "NodeDataType": "string",
+              "NodePath": "/ns:test/ns:elements/ns:element[*]/@code",
+              "NodeType": "Attribute",
+              "Children": []
+            },
+            {
+              "Name": "id",
+              "DisplayName": "id",
+              "NodeDataType": "string",
+              "NodePath": "/ns:test/ns:elements/ns:element[*]/id",
+              "NodeType": "Element",
+              "Children": []
+            },
+            {
+              "Name": "firstname",
+              "DisplayName": "firstname",
+              "NodeDataType": "string",
+              "NodePath": "/ns:test/ns:elements/ns:element[*]/firstname",
+              "NodeType": "Element",
+              "Children": []
+            },
+            {
+              "Name": "surname",
+              "DisplayName": "surname",
+              "NodeDataType": "string",
+              "NodePath": "/ns:test/ns:elements/ns:element[*]/surname",
+              "NodeType": "Element",
+              "Children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test>
+  <elements id="root">
+    <element code="Dan">
+      <id>1</id>
+      <firstname>Daniel</firstname>
+      <surname>Saunders</surname>
+    </element>
+    <element code="Br">
+      <id>2</id>
+      <firstname>Ryan</firstname>
+      <surname>Spain</surname>
+    </element>
+    <element code="Bel">
+      <id>3</id>
+      <firstname>Belinda</firstname>
+      <surname>Chambers</surname>
+    </element>
+  </elements>
+</test>

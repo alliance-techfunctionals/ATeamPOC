@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns:test xmlns:ns="http://www.exatetechnology.com/test">
+  <ns:elements id="root">
+    <ns:element code="Dan">
+      <ns:id>1</ns:id>
+      <ns:firstname>Daniel</ns:firstname>
+      <ns:surname>Saunders</ns:surname>
+    </ns:element>
+    <ns:element code="Br">
+      <ns:id>2</ns:id>
+      <ns:firstname>Ryan</ns:firstname>
+      <ns:surname>Spain</ns:surname>
+    </ns:element>
+    <ns:element code="Bel">
+      <ns:id>3</ns:id>
+      <ns:firstname>Belinda</ns:firstname>
+      <ns:surname>Chambers</ns:surname>
+    </ns:element>
+  </ns:elements>
+</ns:test>
