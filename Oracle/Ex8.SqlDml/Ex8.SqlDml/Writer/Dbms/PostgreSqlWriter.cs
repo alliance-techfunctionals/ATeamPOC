@@ -84,29 +84,44 @@ namespace Ex8.SqlDml.Writer.Dbms
         /// </returns>
         internal NpgsqlParameter _PostgreParameter(string dataType, List<dynamic> colValueArrr)
         {
-            NpgsqlParameter pgParam = new NpgsqlParameter();
+            var param = new NpgsqlParameter();
             switch (dataType.ToLower())
             {
-                case "number":
-                case "Decimal":
-                case "integer":
-                    pgParam.NpgsqlDbType = NpgsqlDbType.Double;
+                case "float":
+                case "real":
+                    param.NpgsqlDbType = NpgsqlDbType.Real;
+                    break;
+                case "numeric":
+                    param.NpgsqlDbType = NpgsqlDbType.Numeric;
+                    break;
+                case "smallint":
+                    param.NpgsqlDbType = NpgsqlDbType.Smallint;
+                    break;
+                case "int":
+                    param.NpgsqlDbType = NpgsqlDbType.Integer;
+                    break;
+                case "bigint":
+                    param.NpgsqlDbType = NpgsqlDbType.Bigint;
+                    break;
+                case "char":
+                    param.NpgsqlDbType = NpgsqlDbType.Char;
                     break;
                 case "varchar":
+                    param.NpgsqlDbType = NpgsqlDbType.Varchar;
+                    break;
                 case "text":
-                    pgParam.NpgsqlDbType = NpgsqlDbType.Varchar;
+                    param.NpgsqlDbType = NpgsqlDbType.Text;
                     break;
                 case "datetime":
                 case "date":
-                    pgParam.NpgsqlDbType = NpgsqlDbType.Date;
+                    param.NpgsqlDbType = NpgsqlDbType.Date;
                     break;
-                // To Do: by Neha - I have to add more datatypes..for now I am just testing this for the above 4 only..
                 default:
-                    break;
+                    throw new ArgumentException($"Unsupported Data Type: {dataType}");
             }
 
-            pgParam.Value = colValueArrr.ToArray();
-            return pgParam;
+            param.Value = colValueArrr.ToArray();
+            return param;
         }
 
 
