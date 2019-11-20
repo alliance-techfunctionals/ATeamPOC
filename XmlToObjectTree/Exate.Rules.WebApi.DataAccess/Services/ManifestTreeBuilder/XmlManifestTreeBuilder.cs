@@ -21,10 +21,24 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
 
         private static XmlNode RecurseXmlDocument(XmlNode nodeofxml, ref ManifestTreeNode node, XmlNode previousnode)
         {
-            node.Name = nodeofxml.Name;
-            node.DisplayName = nodeofxml.Name;
-            //node.NodeDataType = root.GetType().Name.ToString();
+            node.Name = nodeofxml.LocalName;
+            node.DisplayName = nodeofxml.LocalName;
             node.NodeType = XmlNodeTypeEnum.Element;
+
+            if(nodeofxml.ParentNode.ParentNode == null)  // I ensure that we take the rootNode of xml 
+            {
+                var nameSpacePrefix = String.IsNullOrEmpty(nodeofxml.GetPrefixOfNamespace(nodeofxml.NamespaceURI)) && !String.IsNullOrEmpty(nodeofxml.NamespaceURI) ? "ns" : nodeofxml.GetPrefixOfNamespace(nodeofxml.NamespaceURI);
+                var nameSpace = new ManifestXmlNamespace
+                {
+                    Value = nodeofxml.NamespaceURI,
+                    Prefix = nameSpacePrefix
+                };
+
+                if (!String.IsNullOrEmpty(nameSpace.Value) && !String.IsNullOrEmpty(nameSpace.Prefix))
+                {
+                    node.Namespace = nameSpace;
+                }
+            }
 
             var children = new List<ManifestTreeNode>();
             int countSimilarChildren = 0, countskip = 0;
@@ -38,21 +52,25 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
             }
 
             var arrayXPath = countSimilarChildren > 1 ? "[*]" : string.Empty;
-            node.NodePath = $"{node.NodePath}/{nodeofxml.Name}{arrayXPath}";
+            var nameSpaceXPath = String.IsNullOrEmpty(nodeofxml.GetPrefixOfNamespace(nodeofxml.NamespaceURI))  && !String.IsNullOrEmpty(nodeofxml.NamespaceURI) ? "ns:" : "";
+            node.NodePath = $"{node.NodePath}/{nameSpaceXPath}{nodeofxml.Name}{arrayXPath}";
 
             for (int index = 0; index < nodeofxml.Attributes.Count; index++)
             {
                 if (countskip == 0)
-                {
-                    var childNode = new ManifestTreeNode
+                {      
+                    if(!nodeofxml.Attributes[index].Name.Contains("xmlns"))
                     {
-                        Name = nodeofxml.Attributes[index].Name,
-                        DisplayName = nodeofxml.Attributes[index].Name,
-                        //NodeDataType = root.GetType().Name.ToString(),
-                        NodeType = XmlNodeTypeEnum.Attribute,
-                        NodePath = node.NodePath + "/@" + nodeofxml.Attributes[index].Name
-                    };
-                    children.Add(childNode);
+                        var childNode = new ManifestTreeNode
+                        {
+                            Name = nodeofxml.Attributes[index].LocalName,
+                            DisplayName = nodeofxml.Attributes[index].LocalName,
+                            //NodeDataType = root.GetType().Name.ToString(),
+                            NodeType = XmlNodeTypeEnum.Attribute,
+                            NodePath = node.NodePath + "/@" + nodeofxml.Attributes[index].Name
+                        };
+                        children.Add(childNode);
+                    }                    
                 }
             }
 
@@ -68,8 +86,8 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
                         {
                             var childNode = new ManifestTreeNode
                             {
-                                Name = child.Name,
-                                DisplayName = child.Name,
+                                Name = child.LocalName,
+                                DisplayName = child.LocalName,
                                 //NodeDataType = child.GetType().Name.ToString(),
                                 NodeType = XmlNodeTypeEnum.Element,
                                 NodePath = node.NodePath
