@@ -8,13 +8,6 @@
     "Value": "http://www.tracegroup.com/transformer/swift2018"
   },
   "Children": [
-    //{
-    //  "Name": "xmlns",
-    //  "DisplayName": "xmlns",
-    //  "NodePath": "/ns:MessageMT300/@xmlns",
-    //  "NodeType": "Attribute",
-    //  "Children": []
-    //},
     {
       "Name": "Blocks123",
       "DisplayName": "Blocks123",

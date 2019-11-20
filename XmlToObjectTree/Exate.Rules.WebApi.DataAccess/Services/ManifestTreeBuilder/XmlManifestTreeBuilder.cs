@@ -27,16 +27,9 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
 
             if(nodeofxml.ParentNode.ParentNode == null)  // I ensure that we take the rootNode of xml 
             {
-                var nameSpacePrefix = String.IsNullOrEmpty(nodeofxml.GetPrefixOfNamespace(nodeofxml.NamespaceURI)) && !String.IsNullOrEmpty(nodeofxml.NamespaceURI) ? "ns" : nodeofxml.GetPrefixOfNamespace(nodeofxml.NamespaceURI);
-                var nameSpace = new ManifestXmlNamespace
+                if (!string.IsNullOrEmpty(nodeofxml.NamespaceURI))
                 {
-                    Value = nodeofxml.NamespaceURI,
-                    Prefix = nameSpacePrefix
-                };
-
-                if (!String.IsNullOrEmpty(nameSpace.Value) && !String.IsNullOrEmpty(nameSpace.Prefix))
-                {
-                    node.Namespace = nameSpace;
+                    node.Namespace = GetXmlNamespace(nodeofxml);
                 }
             }
 
@@ -102,6 +95,15 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
 
             node.Children = children;
             return nodeofxml;
+        }
+
+        private static ManifestXmlNamespace GetXmlNamespace(XmlNode node)
+        {
+            return new ManifestXmlNamespace
+            {
+                Value = node.NamespaceURI,
+                Prefix = string.IsNullOrEmpty(node.GetPrefixOfNamespace(node.NamespaceURI)) ? "ns" : node.GetPrefixOfNamespace(node.NamespaceURI)
+            };
         }
     }
 }
