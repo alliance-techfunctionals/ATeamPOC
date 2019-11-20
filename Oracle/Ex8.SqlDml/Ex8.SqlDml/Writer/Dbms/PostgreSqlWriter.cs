@@ -22,14 +22,11 @@ namespace Ex8.SqlDml.Writer.Dbms
             using (var connection = new NpgsqlConnection(connectionString))
             {
                 connection.Open();
-
                 foreach (var sql in setupSql)
                 {
                     connection.Execute(sql);
                 }
-
                 BulkCopy(connection, tableInfo.temp_name, tableInfo, uploadData);
-
                 foreach (var sql in postSql)
                 {
                     connection.Execute(sql);
@@ -61,23 +58,22 @@ namespace Ex8.SqlDml.Writer.Dbms
         {
             using (var writer = connection.BeginBinaryImport($"COPY {destinationTableName} FROM STDIN (FORMAT BINARY)"))
             {
-                foreach (DataRow dataRows in data.Rows)
+                foreach (DataRow dataRow in data.Rows)
                 {
                     writer.StartRow();
-                    BulkCopy(writer, destinationTableName, tableInfo, dataRows);
+                    BulkCopy(writer, destinationTableName, tableInfo, dataRow);
                 }
                 var count = writer.CompleteAsync();
                 return Convert.ToInt32(count.Result);
             }
         }
 
-        internal void BulkCopy(NpgsqlBinaryImporter writer, string destinationTableName, Table tableInfo, DataRow dataRows)
+        internal void BulkCopy(NpgsqlBinaryImporter writer, string destinationTableName, Table tableInfo, DataRow dataRow)
         {
-            WriteToStream(writer, tableInfo.pk_data_type, dataRows.Field<dynamic>(tableInfo.pk_column_name));
-
+            WriteToStream(writer, tableInfo.pk_data_type, dataRow.Field<dynamic>(tableInfo.pk_column_name));
             foreach (var dataColumn in tableInfo.columns)
             {
-                WriteToStream(writer, dataColumn.dataType, dataRows.Field<dynamic>(dataColumn.name));
+                WriteToStream(writer, dataColumn.dataType, dataRow.Field<dynamic>(dataColumn.name));
             }
         }
 
@@ -129,84 +125,8 @@ namespace Ex8.SqlDml.Writer.Dbms
                     writer.Write(item, NpgsqlDbType.Time);
                     break;
                 default:
-                    throw new ArgumentException($"Unsupported Data Type: {dataType}");
+                    throw new ArgumentException($"Unsupported Data Type in PostGres DB: {dataType}");
             }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataType"></param>
-        /// <param name="colValueArrr"></param>
-        /// <returns>
-        ///    pgParam
-        /// </returns>
-        internal NpgsqlParameter _PostgreParameter(string dataType, List<dynamic> colValueArrr)
-        {
-            var param = new NpgsqlParameter();
-            switch (dataType.ToLower())
-            {
-                case "float":
-                case "real":
-                    param.NpgsqlDbType = NpgsqlDbType.Real;
-                    break;
-                case "numeric":
-                    param.NpgsqlDbType = NpgsqlDbType.Numeric;
-                    break;
-                case "smallint":
-                    param.NpgsqlDbType = NpgsqlDbType.Smallint;
-                    break;
-                case "int":
-                    param.NpgsqlDbType = NpgsqlDbType.Integer;
-                    break;
-                case "bigint":
-                    param.NpgsqlDbType = NpgsqlDbType.Bigint;
-                    break;
-                case "char":
-                    param.NpgsqlDbType = NpgsqlDbType.Char;
-                    break;
-                case "varchar":
-                    param.NpgsqlDbType = NpgsqlDbType.Varchar;
-                    break;
-                case "text":
-                    param.NpgsqlDbType = NpgsqlDbType.Text;
-                    break;
-                case "datetime":
-                case "date":
-                    param.NpgsqlDbType = NpgsqlDbType.Date;
-                    break;
-                default:
-                    throw new ArgumentException($"Unsupported Data Type: {dataType}");
-            }
-
-            param.Value = colValueArrr.ToArray();
-            return param;
-        }
-
-
-
-        /// <summary>
-        /// Expected command text = INSERT INTO {destinationTableName} (PERSON_ID, FIRST_NAME, LAST_NAME) VALUES (:1, :2, :3)
-        /// </summary>
-        /// <param name="destinationTableName"></param>
-        /// <param name="tableInfo"></param>
-        /// <returns></returns>
-        internal string GetCommandText(string destinationTableName, Table tableInfo)
-        {
-            int i = 1;
-            var sql = new StringBuilder("INSERT INTO " + destinationTableName + " (" + tableInfo.pk_column_name); // handling Primary Key col.
-            var values = new StringBuilder($"VALUES ( :{i}");
-
-            foreach (var col in tableInfo.columns)
-            {
-                sql.Append($",{col.name}");
-                i++;
-                values.Append($",:{i}");
-            }
-            sql.Append(") ");
-            sql.Append(values.ToString());
-            sql.Append(")");
-            return sql.ToString();
         }
     }
 }
