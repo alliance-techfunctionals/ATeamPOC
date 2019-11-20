@@ -43,7 +43,7 @@
               "Name": "id",
               "DisplayName": "id",
               "NodeDataType": "string",
-              "NodePath": "/ns:test/ns:elements/ns:element[*]/id",
+              "NodePath": "/ns:test/ns:elements/ns:element[*]/ns:id",
               "NodeType": "Element",
               "Children": []
             },
@@ -51,7 +51,7 @@
               "Name": "firstname",
               "DisplayName": "firstname",
               "NodeDataType": "string",
-              "NodePath": "/ns:test/ns:elements/ns:element[*]/firstname",
+              "NodePath": "/ns:test/ns:elements/ns:element[*]/ns:firstname",
               "NodeType": "Element",
               "Children": []
             },
@@ -59,7 +59,7 @@
               "Name": "surname",
               "DisplayName": "surname",
               "NodeDataType": "string",
-              "NodePath": "/ns:test/ns:elements/ns:element[*]/surname",
+              "NodePath": "/ns:test/ns:elements/ns:element[*]/ns:surname",
               "NodeType": "Element",
               "Children": []
             }
