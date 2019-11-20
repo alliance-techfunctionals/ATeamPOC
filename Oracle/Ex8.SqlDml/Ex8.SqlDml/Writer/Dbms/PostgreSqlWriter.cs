@@ -59,19 +59,78 @@ namespace Ex8.SqlDml.Writer.Dbms
 
         internal int BulkCopy(NpgsqlConnection connection, string destinationTableName, Table tableInfo, DataTable data)
         {
+            using (var writer = connection.BeginBinaryImport($"COPY {destinationTableName} FROM STDIN (FORMAT BINARY)"))
+            {
+                foreach (DataRow dataRows in data.Rows)
+                {
+                    writer.StartRow();
+                    BulkCopy(writer, destinationTableName, tableInfo, dataRows);
+                }
+                var count = writer.CompleteAsync();
+                return Convert.ToInt32(count.Result);
+            }
+        }
 
-            var copyHelper = new PostgreSQLCopyHelper<Customer>(destinationTableName)
-                .MapInteger("id", x => x.Id)
-                .MapVarchar("FirstName", x => x.FirstName)
-                .MapVarchar("LastName", x => x.LastName)
-                .MapVarchar("email", x => x.Email)
-                .MapVarchar("contact", x => x.Contact)
-                .MapInteger("age", x => x.Age);
+        internal void BulkCopy(NpgsqlBinaryImporter writer, string destinationTableName, Table tableInfo, DataRow dataRows)
+        {
+            WriteToStream(writer, tableInfo.pk_data_type, dataRows.Field<dynamic>(tableInfo.pk_column_name));
 
+            foreach (var dataColumn in tableInfo.columns)
+            {
+                WriteToStream(writer, dataColumn.dataType, dataRows.Field<dynamic>(dataColumn.name));
+            }
+        }
 
-            IEnumerable<Customer> entities = data.DataTableToList<Customer>();
+        internal void WriteToStream(NpgsqlBinaryImporter writer, string dataType, dynamic item)
+        {
 
-            return Convert.ToInt32(copyHelper.SaveAll(connection, entities));
+            switch (dataType.ToLower())
+            {
+                case "numeric":
+                    writer.Write(item, NpgsqlDbType.Numeric);
+                    break;
+                case "smallint":
+                    writer.Write(item, NpgsqlDbType.Smallint);
+                    break;
+                case "integer":
+                case "int":
+                    writer.Write(item, NpgsqlDbType.Integer);
+                    break;
+                case "bigint":
+                    writer.Write(item, NpgsqlDbType.Bigint);
+                    break;
+                case "float":
+                case "real":
+                    writer.Write(item, NpgsqlDbType.Real);
+                    break;
+                case "varchar":
+                    writer.Write(item, NpgsqlDbType.Varchar);
+                    break;
+                case "text":
+                    writer.Write(item, NpgsqlDbType.Text);
+                    break;
+                case "datetime":
+                case "date":
+                    writer.Write(item, NpgsqlDbType.Date);
+                    break;
+                case "char":
+                    writer.Write(item, NpgsqlDbType.Char);
+                    break;
+                case "boolean":
+                    writer.Write(item, NpgsqlDbType.Boolean);
+                    break;
+                case "double":
+                    writer.Write(item, NpgsqlDbType.Double);
+                    break;
+                case "money":
+                    writer.Write(item, NpgsqlDbType.Money);
+                    break;
+                case "time":
+                    writer.Write(item, NpgsqlDbType.Time);
+                    break;
+                default:
+                    throw new ArgumentException($"Unsupported Data Type: {dataType}");
+            }
         }
 
         /// <summary>
