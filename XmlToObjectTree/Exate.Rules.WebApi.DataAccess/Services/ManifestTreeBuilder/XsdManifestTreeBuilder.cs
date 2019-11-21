@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
 {
@@ -25,12 +26,16 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
             {
                 customerSchema = schema;
             }
-
             var rootNode = new ManifestTreeNode();
             foreach (XmlSchemaElement element in customerSchema.Elements.Values)
             {
                 rootNode.NodePath = "/";
-                RecursiveElementAnalyser("", element, ref rootNode);
+                element.Namespaces = customerSchema.Namespaces;
+                if (element.Namespaces.Count > 0)
+                {
+                    rootNode.Namespace = GetXsdNamespace(customerSchema.Namespaces);
+                }
+                RecursiveElementAnalyser(element, ref rootNode);
             }
 
             return rootNode;
@@ -46,17 +51,25 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
             return xss;
         }
 
-        private void RecursiveElementAnalyser(string prefix, XmlSchemaElement element, ref ManifestTreeNode node)
+        private void RecursiveElementAnalyser(XmlSchemaElement element, ref ManifestTreeNode node)
         {
-            string elementName = prefix + (element.Name ?? element.RefName.ToString());
+            string elementName = element.Name ?? element.RefName.ToString();
             var children = new List<ManifestTreeNode>();
+            string nameSpacePrefix="";
 
-            string dataType = element.ElementSchemaType.TypeCode.ToString();
+            if (element.Namespaces.Count > 0)
+            {
+                nameSpacePrefix = element.Namespaces.ToArray()[0].Name;  // Neha: I am assuming here that we have one namespace in our XSD. we can have more but that has to be dealt then              
+            }
+
+            //string dataType = element.ElementSchemaType.TypeCode.ToString(); // we are not using this anymore. 
+
             node.Name = element.Name ?? element.RefName.ToString();
             node.DisplayName = elementName;
             //node.NodeDataType = dataType;
-            node.NodeType = XmlNodeTypeEnum.Element;
-            node.NodePath = node.NodePath + element.Name;
+            node.NodeType = XmlNodeTypeEnum.Element;           
+            var nameSpaceXPath = !String.IsNullOrEmpty(element.Name) ? !String.IsNullOrEmpty(nameSpacePrefix) ? $"{nameSpacePrefix}:" : "" : "";
+            node.NodePath = node.NodePath + nameSpaceXPath + element.Name;
 
             var complexType = element.ElementSchemaType as XmlSchemaComplexType;
             if (complexType != null)
@@ -85,27 +98,30 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
                 if (sequence != null)
                 {
                     foreach (var childElement in sequence.Items)
-                    {
+                    {                        
+                        childElement.Namespaces = element.Namespaces;
+                        
                         var xmlSchemaElement = childElement as XmlSchemaElement;
                         if (xmlSchemaElement != null)
                         {
                             if (xmlSchemaElement.RefName == null)
                             {
-                                RecursiveElementAnalyser(prefix, xmlSchemaElement, ref node);
+                                RecursiveElementAnalyser(xmlSchemaElement, ref node);
                             }
                             else if (xmlSchemaElement.RefName != null)
                             {
                                 string seqDataType = sequence.GetType().ToString();
+                                nameSpaceXPath = !String.IsNullOrEmpty(nameSpacePrefix) ? node.NodePath + "/" + nameSpacePrefix + ':' + xmlSchemaElement.RefName :"";
                                 var childNode = new ManifestTreeNode
-                                {
+                                {                                    
                                     Name = xmlSchemaElement.RefName.Name,
                                     DisplayName = xmlSchemaElement.RefName.Name,
                                     //NodeDataType = seqDataType,
                                     NodeType = XmlNodeTypeEnum.Element,
-                                    NodePath = node.NodePath + "/" + xmlSchemaElement.RefName
+                                    NodePath = xmlSchemaElement.RefName.Name != "" ? nameSpaceXPath : node.NodePath + "/" + xmlSchemaElement.RefName
                                 };
 
-                                RecursiveElementAnalyser(prefix, xmlSchemaElement, ref childNode);
+                                RecursiveElementAnalyser(xmlSchemaElement, ref childNode);
                                 children.Add(childNode);
                             }
                             else
@@ -118,7 +134,7 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
                                         var xmlChoiceSchemaElement = choiceElement as XmlSchemaElement;
                                         if (xmlChoiceSchemaElement != null)
                                         {
-                                            RecursiveElementAnalyser(prefix, xmlChoiceSchemaElement, ref node);
+                                            RecursiveElementAnalyser(xmlChoiceSchemaElement, ref node);
                                         }
                                     }
                                 }
@@ -130,5 +146,18 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
 
             node.Children = children;
         }
+
+
+        private static ManifestXmlNamespace GetXsdNamespace(XmlSerializerNamespaces customerNamespaces)
+        {
+            XmlQualifiedName[] xmlQualifiedNames = customerNamespaces.ToArray();
+            return new ManifestXmlNamespace
+            {
+                Prefix = xmlQualifiedNames[0].Name,     // we picking up the first namespace only and so put 0! Can there be chances of multiple namespaces ?
+                Value = xmlQualifiedNames[0].Namespace  // we picking up the first namespace only and so put 0! assumed that we have just one namespace only ?
+            };
+        }
+
+
     }
 }
