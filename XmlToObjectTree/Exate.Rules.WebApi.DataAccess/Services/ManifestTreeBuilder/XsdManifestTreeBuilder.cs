@@ -5,7 +5,6 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
-using System.Xml.Serialization;
 
 namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
 {
@@ -33,9 +32,9 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
                 element.Namespaces = customerSchema.Namespaces;
                 if (element.Namespaces.Count > 0)
                 {
-                    rootNode.Namespace = GetXsdNamespace(customerSchema.Namespaces);
+                    rootNode.Namespace = GetXsdNamespace(customerSchema.TargetNamespace);
                 }
-                RecursiveElementAnalyser(element, ref rootNode);
+                RecursiveElementAnalyser(element, ref rootNode, rootNode.Namespace);
             }
 
             return rootNode;
@@ -51,16 +50,11 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
             return xss;
         }
 
-        private void RecursiveElementAnalyser(XmlSchemaElement element, ref ManifestTreeNode node)
+        private void RecursiveElementAnalyser(XmlSchemaElement element, ref ManifestTreeNode node, ManifestXmlNamespace xmlNamespace)
         {
             string elementName = element.Name ?? element.RefName.ToString();
             var children = new List<ManifestTreeNode>();
-            string nameSpacePrefix="";
-
-            if (element.Namespaces.Count > 0)
-            {
-                nameSpacePrefix = element.Namespaces.ToArray()[0].Name;  // Neha: I am assuming here that we have one namespace in our XSD. we can have more but that has to be dealt then              
-            }
+            string nameSpacePrefix = xmlNamespace != null ? xmlNamespace.Prefix : string.Empty;
 
             //string dataType = element.ElementSchemaType.TypeCode.ToString(); // we are not using this anymore. 
 
@@ -68,7 +62,7 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
             node.DisplayName = elementName;
             //node.NodeDataType = dataType;
             node.NodeType = XmlNodeTypeEnum.Element;           
-            var nameSpaceXPath = !String.IsNullOrEmpty(element.Name) ? !String.IsNullOrEmpty(nameSpacePrefix) ? $"{nameSpacePrefix}:" : "" : "";
+            var nameSpaceXPath = !string.IsNullOrEmpty(element.Name) ? !string.IsNullOrEmpty(nameSpacePrefix) ? $"{nameSpacePrefix}:" : "" : "";
             node.NodePath = node.NodePath + nameSpaceXPath + element.Name;
 
             var complexType = element.ElementSchemaType as XmlSchemaComplexType;
@@ -106,22 +100,22 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
                         {
                             if (xmlSchemaElement.RefName == null)
                             {
-                                RecursiveElementAnalyser(xmlSchemaElement, ref node);
+                                RecursiveElementAnalyser(xmlSchemaElement, ref node, xmlNamespace);
                             }
                             else if (xmlSchemaElement.RefName != null)
                             {
                                 string seqDataType = sequence.GetType().ToString();
-                                nameSpaceXPath = !String.IsNullOrEmpty(nameSpacePrefix) ? node.NodePath + "/" + nameSpacePrefix + ':' + xmlSchemaElement.RefName :"";
+                                nameSpaceXPath = !string.IsNullOrEmpty(nameSpacePrefix) ? $"{node.NodePath}/{nameSpacePrefix}:{xmlSchemaElement.RefName}" : "";
                                 var childNode = new ManifestTreeNode
-                                {                                    
+                                {
                                     Name = xmlSchemaElement.RefName.Name,
                                     DisplayName = xmlSchemaElement.RefName.Name,
                                     //NodeDataType = seqDataType,
                                     NodeType = XmlNodeTypeEnum.Element,
-                                    NodePath = xmlSchemaElement.RefName.Name != "" ? nameSpaceXPath : node.NodePath + "/" + xmlSchemaElement.RefName
+                                    NodePath = xmlSchemaElement.RefName.Name != "" ? nameSpaceXPath : $"{node.NodePath}/{xmlSchemaElement.RefName}"
                                 };
 
-                                RecursiveElementAnalyser(xmlSchemaElement, ref childNode);
+                                RecursiveElementAnalyser(xmlSchemaElement, ref childNode, xmlNamespace);
                                 children.Add(childNode);
                             }
                             else
@@ -134,7 +128,7 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
                                         var xmlChoiceSchemaElement = choiceElement as XmlSchemaElement;
                                         if (xmlChoiceSchemaElement != null)
                                         {
-                                            RecursiveElementAnalyser(xmlChoiceSchemaElement, ref node);
+                                            RecursiveElementAnalyser(xmlChoiceSchemaElement, ref node, xmlNamespace);
                                         }
                                     }
                                 }
@@ -147,14 +141,12 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
             node.Children = children;
         }
 
-
-        private static ManifestXmlNamespace GetXsdNamespace(XmlSerializerNamespaces customerNamespaces)
+        private static ManifestXmlNamespace GetXsdNamespace(string targetNamespace)
         {
-            XmlQualifiedName[] xmlQualifiedNames = customerNamespaces.ToArray();
-            return new ManifestXmlNamespace
+            return targetNamespace == null ? null : new ManifestXmlNamespace
             {
-                Prefix = xmlQualifiedNames[0].Name,     // we picking up the first namespace only and so put 0! Can there be chances of multiple namespaces ?
-                Value = xmlQualifiedNames[0].Namespace  // we picking up the first namespace only and so put 0! assumed that we have just one namespace only ?
+                Prefix = "ns",
+                Value = targetNamespace
             };
         }
 

@@ -2,18 +2,14 @@
   "Name": "shiporder",
   "DisplayName": "shiporder",
   "NodeDataType": "None",
-  "NodePath": "/xs:shiporder",
+  "NodePath": "/shiporder",
   "NodeType": "Element",
-  "Namespace": {
-    "Prefix": "xs",
-    "Value": "http://www.w3.org/2001/XMLSchema"
-  },
   "Children": [
     {
       "Name": "orderid",
       "DisplayName": "orderid",
       "NodeDataType": "String",
-      "NodePath": "/xs:shiporder/@orderid",
+      "NodePath": "/shiporder/@orderid",
       "NodeType": "Attribute",
       "Children": []
     },
@@ -21,7 +17,7 @@
       "Name": "orderperson",
       "DisplayName": "orderperson",
       "NodeDataType": "String",
-      "NodePath": "/xs:shiporder/xs:orderperson",
+      "NodePath": "/shiporder/orderperson",
       "NodeType": "Element",
       "Children": []
     },
@@ -29,14 +25,14 @@
       "Name": "shipto",
       "DisplayName": "shipto",
       "NodeDataType": "None",
-      "NodePath": "/xs:shiporder/xs:shipto",
+      "NodePath": "/shiporder/shipto",
       "NodeType": "Element",
       "Children": [
         {
           "Name": "name",
           "DisplayName": "name",
           "NodeDataType": "String",
-          "NodePath": "/xs:shiporder/xs:shipto/xs:name",
+          "NodePath": "/shiporder/shipto/name",
           "NodeType": "Element",
           "Children": []
         },
@@ -44,7 +40,7 @@
           "Name": "address",
           "DisplayName": "address",
           "NodeDataType": "String",
-          "NodePath": "/xs:shiporder/xs:shipto/xs:address",
+          "NodePath": "/shiporder/shipto/address",
           "NodeType": "Element",
           "Children": []
         },
@@ -52,7 +48,7 @@
           "Name": "city",
           "DisplayName": "city",
           "NodeDataType": "String",
-          "NodePath": "/xs:shiporder/xs:shipto/xs:city",
+          "NodePath": "/shiporder/shipto/city",
           "NodeType": "Element",
           "Children": []
         },
@@ -60,7 +56,7 @@
           "Name": "country",
           "DisplayName": "country",
           "NodeDataType": "String",
-          "NodePath": "/xs:shiporder/xs:shipto/xs:country",
+          "NodePath": "/shiporder/shipto/country",
           "NodeType": "Element",
           "Children": []
         }
@@ -70,14 +66,14 @@
       "Name": "item",
       "DisplayName": "item",
       "NodeDataType": "None",
-      "NodePath": "/xs:shiporder/xs:item",
+      "NodePath": "/shiporder/item",
       "NodeType": "Element",
       "Children": [
         {
           "Name": "title",
           "DisplayName": "title",
           "NodeDataType": "String",
-          "NodePath": "/xs:shiporder/xs:item/xs:title",
+          "NodePath": "/shiporder/item/title",
           "NodeType": "Element",
           "Children": []
         },
@@ -85,7 +81,7 @@
           "Name": "note",
           "DisplayName": "note",
           "NodeDataType": "String",
-          "NodePath": "/xs:shiporder/xs:item/xs:note",
+          "NodePath": "/shiporder/item/note",
           "NodeType": "Element",
           "Children": []
         },
@@ -93,7 +89,7 @@
           "Name": "quantity",
           "DisplayName": "quantity",
           "NodeDataType": "PositiveInteger",
-          "NodePath": "/xs:shiporder/xs:item/xs:quantity",
+          "NodePath": "/shiporder/item/quantity",
           "NodeType": "Element",
           "Children": []
         },
@@ -101,7 +97,7 @@
           "Name": "price",
           "DisplayName": "price",
           "NodeDataType": "Decimal",
-          "NodePath": "/xs:shiporder/xs:item/xs:price",
+          "NodePath": "/shiporder/item/price",
           "NodeType": "Element",
           "Children": []
         }

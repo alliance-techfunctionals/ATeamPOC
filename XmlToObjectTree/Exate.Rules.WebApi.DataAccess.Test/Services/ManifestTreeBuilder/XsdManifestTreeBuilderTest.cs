@@ -45,6 +45,36 @@ namespace Exate.Rules.WebApi.DataAccess.Test.Services.ManifestTreeBuilder
             result.Should().BeEquivalentTo(expectedResult);
         }
 
+        [Fact]
+        public void XsdToTree_Basic_NoNamespace()
+        {
+            var xss = GetXmlSchemaText("basic.example.no.namespace.xsd");
+            var expectedResult = GetExpectedResult("basic.example.no.namespace.json");
+            var target = new XsdManifestTreeBuilder();
+            var result = target.GetTree(xss);
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [Fact]
+        public void XsdToTree_Basic_DefaultNamespace()
+        {
+            var xss = GetXmlSchemaText("basic.example.default.namespace.xsd");
+            var expectedResult = GetExpectedResult("basic.example.default.namespace.json");
+            var target = new XsdManifestTreeBuilder();
+            var result = target.GetTree(xss);
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [Fact]
+        public void XsdToTree_Basic_PrefixNamespace()
+        {
+            var xss = GetXmlSchemaText("basic.example.prefix.namespace.xsd");
+            var expectedResult = GetExpectedResult("basic.example.prefix.namespace.json");
+            var target = new XsdManifestTreeBuilder();
+            var result = target.GetTree(xss);
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
         private ManifestTreeNode GetExpectedResult(string path)
         {
             var outputPath = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), string.Format("{0}{1}", _outputRoot, path));
