@@ -25,8 +25,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
         public void UploadTable_SetupSource()
         {
             var data = CreateTable("Pre", 60000); 
-            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");
-            var table = manifestObject.manifest.tables[0];
+            var table = GetJsonFile<Table>(_inputRoot, "table.test_user.person.json");
             table.temp_name = table.qualified_table_name; //initializing Table-TempName with Person Table
 
             var target = new OracleSqlWriter();
@@ -42,7 +41,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             int recordCount = 500000;
             var data = CreateTable("Post", recordCount);
 
-            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");
+            var table = GetJsonFile<Table>(_inputRoot, "table.test_user.person.json");
             var sql = GetJsonFile<TargetSql>(_inputRoot, "xepdb1.target.person.json");
 
             Stopwatch stopwatch = new Stopwatch();  
@@ -51,7 +50,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             var target = new OracleSqlWriter();
             target.UploadTable(connectionString,
                 sql.SetupTempDml,
-                manifestObject.manifest.tables[0],
+                table,
                 data,
                 new List<string> { sql.UpdateFromTempDml, sql.ClearTempDml });
 

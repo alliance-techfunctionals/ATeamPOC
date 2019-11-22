@@ -1,0 +1,58 @@
+{
+  "schema_name": "SalesLT",
+  "table_name": "Address",
+  "pk_column_name": "AddressID",
+  "pk_data_type": "int",
+  "record_count": 450,
+  "temp_name": "#Address",
+  "columns": [
+    {
+      "name": "AddressLine1",
+      "dataType": "nvarchar",
+      "maxLength": 60,
+      "attributeTypeEnum": "AL",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    },
+    {
+      "name": "City",
+      "dataType": "nvarchar",
+      "maxLength": 30,
+      "attributeTypeEnum": "CI",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    },
+    {
+      "name": "StateProvince",
+      "dataType": "nvarchar",
+      "maxLength": 50,
+      "attributeTypeEnum": "SP",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    },
+    {
+      "name": "CountryRegion",
+      "dataType": "nvarchar",
+      "maxLength": 50,
+      "attributeTypeEnum": "CR",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    },
+    {
+      "name": "PostalCode",
+      "dataType": "nvarchar",
+      "maxLength": 15,
+      "attributeTypeEnum": "PC",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    },
+    {
+      "name": "ModifiedDate",
+      "dataType": "nvarchar",
+      "maxLength": 50,
+      "attributeTypeEnum": "MD",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    }
+  ]
+}

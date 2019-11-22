@@ -19,15 +19,16 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
     {
         private const string _inputRoot = "TestData\\Input\\";
         private const string _outputRoot = "TestData\\Output\\";
-
         private const string connectionString = "Data Source=winserver1.vm.exatebot.com; Initial Catalog=AdventureWorksLT2016_dev; User ID=ex8ExecuteUser; Password=lbv9hFlO9s1j;";
 
+        private const int InitialCustomerTableRowCount = 847;
+        private const int InitialAddressTableRowCount = 450;
+
         [Fact(Skip = "Integration Test. Manual execution only for now")]
-        public void UploadTable_SetupSource()
+        public void UploadTable_CustomerATeam_SetupSource()
         {
             var data = CreateTable("Pre", 500000);
-            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.job.adventureWorks.json");
-            var table = manifestObject.manifest.tables[1];
+            var table = GetJsonFile<Table>(_inputRoot, "table.SalesLT.CustomerATeam.json");
             table.temp_name = table.qualified_table_name; //initializing Table-TempName with CustomerATeam Table
 
             var target = new MsSqlWriter();
@@ -38,12 +39,12 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
         }
 
         [Fact(Skip = "Integration Test. Manual execution only for now")]
-        public void UploadTable_LoadTest()
+        public void UploadTable_CustomerATeam_LoadTest()
         {
             int recordCount = 500000;
             var data = CreateTable("Post", recordCount);
 
-            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.job.adventureWorks.json");
+            var table = GetJsonFile<Table>(_inputRoot, "table.SalesLT.CustomerATeam.json");
             var sql = GetJsonFile<TargetSql>(_inputRoot, "adventureWorks.target.customer.json");
 
             Stopwatch stopwatch = new Stopwatch();
@@ -53,7 +54,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
            
             target.UploadTable(connectionString,
                 sql.SetupTempDml,
-                manifestObject.manifest.tables[1],
+                table,
                 data,
                 new List<string> { sql.UpdateFromTempDml, sql.ClearTempDml });
 
@@ -62,32 +63,30 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             WriteLogCsvFile(new CsvLogger { TestDate = DateTime.Now, NoOfRecords = recordCount, TimeElapsed = ElapsedDuration });
         }
 
-        [Fact]
-        public void UploadTableCustomer_SetupSource()
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
+        public void UploadTable_Customer_SetupSource()
         {
-            var data = CreateTableForCustomer("Pre", 1000000); 
-            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.job.adventureWorks.json");
-            var table = manifestObject.manifest.tables[2];
+            var data = CreateTableForCustomer("Pre", 300000);
+            var table = GetJsonFile<Table>(_inputRoot, "table.SalesLT.Customer.json");
             table.temp_name = table.qualified_table_name; //initializing Table-TempName with Customer Table
 
             var target = new MsSqlWriter();
            
-            var outputnoOfRecord = target.BulkCopy(connectionString, table, data); // This call should copy records from data to Customer directly. 
-            data.Rows.Count.Should().Be(outputnoOfRecord-847);
+            var rowsInserted = target.BulkCopy(connectionString, table, data);
+            data.Rows.Count.Should().Be(rowsInserted - InitialCustomerTableRowCount );
         }
 
-        [Fact]
-        public void UploadTableAddress_SetupSource()
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
+        public void UploadTable_Address_SetupSource()
         {
-            var data = CreateTableForAddress("Pre",1000000);          
-            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.job.adventureWorks.json");
-            var table = manifestObject.manifest.tables[0];
+            var data = CreateTableForAddress("Pre",1000000);
+            var table = GetJsonFile<Table>(_inputRoot, "table.SalesLT.Address.json");
             table.temp_name = table.qualified_table_name; 
 
             var target = new MsSqlWriter();
 
-            var outputnoOfRecord = target.BulkCopy(connectionString, table, data);
-            data.Rows.Count.Should().Be(outputnoOfRecord-450);
+            var rowsInserted = target.BulkCopy(connectionString, table, data);
+            data.Rows.Count.Should().Be(rowsInserted - InitialAddressTableRowCount);
         }
 
         private T GetJsonFile<T>(string root, string file)
@@ -130,40 +129,46 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
         public DataTable CreateTableForCustomer(string runState, int RecordsToBeAdded = 500000)
         {
             var dt = new DataTable();
-            string fName = "Daniel", lName = "Saunders", cName = "Exate Technology", phone = "9898989856", title = "Mr.", SalesPerson = @"adventure-works\jillian";
+            string fName = "Daniel", lName = "Saunders", cName = "exate", phone = "9898989856", title = "Mr.", SalesPerson = @"adventure-works\jillian";
 
-            int startingRecordCustId = 30119; // this i checked from database, should I do this by dynamically pulling this up ?
-            int existingRecords = 847;  // this i checked from database Nb of records in customer table are 847. should I do this by dynamically pulling this up ?
-            
-            int lastRecordCustId = (RecordsToBeAdded - existingRecords) + (startingRecordCustId - 1); // calculate the last record Id here 
+            int startingRecordCustId = 30119; // this i checked from database, should I do this by dynamically pulling this up ?           
+            int lastRecordCustId = (RecordsToBeAdded - InitialCustomerTableRowCount) + (startingRecordCustId - 1); // calculate the last record Id here 
 
             DateTime dateTime = DateTime.Now;
             dt.Columns.Add("CustomerID", typeof(Int32));
+            dt.Columns.Add("NameStyle", typeof(bool));
             dt.Columns.Add("Title", typeof(string));
-            dt.Columns.Add("FirstName", typeof(string));            
+            dt.Columns.Add("FirstName", typeof(string));
+            dt.Columns.Add("MiddleName", typeof(string));
             dt.Columns.Add("LastName", typeof(string));
+            dt.Columns.Add("Suffix", typeof(string));
             dt.Columns.Add("FullName", typeof(string));
             dt.Columns.Add("CompanyName", typeof(string));
             dt.Columns.Add("SalesPerson", typeof(string));
             dt.Columns.Add("EmailAddress", typeof(string));
             dt.Columns.Add("Phone", typeof(string));
             dt.Columns.Add("PasswordHash", typeof(string));
-            dt.Columns.Add("PasswordSalt", typeof(string));           
+            dt.Columns.Add("PasswordSalt", typeof(string));
+            dt.Columns.Add("rowguid", typeof(Guid));
             dt.Columns.Add("ModifiedDate", typeof(DateTime));
 
             for (int counter = startingRecordCustId; counter <= lastRecordCustId; counter++)
             {
                 dt.Rows.Add(counter,
+                    false,
                     $"{title}",
                     $"{fName}_{counter}",
+                    null,
                     $"{lName}_{counter}",
+                    null,
                     $"{fName}_{counter} {lName}_{counter}",
                     $"{cName}",
                     $"{SalesPerson}_{counter}",
-                    $"{fName}_{counter}@ExateTechnology.com",
+                    $"{fName}_{counter}@{cName}.com",
                     $"{phone}",
                     $"U{counter}/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=",
-                    $"{Guid.NewGuid().ToString("d").Substring(1, 7).ToUpper()}=",                 
+                    $"{Guid.NewGuid().ToString("d").Substring(1, 7).ToUpper()}=",
+                    Guid.NewGuid(),
                     $"{dateTime}"
                     );
             }
@@ -176,9 +181,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             string add1 = "Agra", state = "UP", city = "agra", country = "India", postal = "282004";
            
             int startingRecordAddId = 11383;  // this i checked from database last Id = 11382 so we start from 11383 onwards
-            int existingRecords = 450;  // this i checked from database Nb of records in customer table are 450
-
-            int lastRecordAddId = (RecordsToBeAdded - existingRecords) + (startingRecordAddId - 1); // calculate the last record Address Id 
+            int lastRecordAddId = (RecordsToBeAdded - InitialAddressTableRowCount) + (startingRecordAddId - 1); // calculate the last record Address Id 
 
             DateTime dateTime = DateTime.Now;
             dt.Columns.Add("AddressID", typeof(Int32));

@@ -24,10 +24,10 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
         public void Can_BulkCopy()
         {
             var data = CreateTable();
-            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");
+            var table = GetJsonFile<Table>(_inputRoot, "table.test_user.person.json");
 
             OracleSqlWriter target = new OracleSqlWriter();
-            var outputnoOfRecord = target.BulkCopy(connectionString, manifestObject.manifest.tables[0], data);
+            var outputnoOfRecord = target.BulkCopy(connectionString, table, data);
 
             data.Rows.Count.Should().Be(outputnoOfRecord);
         }
@@ -35,14 +35,14 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
         [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void CanUploadTable()
         {
-            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");
+            var table = GetJsonFile<Table>(_inputRoot, "table.test_user.person.json");
             var sql = GetJsonFile<TargetSql>(_inputRoot, "xepdb1.target.person.json");
             var data = CreateTable();
 
             var target = new OracleSqlWriter();
             target.UploadTable(connectionString,
                 sql.SetupTempDml,
-                manifestObject.manifest.tables[0],
+                table,
                 data,
                 new List<string> { sql.UpdateFromTempDml, sql.ClearTempDml });
 
@@ -62,10 +62,10 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             string connectString = userCreds + dbSource;
             
             var data = CreateTable();
-            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");
+            var table = GetJsonFile<Table>(_inputRoot, "table.test_user.person.json");
 
             OracleSqlWriter target = new OracleSqlWriter();
-            var outputnoOfRecord = target.BulkCopy(connectString, manifestObject.manifest.tables[0], data);
+            var outputnoOfRecord = target.BulkCopy(connectString, table, data);
             target.ExecuteSqlText(connectString, new List<string> { });
             data.Rows.Count.Should().Be(outputnoOfRecord);
         }
@@ -75,10 +75,12 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
         {
             string connectString = @"Data Source=TEST_USER/ExateDbUser123!@//oracle1.sql.exatebot.com:1521/xepdb1";
             var data = CreateTable();
-            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");
+            var table = GetJsonFile<Table>(_inputRoot, "table.test_user.person.json");
+
             OracleSqlWriter target = new OracleSqlWriter();
-            var outputnoOfRecord = target.BulkCopy(connectString, manifestObject.manifest.tables[0], data);
+            var outputnoOfRecord = target.BulkCopy(connectString, table, data);
             target.ExecuteSqlText(connectString, new List<string> { });
+
             data.Rows.Count.Should().Be(outputnoOfRecord);
         }
 
@@ -89,17 +91,14 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             string connectString = "user id=TEST_USER; password=ExateDbUser123!; data source=orclpdb;";
 
             var data = CreateTable();
-            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.manifest.xepdb1.json");
+            var table = GetJsonFile<Table>(_inputRoot, "table.test_user.person.json");
+
             OracleSqlWriter target = new OracleSqlWriter();
-            var outputnoOfRecord = target.BulkCopy(connectString, manifestObject.manifest.tables[0], data);
+            var outputnoOfRecord = target.BulkCopy(connectString, table, data);
+
             target.ExecuteSqlText(connectString, new List<string> { });
             data.Rows.Count.Should().Be(outputnoOfRecord);
         }
-
-
-
-
-
 
         private T GetJsonFile<T>(string root, string file)
         {

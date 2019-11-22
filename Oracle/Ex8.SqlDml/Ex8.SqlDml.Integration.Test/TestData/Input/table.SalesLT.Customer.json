@@ -1,0 +1,99 @@
+{
+  "schema_name": "SalesLT",
+  "table_name": "Customer",
+  "pk_column_name": "CustomerID",
+  "pk_data_type": "int",
+  "record_count": 847,
+  "temp_name": "#Customer",
+  "columns": [
+    {
+      "name": "Title",
+      "dataType": "nvarchar",
+      "maxLength": 8,
+      "attributeTypeEnum": "FN",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    },
+    {
+      "name": "FirstName",
+      "dataType": "nvarchar",
+      "maxLength": 50,
+      "attributeTypeEnum": "MN",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    },
+    {
+      "name": "LastName",
+      "dataType": "nvarchar",
+      "maxLength": 50,
+      "attributeTypeEnum": "LN",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    },
+    {
+      "name": "FullName",
+      "dataType": "nvarchar",
+      "maxLength": 50,
+      "attributeTypeEnum": "FN",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    },
+    {
+      "name": "CompanyName",
+      "dataType": "nvarchar",
+      "maxLength": 128,
+      "attributeTypeEnum": "FN",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    },
+    {
+      "name": "SalesPerson",
+      "dataType": "nvarchar",
+      "maxLength": 256,
+      "attributeTypeEnum": "SP",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    },
+    {
+      "name": "EmailAddress",
+      "dataType": "nvarchar",
+      "maxLength": 50,
+      "attributeTypeEnum": "FN",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    },
+    {
+      "name": "Phone",
+      "dataType": "nvarchar",
+      "maxLength": 25,
+      "attributeTypeEnum": "FN",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    },
+    {
+      "name": "PasswordHash",
+      "dataType": "nvarchar",
+      "maxLength": 128,
+      "attributeTypeEnum": "PH",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    },
+    {
+      "name": "PasswordSalt",
+      "dataType": "nvarchar",
+      "maxLength": 10,
+      "attributeTypeEnum": "PS",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    },
+    {
+      "name": "ModifiedDate",
+      "dataType": "DateTime",
+      "maxLength": 50,
+      "attributeTypeEnum": "MD",
+      "anonymisationKey": "BF4B655D-63DE-42C3-9F44-567BD9EDCF4C",
+      "subjectEntityMappingId": null
+    }
+
+  ]
+}

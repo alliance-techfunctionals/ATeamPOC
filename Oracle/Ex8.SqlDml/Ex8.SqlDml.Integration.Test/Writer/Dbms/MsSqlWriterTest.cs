@@ -23,20 +23,20 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
         public void Can_BulkCopy()
         {
             var data = CreateTable();
-            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.job.adventureWorks.json");         
+            var table = GetJsonFile<Table>(_inputRoot, "table.SalesLT.CustomerATeam.json");
             var inputSqlQueries = GetJsonFile<TargetSql>(_inputRoot, "adventureWorks.target.customer.json");
            
             MsSqlWriter target = new MsSqlWriter();
             target.ExecuteSqlText(connectionString, inputSqlQueries.SetupTempDml);
            
-            var outputnoOfRecord = target.BulkCopy(connectionString, manifestObject.manifest.tables[1], data);
+            var outputnoOfRecord = target.BulkCopy(connectionString, table, data);
             data.Rows.Count.Should().Be(outputnoOfRecord);
         }
 
         [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void CanUploadTable()
         {
-            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.job.adventureWorks.json");
+            var table = GetJsonFile<Table>(_inputRoot, "table.SalesLT.CustomerATeam.json");
             var inputSqlQueries = GetJsonFile<TargetSql>(_inputRoot, "adventureWorks.target.customer.json");
             var data = CreateTable();
 
@@ -44,7 +44,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
 
             target.UploadTable(connectionString,
                 inputSqlQueries.SetupTempDml,
-                manifestObject.manifest.tables[1],
+                table,
                 data,
                 new List<string> { inputSqlQueries.UpdateFromTempDml, inputSqlQueries.ClearTempDml }); 
 
