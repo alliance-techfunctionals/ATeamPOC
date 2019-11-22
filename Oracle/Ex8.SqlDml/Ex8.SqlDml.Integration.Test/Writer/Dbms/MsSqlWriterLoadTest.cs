@@ -63,6 +63,36 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             WriteLogCsvFile(new CsvLogger { TestDate = DateTime.Now, NoOfRecords = recordCount, TimeElapsed = ElapsedDuration });
         }
 
+        [Fact]
+        public void UploadTableInCustomer_SetupSource()
+        {
+            string connectionString = "Data Source=winserver1.vm.exatebot.com; Initial Catalog=AdventureWorksLT2016_dev; User ID=ex8ExecuteUser; Password=lbv9hFlO9s1j;";
+            var data = CreateTableForCustomer("Pre", 1029271); // this will insert another 999,153‬ rows to complete 1mill records in table. we preferred not to delete your existing actual records because may be you need them ??
+            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.job.adventureWorks.json");
+            var table = manifestObject.manifest.tables[2];
+            table.temp_name = table.qualified_table_name; //initializing Table-TempName with Customer Table
+
+            var target = new MsSqlWriter();
+           
+            var outputnoOfRecord = target.BulkCopy(connectionString, table, data); // This call should copy records from data to Customer directly. 
+            data.Rows.Count.Should().Be(outputnoOfRecord-847);
+        }
+
+        [Fact]
+        public void UploadTableInAddress_SetupSource()
+        {
+            string connectionString = "Data Source=winserver1.vm.exatebot.com; Initial Catalog=AdventureWorksLT2016_dev; User ID=ex8ExecuteUser; Password=lbv9hFlO9s1j;";
+            var data = CreateTableForAddress("Pre",1010932);     // this will insert another 999,153‬ rows to complete 1mill records in table. we preferred not to delete your existing actual records because may be you need them ??       
+            var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.job.adventureWorks.json");
+            var table = manifestObject.manifest.tables[0];
+            table.temp_name = table.qualified_table_name; 
+
+            var target = new MsSqlWriter();
+
+            var outputnoOfRecord = target.BulkCopy(connectionString, table, data);
+            data.Rows.Count.Should().Be(outputnoOfRecord-450);
+        }
+
         private T GetJsonFile<T>(string root, string file)
         {
             var outputPath = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), string.Format("{0}{1}", root, file));
@@ -95,6 +125,74 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
                     $"{runState}{cName}",
                     $"{runState}{fName}_{counter}@ExateTechnology.com",
                     $"{runState}{phone}"
+                    );
+            }
+            return dt;
+        }
+
+        public DataTable CreateTableForCustomer(string runState, int RecordsToBeAdded = 500000)
+        {
+            var dt = new DataTable();
+            string fName = "Daniel", lName = "Saunders", cName = "Exate Technology", phone = "9898989856", title = "Mr.", SalesPerson = @"adventure-works\jillian";           
+
+            DateTime dateTime = DateTime.Now;
+            dt.Columns.Add("CustomerID", typeof(Int32));
+            dt.Columns.Add("Title", typeof(string));
+            dt.Columns.Add("FirstName", typeof(string));            
+            dt.Columns.Add("LastName", typeof(string));
+            dt.Columns.Add("FullName", typeof(string));
+            dt.Columns.Add("CompanyName", typeof(string));
+            dt.Columns.Add("SalesPerson", typeof(string));
+            dt.Columns.Add("EmailAddress", typeof(string));
+            dt.Columns.Add("Phone", typeof(string));
+            dt.Columns.Add("PasswordHash", typeof(string));
+            dt.Columns.Add("PasswordSalt", typeof(string));           
+            dt.Columns.Add("ModifiedDate", typeof(DateTime));
+
+            for (int counter = 30119; counter <= RecordsToBeAdded; counter++) //last Id = 30118
+            {
+                dt.Rows.Add(counter,
+                    $"{title}",
+                    $"{fName}_{counter}",
+                    $"{lName}_{counter}",
+                    $"{fName}_{counter} {lName}_{counter}",
+                    $"{cName}",
+                    $"{SalesPerson}_{counter}",
+                    $"{fName}_{counter}@ExateTechnology.com",
+                    $"{phone}",
+                    $"U{counter}/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=",
+                    $"{Guid.NewGuid().ToString("d").Substring(1, 7).ToUpper()}=",                 
+                    $"{dateTime}"
+                    );
+            }
+            return dt;
+        }
+
+        public DataTable CreateTableForAddress(string runState, int RecordsToBeAdded = 500000)
+        {
+            var dt = new DataTable();
+            string add1 = "Agra", state = "UP", city = "agra", country = "India", postal = "282004";
+            var pass = Guid.NewGuid().ToString("d").Substring(1, 7);
+
+            DateTime dateTime = DateTime.Now;
+            dt.Columns.Add("AddressID", typeof(Int32));
+            dt.Columns.Add("AddressLine1", typeof(string));
+            dt.Columns.Add("City", typeof(string));           
+            dt.Columns.Add("StateProvince", typeof(string));
+            dt.Columns.Add("CountryRegion", typeof(string));
+            dt.Columns.Add("PostalCode", typeof(string));
+            dt.Columns.Add("ModifiedDate", typeof(string));
+
+
+            for (int counter = 11383; counter <= RecordsToBeAdded; counter++) // last Id = 11382
+            {
+                dt.Rows.Add(counter,
+                    $"{add1}",
+                    $"{city}_{counter}",
+                    $"{state}_{counter}",
+                    $"{country}_{counter}",
+                    $"{postal}",
+                    $"{dateTime}"
                     );
             }
             return dt;
