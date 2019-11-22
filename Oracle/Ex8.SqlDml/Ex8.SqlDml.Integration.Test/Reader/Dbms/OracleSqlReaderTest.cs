@@ -8,8 +8,7 @@ namespace Ex8.SqlDml.Integration.Test.Reader.Dbms
     {
         private const string connectionString = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=oracle1.sql.exatebot.com)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=xepdb1)));User Id=TEST_USER;Password=ExateDbUser123!;";
 
-        //TODO should not be run in CI-CD pipeline
-        //[Fact]
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void Can_GetData()
         {
             var target = new OracleSqlReader();

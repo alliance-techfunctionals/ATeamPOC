@@ -65,13 +65,13 @@ namespace Ex8.SqlDml.Writer.Dbms
 
             // for primary key column Values
             colValueArrr = data.AsEnumerable().Select(r => r.Field<dynamic>(pk_colname)).ToList();
-            cmd.Parameters.Add(_OracleParameter(pk_datatype, colValueArrr));
+            cmd.Parameters.Add(CreateParameter(pk_datatype, colValueArrr));
 
             // Foreach - Looping for All columns except PK col
             foreach (var tableCol in tableInfo.columns) //TODO avoid nested for loop. O(n)2 performance
             {
                 colValueArrr = data.AsEnumerable().Select(r => r.Field<dynamic>(tableCol.name)).ToList();
-                cmd.Parameters.Add(_OracleParameter(tableCol.dataType, colValueArrr));
+                cmd.Parameters.Add(CreateParameter(tableCol.dataType, colValueArrr));
             }
 
             return cmd.ExecuteNonQuery();
@@ -80,32 +80,57 @@ namespace Ex8.SqlDml.Writer.Dbms
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="dataType"></param>
-        /// <param name="colValueArrr"></param>
+        /// <param name="dataType">DataType extracted from Oracle schema: USER_TAB_COLUMNS</param>
+        /// <param name="colValueArrr">Array of values</param>
         /// <returns>
         ///    oracleParam
         /// </returns>
-        internal OracleParameter _OracleParameter(string dataType, List<dynamic> colValueArrr)
+        internal OracleParameter CreateParameter(string dataType, List<dynamic> colValueArrr)
         {
             OracleParameter oracleParam = new OracleParameter();
             switch (dataType.ToLower())
             {
-                case "number":
-                case "Decimal":
-                case "Int32":
-                    oracleParam.OracleDbType = OracleDbType.Decimal;
+                case "char":
+                    oracleParam.OracleDbType = OracleDbType.Char;
                     break;
+                case "varchar":
                 case "varchar2":
-                case "text":
+                    oracleParam.OracleDbType = OracleDbType.Varchar2;
+                    break;
+                case "nchar":
+                    oracleParam.OracleDbType = OracleDbType.NChar;
+                    break;
+                case "nvarchar2":
                     oracleParam.OracleDbType = OracleDbType.NVarchar2;
                     break;
-                case "datetime":
+                case "clob":
+                    oracleParam.OracleDbType = OracleDbType.Clob;
+                    break;
+                case "nclob":
+                    oracleParam.OracleDbType = OracleDbType.NClob;
+                    break;
+
+                case "integer":
+                    //oracleParam.OracleDbType = OracleDbType.Int16;
+                    oracleParam.OracleDbType = OracleDbType.Int32;
+                    //oracleParam.OracleDbType = OracleDbType.Int64;
+                    break;
+                case "float":
+                    oracleParam.OracleDbType = OracleDbType.Double;
+                    break;
+                case "number":
+                    oracleParam.OracleDbType = OracleDbType.Decimal;
+                    break;
+
                 case "date":
                     oracleParam.OracleDbType = OracleDbType.Date;
                     break;
-                // To Do: by Neha - I have to add more datatypes..for now I am just testing this for the above 4 only..
-                default:
+                case "timestamp":
+                    oracleParam.OracleDbType = OracleDbType.TimeStamp;
                     break;
+
+                default:
+                    throw new ArgumentException($"Unsupported Oracle Data Type: {dataType}");
             }
 
             oracleParam.Value = colValueArrr.ToArray();

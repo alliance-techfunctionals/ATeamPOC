@@ -9,7 +9,7 @@ namespace Ex8.EtlModel.DatabaseJobManifest
         SqlServer = 1,
         Oracle = 2,
         Postgres = 3,
-        MsSql = 4
+        MySql = 4
     }
 
 }

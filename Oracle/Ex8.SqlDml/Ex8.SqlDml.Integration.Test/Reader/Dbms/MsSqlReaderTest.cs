@@ -11,7 +11,7 @@ namespace Ex8.SqlDml.Integration.Test.Reader.Dbms
     {
         private const string connectionString = "Data Source=winserver1.vm.exatebot.com; Initial Catalog=AdventureWorksLT2016; User ID=ex8ExecuteUser; Password=lbv9hFlO9s1j;";
 
-        [Fact]
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void Can_GetData()
         {
             var target = new MsSqlReader();

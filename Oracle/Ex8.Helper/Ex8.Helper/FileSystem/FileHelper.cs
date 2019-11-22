@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using Ex8.Helper.Globalization;
 using Ex8.Helper.Serialization;
 using Ude;
 
@@ -9,6 +10,34 @@ namespace Ex8.Helper.FileSystem
 {
     public static class FileHelper
     {
+        public static Encoding GetFileEncoding(string fullPath)
+        {
+            using (var fs = File.OpenRead(fullPath))
+            {
+                var charsetDetector = new CharsetDetector();
+                charsetDetector.Feed(fs);
+                charsetDetector.DataEnd();
+                fs.Close();
+
+                return EncodingHelper.GetEncodingFromCharSet(charsetDetector.Charset);
+            }
+        }
+
+        public static IEnumerable<string> ReadLines(string fullPath)
+        {
+            var encoding = GetFileEncoding(fullPath);
+
+            using (var fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var reader = new StreamReader(fs, encoding, true))
+            {
+                string currentLine;
+                while ((currentLine = reader.ReadLine()) != null)
+                {
+                    yield return currentLine;
+                }
+            }
+        }
+
         public static string ReadText(string fullPath)
         {
             string content;
