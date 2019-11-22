@@ -20,7 +20,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
         private const string _inputRoot = "TestData\\Input\\";
         private const string _outputRoot = "TestData\\Output\\";
 
-        private const string connectionString = "Data Source=winserver1.vm.exatebot.com; Initial Catalog=AdventureWorksLT2016; User ID=ex8ExecuteUser; Password=lbv9hFlO9s1j;";
+        private const string connectionString = "Data Source=winserver1.vm.exatebot.com; Initial Catalog=AdventureWorksLT2016_dev; User ID=ex8ExecuteUser; Password=lbv9hFlO9s1j;";
 
         [Fact(Skip = "Integration Test. Manual execution only for now")]
         public void UploadTable_SetupSource()
@@ -59,15 +59,13 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
 
             stopwatch.Stop();  // end timer
             var ElapsedDuration = stopwatch.Elapsed; // this is the elapsed duration now for updating RecordsCount records in table database
-
             WriteLogCsvFile(new CsvLogger { TestDate = DateTime.Now, NoOfRecords = recordCount, TimeElapsed = ElapsedDuration });
         }
 
         [Fact]
-        public void UploadTableInCustomer_SetupSource()
+        public void UploadTableCustomer_SetupSource()
         {
-            string connectionString = "Data Source=winserver1.vm.exatebot.com; Initial Catalog=AdventureWorksLT2016_dev; User ID=ex8ExecuteUser; Password=lbv9hFlO9s1j;";
-            var data = CreateTableForCustomer("Pre", 1029271); // this will insert another 999,153‬ rows to complete 1mill records in table. we preferred not to delete your existing actual records because may be you need them ??
+            var data = CreateTableForCustomer("Pre", 1000000); 
             var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.job.adventureWorks.json");
             var table = manifestObject.manifest.tables[2];
             table.temp_name = table.qualified_table_name; //initializing Table-TempName with Customer Table
@@ -79,10 +77,9 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
         }
 
         [Fact]
-        public void UploadTableInAddress_SetupSource()
+        public void UploadTableAddress_SetupSource()
         {
-            string connectionString = "Data Source=winserver1.vm.exatebot.com; Initial Catalog=AdventureWorksLT2016_dev; User ID=ex8ExecuteUser; Password=lbv9hFlO9s1j;";
-            var data = CreateTableForAddress("Pre",1010932);     // this will insert another 999,153‬ rows to complete 1mill records in table. we preferred not to delete your existing actual records because may be you need them ??       
+            var data = CreateTableForAddress("Pre",1000000);          
             var manifestObject = GetJsonFile<DatabaseJobManifest>(_inputRoot, "database.job.adventureWorks.json");
             var table = manifestObject.manifest.tables[0];
             table.temp_name = table.qualified_table_name; 
@@ -133,7 +130,12 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
         public DataTable CreateTableForCustomer(string runState, int RecordsToBeAdded = 500000)
         {
             var dt = new DataTable();
-            string fName = "Daniel", lName = "Saunders", cName = "Exate Technology", phone = "9898989856", title = "Mr.", SalesPerson = @"adventure-works\jillian";           
+            string fName = "Daniel", lName = "Saunders", cName = "Exate Technology", phone = "9898989856", title = "Mr.", SalesPerson = @"adventure-works\jillian";
+
+            int startingRecordCustId = 30119; // this i checked from database, should I do this by dynamically pulling this up ?
+            int existingRecords = 847;  // this i checked from database Nb of records in customer table are 847. should I do this by dynamically pulling this up ?
+            
+            int lastRecordCustId = (RecordsToBeAdded - existingRecords) + (startingRecordCustId - 1); // calculate the last record Id here 
 
             DateTime dateTime = DateTime.Now;
             dt.Columns.Add("CustomerID", typeof(Int32));
@@ -149,7 +151,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             dt.Columns.Add("PasswordSalt", typeof(string));           
             dt.Columns.Add("ModifiedDate", typeof(DateTime));
 
-            for (int counter = 30119; counter <= RecordsToBeAdded; counter++) //last Id = 30118
+            for (int counter = startingRecordCustId; counter <= lastRecordCustId; counter++)
             {
                 dt.Rows.Add(counter,
                     $"{title}",
@@ -172,7 +174,11 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
         {
             var dt = new DataTable();
             string add1 = "Agra", state = "UP", city = "agra", country = "India", postal = "282004";
-            var pass = Guid.NewGuid().ToString("d").Substring(1, 7);
+           
+            int startingRecordAddId = 11383;  // this i checked from database last Id = 11382 so we start from 11383 onwards
+            int existingRecords = 450;  // this i checked from database Nb of records in customer table are 450
+
+            int lastRecordAddId = (RecordsToBeAdded - existingRecords) + (startingRecordAddId - 1); // calculate the last record Address Id 
 
             DateTime dateTime = DateTime.Now;
             dt.Columns.Add("AddressID", typeof(Int32));
@@ -184,7 +190,7 @@ namespace Ex8.SqlDml.Integration.Test.Writer.Dbms
             dt.Columns.Add("ModifiedDate", typeof(string));
 
 
-            for (int counter = 11383; counter <= RecordsToBeAdded; counter++) // last Id = 11382
+            for (int counter = startingRecordAddId; counter <= lastRecordAddId; counter++) // 
             {
                 dt.Rows.Add(counter,
                     $"{add1}",
