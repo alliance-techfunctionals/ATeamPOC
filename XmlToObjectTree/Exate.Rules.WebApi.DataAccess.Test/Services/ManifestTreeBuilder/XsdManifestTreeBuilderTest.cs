@@ -76,7 +76,7 @@ namespace Exate.Rules.WebApi.DataAccess.Test.Services.ManifestTreeBuilder
         }
 
         [Fact]
-        public void XsdToTree_Basic_diffrentPrefixNamespace()
+        public void XsdToTree_Basic_PrefixAndDefaultNamespace()
         {
             var xss = GetXmlSchemaText("basic.example.different.prefix.namespace.xsd");
             var expectedResult = GetExpectedResult("basic.example.different.prefix.namespace.json");
