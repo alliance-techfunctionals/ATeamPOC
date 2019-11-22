@@ -26,7 +26,7 @@ namespace Ex8.SqlDml.Writer.Dbms
                     connection.Execute(sql);
                 }
 
-                BulkCopy(connection, tableInfo.temp_name, uploadData);
+                BulkCopy(connection, tableInfo.temp_name, uploadData,tableInfo);
 
                 foreach (var sql in postSql)
                 {
@@ -46,12 +46,15 @@ namespace Ex8.SqlDml.Writer.Dbms
             }
         }
 
-        internal void BulkCopy(SqlConnection connection, string destinationTableName, DataTable data)
+        internal void BulkCopy(SqlConnection connection, string destinationTableName, DataTable data, Table tableInfo)
         {
             using (var bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.KeepIdentity, null))
             {
                 bulkCopy.BulkCopyTimeout = 0;
                 bulkCopy.DestinationTableName = destinationTableName;
+                bulkCopy.ColumnMappings.Add(tableInfo.pk_column_name, tableInfo.pk_column_name); // mapping between source and destination
+                foreach (var tableColumn in tableInfo.columns) 
+                    bulkCopy.ColumnMappings.Add(tableColumn.name, tableColumn.name); // mapping between source and destination
                 bulkCopy.WriteToServer(data);
                 bulkCopy.Close();
             }
@@ -62,7 +65,7 @@ namespace Ex8.SqlDml.Writer.Dbms
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                BulkCopy(connection, tableInfo.temp_name, sourceTable);
+                BulkCopy(connection, tableInfo.temp_name, sourceTable,tableInfo);
                 var recordsCount = connection.ExecuteScalar<int>($"select count(*) from {tableInfo.temp_name}");
                 return recordsCount;
             }
