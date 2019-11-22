@@ -75,6 +75,16 @@ namespace Exate.Rules.WebApi.DataAccess.Test.Services.ManifestTreeBuilder
             result.Should().BeEquivalentTo(expectedResult);
         }
 
+        [Fact]
+        public void XsdToTree_Basic_diffrentPrefixNamespace()
+        {
+            var xss = GetXmlSchemaText("basic.example.different.prefix.namespace.xsd");
+            var expectedResult = GetExpectedResult("basic.example.different.prefix.namespace.json");
+            var target = new XsdManifestTreeBuilder();
+            var result = target.GetTree(xss);
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
         private ManifestTreeNode GetExpectedResult(string path)
         {
             var outputPath = Path.Combine(AssemblyHelper.GetCurrentExecutingAssemblyPath(), string.Format("{0}{1}", _outputRoot, path));

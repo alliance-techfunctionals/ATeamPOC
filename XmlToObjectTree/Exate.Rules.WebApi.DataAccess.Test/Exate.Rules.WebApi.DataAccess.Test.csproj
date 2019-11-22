@@ -46,6 +46,9 @@
     <None Update="TestData\Input\xsd\basic.example.default.namespace.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="TestData\Input\xsd\basic.example.different.prefix.namespace.xsd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestData\Input\xsd\basic.example.no.namespace.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -74,6 +77,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestData\Output\xml\trade-irs.example.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Output\xsd\basic.example.different.prefix.namespace.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestData\Output\xsd\basic.example.prefix.namespace.json">

@@ -28,9 +28,8 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
             var rootNode = new ManifestTreeNode();
             foreach (XmlSchemaElement element in customerSchema.Elements.Values)
             {
-                rootNode.NodePath = "/";
-                element.Namespaces = customerSchema.Namespaces;
-                if (element.Namespaces.Count > 0)
+                rootNode.NodePath = "/";              
+                if (customerSchema.Namespaces.Count > 0)
                 {
                     rootNode.Namespace = GetXsdNamespace(customerSchema.TargetNamespace);
                 }
@@ -92,9 +91,7 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
                 if (sequence != null)
                 {
                     foreach (var childElement in sequence.Items)
-                    {                        
-                        childElement.Namespaces = element.Namespaces;
-                        
+                    {                                                                        
                         var xmlSchemaElement = childElement as XmlSchemaElement;
                         if (xmlSchemaElement != null)
                         {
@@ -105,14 +102,14 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
                             else if (xmlSchemaElement.RefName != null)
                             {
                                 string seqDataType = sequence.GetType().ToString();
-                                nameSpaceXPath = !string.IsNullOrEmpty(nameSpacePrefix) ? $"{node.NodePath}/{nameSpacePrefix}:{xmlSchemaElement.RefName}" : "";
+                                nameSpaceXPath = !string.IsNullOrEmpty(nameSpacePrefix) ? $"{nameSpacePrefix}:" : "";
                                 var childNode = new ManifestTreeNode
                                 {
                                     Name = xmlSchemaElement.RefName.Name,
                                     DisplayName = xmlSchemaElement.RefName.Name,
                                     //NodeDataType = seqDataType,
                                     NodeType = XmlNodeTypeEnum.Element,
-                                    NodePath = xmlSchemaElement.RefName.Name != "" ? nameSpaceXPath : $"{node.NodePath}/{xmlSchemaElement.RefName}"
+                                    NodePath = !string.IsNullOrEmpty(xmlSchemaElement.RefName.Name)?$"{node.NodePath}/{nameSpaceXPath}{xmlSchemaElement.RefName}": $"{node.NodePath}/{xmlSchemaElement.RefName}"
                                 };
 
                                 RecursiveElementAnalyser(xmlSchemaElement, ref childNode, xmlNamespace);
@@ -145,10 +142,12 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
         {
             return targetNamespace == null ? null : new ManifestXmlNamespace
             {
-                Prefix = "ns",
+                Prefix ="ns",
                 Value = targetNamespace
             };
         }
+
+
 
 
     }

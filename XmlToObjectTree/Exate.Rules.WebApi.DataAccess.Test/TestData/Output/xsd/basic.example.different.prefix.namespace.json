@@ -1,0 +1,135 @@
+{
+  "Name": "PurchaseOrder",
+  "DisplayName": "PurchaseOrder",
+  "NodeDataType": "None",
+  "NodePath": "/tns:PurchaseOrder",
+  "NodeType": "Element",
+  "Namespace": {
+    "Prefix": "tns",
+    "Value": "http://tempuri.org/PurchaseOrderSchema.xsd"
+  },
+  "Children": [
+    {
+      "Name": "OrderDate",
+      "DisplayName": "OrderDate",
+      "NodeDataType": "string",
+      "NodePath": "/tns:PurchaseOrder/@OrderDate",
+      "NodeType": "Attribute",
+      "Children": []
+    },
+    {
+      "Name": "ShipTo",
+      "DisplayName": "ShipTo",
+      "NodeDataType": "none",
+      "NodePath": "/tns:PurchaseOrder/tns:ShipTo",
+      "NodeType": "Element",
+      "Children": [
+        {
+          "Name": "country",
+          "DisplayName": "country",
+          "NodeDataType": "string",
+          "NodePath": "/tns:PurchaseOrder/tns:ShipTo/@country",
+          "NodeType": "Attribute",
+          "Children": []
+        },
+        {
+          "Name": "name",
+          "DisplayName": "name",
+          "NodeDataType": "string",
+          "NodePath": "/tns:PurchaseOrder/tns:ShipTo/tns:name",
+          "NodeType": "Element",
+          "Children": []
+        },
+        {
+          "Name": "street",
+          "DisplayName": "street",
+          "NodeDataType": "string",
+          "NodePath": "/tns:PurchaseOrder/tns:ShipTo/tns:street",
+          "NodeType": "Element",
+          "Children": []
+        },
+        {
+          "Name": "city",
+          "DisplayName": "city",
+          "NodeDataType": "string",
+          "NodePath": "/tns:PurchaseOrder/tns:ShipTo/tns:city",
+          "NodeType": "Element",
+          "Children": []
+        },
+        {
+          "Name": "state",
+          "DisplayName": "state",
+          "NodeDataType": "string",
+          "NodePath": "/tns:PurchaseOrder/tns:ShipTo/tns:state",
+          "NodeType": "Element",
+          "Children": []
+        },
+        {
+          "Name": "zip",
+          "DisplayName": "zip",
+          "NodeDataType": "string",
+          "NodePath": "/tns:PurchaseOrder/tns:ShipTo/tns:zip",
+          "NodeType": "Element",
+          "Children": []
+        }
+      ]
+    },
+    {
+      "Name": "BillTo",
+      "DisplayName": "BillTo",
+      "NodeDataType": "none",
+      "NodePath": "/tns:PurchaseOrder/tns:BillTo",
+      "NodeType": "Element",
+      "Children": [
+        {
+          "Name": "country",
+          "DisplayName": "country",
+          "NodeDataType": "string",
+          "NodePath": "/tns:PurchaseOrder/tns:BillTo/@country",
+          "NodeType": "Attribute",
+          "Children": []
+        },
+        {
+          "Name": "name",
+          "DisplayName": "name",
+          "NodeDataType": "string",
+          "NodePath": "/tns:PurchaseOrder/tns:BillTo/tns:name",
+          "NodeType": "Element",
+          "Children": []
+        },
+        {
+          "Name": "street",
+          "DisplayName": "street",
+          "NodeDataType": "string",
+          "NodePath": "/tns:PurchaseOrder/tns:BillTo/tns:street",
+          "NodeType": "Element",
+          "Children": []
+        },
+        {
+          "Name": "city",
+          "DisplayName": "city",
+          "NodeDataType": "string",
+          "NodePath": "/tns:PurchaseOrder/tns:BillTo/tns:city",
+          "NodeType": "Element",
+          "Children": []
+        },
+        {
+          "Name": "state",
+          "DisplayName": "state",
+          "NodeDataType": "string",
+          "NodePath": "/tns:PurchaseOrder/tns:BillTo/tns:state",
+          "NodeType": "Element",
+          "Children": []
+        },
+        {
+          "Name": "zip",
+          "DisplayName": "zip",
+          "NodeDataType": "string",
+          "NodePath": "/tns:PurchaseOrder/tns:BillTo/tns:zip",
+          "NodeType": "Element",
+          "Children": []
+        }
+      ]
+    }
+  ]
+}
