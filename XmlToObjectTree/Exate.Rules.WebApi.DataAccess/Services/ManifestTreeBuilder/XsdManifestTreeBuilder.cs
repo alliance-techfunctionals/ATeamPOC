@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
@@ -138,20 +139,12 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
             node.Children = children;
         }
 
-        private static ManifestXmlNamespace GetXsdNamespace(string targetNamespace, XmlQualifiedName[] xsdNamespace)
+        private static ManifestXmlNamespace GetXsdNamespace(string targetNamespace, XmlQualifiedName[] namespaces)
         {
-            var prefix = "";
-            for (int i = 0; i < xsdNamespace.Length; i++)
+            var xmlNamespace = namespaces.AsEnumerable().SingleOrDefault(n => n.Namespace == targetNamespace);
+            return (targetNamespace == null) ? null : new ManifestXmlNamespace
             {
-                if ((xsdNamespace[i].Namespace).Equals(targetNamespace))
-                {
-                    prefix = xsdNamespace[i].Name;
-                }
-            }
-
-            return targetNamespace == null ? null : new ManifestXmlNamespace
-            {
-                Prefix = string.IsNullOrEmpty(prefix) ? "ns" : prefix,
+                Prefix = xmlNamespace == null ? "ns" : xmlNamespace.Name,
                 Value = targetNamespace
             };
         }
