@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
@@ -25,12 +26,15 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
             {
                 customerSchema = schema;
             }
-
             var rootNode = new ManifestTreeNode();
             foreach (XmlSchemaElement element in customerSchema.Elements.Values)
             {
                 rootNode.NodePath = "/";
-                RecursiveElementAnalyser("", element, ref rootNode);
+                if (customerSchema.Namespaces.Count > 0)
+                {
+                    rootNode.Namespace = GetXsdNamespace(customerSchema.TargetNamespace, customerSchema.Namespaces.ToArray());
+                }
+                RecursiveElementAnalyser(element, ref rootNode, rootNode.Namespace);
             }
 
             return rootNode;
@@ -46,17 +50,20 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
             return xss;
         }
 
-        private void RecursiveElementAnalyser(string prefix, XmlSchemaElement element, ref ManifestTreeNode node)
+        private void RecursiveElementAnalyser(XmlSchemaElement element, ref ManifestTreeNode node, ManifestXmlNamespace xmlNamespace)
         {
-            string elementName = prefix + (element.Name ?? element.RefName.ToString());
+            string elementName = element.Name ?? element.RefName.ToString();
             var children = new List<ManifestTreeNode>();
+            string nameSpacePrefix = xmlNamespace != null ? xmlNamespace.Prefix : string.Empty;
 
-            string dataType = element.ElementSchemaType.TypeCode.ToString();
+            //string dataType = element.ElementSchemaType.TypeCode.ToString(); // we are not using this anymore. 
+
             node.Name = element.Name ?? element.RefName.ToString();
             node.DisplayName = elementName;
             //node.NodeDataType = dataType;
             node.NodeType = XmlNodeTypeEnum.Element;
-            node.NodePath = node.NodePath + element.Name;
+            var nameSpaceXPath = !string.IsNullOrEmpty(element.Name) ? !string.IsNullOrEmpty(nameSpacePrefix) ? $"{nameSpacePrefix}:" : "" : "";
+            node.NodePath = node.NodePath + nameSpaceXPath + element.Name;
 
             var complexType = element.ElementSchemaType as XmlSchemaComplexType;
             if (complexType != null)
@@ -91,21 +98,22 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
                         {
                             if (xmlSchemaElement.RefName == null)
                             {
-                                RecursiveElementAnalyser(prefix, xmlSchemaElement, ref node);
+                                RecursiveElementAnalyser(xmlSchemaElement, ref node, xmlNamespace);
                             }
                             else if (xmlSchemaElement.RefName != null)
                             {
                                 string seqDataType = sequence.GetType().ToString();
+                                nameSpaceXPath = !string.IsNullOrEmpty(nameSpacePrefix) ? $"{nameSpacePrefix}:" : "";
                                 var childNode = new ManifestTreeNode
                                 {
                                     Name = xmlSchemaElement.RefName.Name,
                                     DisplayName = xmlSchemaElement.RefName.Name,
                                     //NodeDataType = seqDataType,
                                     NodeType = XmlNodeTypeEnum.Element,
-                                    NodePath = node.NodePath + "/" + xmlSchemaElement.RefName
+                                    NodePath = !string.IsNullOrEmpty(xmlSchemaElement.RefName.Name) ? $"{node.NodePath}/{nameSpaceXPath}{xmlSchemaElement.RefName}" : $"{node.NodePath}/{xmlSchemaElement.RefName}"
                                 };
 
-                                RecursiveElementAnalyser(prefix, xmlSchemaElement, ref childNode);
+                                RecursiveElementAnalyser(xmlSchemaElement, ref childNode, xmlNamespace);
                                 children.Add(childNode);
                             }
                             else
@@ -118,7 +126,7 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
                                         var xmlChoiceSchemaElement = choiceElement as XmlSchemaElement;
                                         if (xmlChoiceSchemaElement != null)
                                         {
-                                            RecursiveElementAnalyser(prefix, xmlChoiceSchemaElement, ref node);
+                                            RecursiveElementAnalyser(xmlChoiceSchemaElement, ref node, xmlNamespace);
                                         }
                                     }
                                 }
@@ -130,5 +138,16 @@ namespace Exate.Rules.WebApi.DataAccess.Services.ManifestTreeBuilder
 
             node.Children = children;
         }
+
+        private static ManifestXmlNamespace GetXsdNamespace(string targetNamespace, XmlQualifiedName[] namespaces)
+        {
+            var xmlNamespace = namespaces.AsEnumerable().SingleOrDefault(n => n.Namespace == targetNamespace);
+            return (targetNamespace == null) ? null : new ManifestXmlNamespace
+            {
+                Prefix = xmlNamespace == null ? "ns" : xmlNamespace.Name,
+                Value = targetNamespace
+            };
+        }
+
     }
 }

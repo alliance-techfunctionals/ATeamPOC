@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.exatetechnology.com/test" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="test">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="elements">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="element">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="id" type="xs:unsignedByte" />
+                    <xs:element name="firstname" type="xs:string" />
+                    <xs:element name="surname" type="xs:string" />
+                  </xs:sequence>
+                  <xs:attribute name="code" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,67 @@
+{
+  "Name": "test",
+  "DisplayName": "test",
+  "NodeDataType": "None",
+  "NodePath": "/test",
+  "NodeType": "Element",
+  "Children": [
+    {
+      "Name": "elements",
+      "DisplayName": "elements",
+      "NodeDataType": "none",
+      "NodePath": "/test/elements",
+      "NodeType": "Element",
+      "Children": [
+        {
+          "Name": "id",
+          "DisplayName": "id",
+          "NodeDataType": "string",
+          "NodePath": "/test/elements/@id",
+          "NodeType": "Attribute",
+          "Children": []
+        },
+        {
+          "Name": "element",
+          "DisplayName": "element",
+          "NodeDataType": "none",
+          "NodePath": "/test/elements/element",
+          "NodeType": "Element",
+          "Children": [
+            {
+              "Name": "code",
+              "DisplayName": "code",
+              "NodeDataType": "string",
+              "NodePath": "/test/elements/element/@code",
+              "NodeType": "Attribute",
+              "Children": []
+            },
+            {
+              "Name": "id",
+              "DisplayName": "id",
+              "NodeDataType": "string",
+              "NodePath": "/test/elements/element/id",
+              "NodeType": "Element",
+              "Children": []
+            },
+            {
+              "Name": "firstname",
+              "DisplayName": "firstname",
+              "NodeDataType": "string",
+              "NodePath": "/test/elements/element/firstname",
+              "NodeType": "Element",
+              "Children": []
+            },
+            {
+              "Name": "surname",
+              "DisplayName": "surname",
+              "NodeDataType": "string",
+              "NodePath": "/test/elements/element/surname",
+              "NodeType": "Element",
+              "Children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

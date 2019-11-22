@@ -4,6 +4,7 @@
   "NodeDataType": "None",
   "NodePath": "/shiporder",
   "NodeType": "Element",
+  "Namespace": null,
   "Children": [
     {
       "Name": "orderid",
