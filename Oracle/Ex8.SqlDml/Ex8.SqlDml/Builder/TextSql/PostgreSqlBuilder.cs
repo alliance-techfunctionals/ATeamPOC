@@ -71,7 +71,9 @@ namespace Ex8.SqlDml.Builder.TextSql
         {
             var selectDmlBuilder = new StringBuilder();
             selectDmlBuilder.AppendLine(selectDml);
-            selectDmlBuilder.AppendLine($"where seqnum between {(pageCount - 1) * pageSize + 1 } and {pageCount * pageSize}");
+            selectDmlBuilder.AppendLine($"order by {pkColumn}");
+            selectDmlBuilder.AppendLine($"LIMIT {pageSize}");
+            selectDmlBuilder.AppendLine($"OFFSET {pageSize} * ({pageCount}- 1);");
 
             return selectDmlBuilder.ToString();
         }
