@@ -1,6 +1,6 @@
 {
   "ClearTempDml": "DROP TEMPORARY TABLE ex8_temp_ATeam;",
-  "SelectDml": "SELECT Id, First_Name, Last_Name from ex8_db1.ATeam;",
+  "SelectDml": "SELECT Id, First_Name, Last_Name from ex8_db1.ATeam ",
   "SetupTempDml": [
     "CREATE TEMPORARY TABLE ex8_temp_ATeam SELECT Id, First_Name, Last_Name FROM ex8_db1.ATeam LIMIT 0;"
   ],

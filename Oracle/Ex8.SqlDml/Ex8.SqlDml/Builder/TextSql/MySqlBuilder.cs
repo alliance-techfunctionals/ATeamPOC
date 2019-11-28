@@ -33,7 +33,7 @@ namespace Ex8.SqlDml.Builder.TextSql
 
             var columnNameCsv = string.Join(", ", table.columns.Select(c => c.name));
             var selectSql = $"SELECT {table.pk_column_name}, {columnNameCsv} " +
-                             $"from {table.schema_name}.{table.table_name};";
+                             $"from {table.schema_name}.{table.table_name} ";
 
 
             var updateFromTempDml = $"UPDATE {table.schema_name}.{table.table_name} actualTable INNER JOIN {table.temp_name} tmpTable "
