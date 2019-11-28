@@ -1,4 +1,5 @@
-﻿using Ex8.SqlDml.Reader.Dbms;
+﻿using Ex8.SqlDml.Builder.TextSql;
+using Ex8.SqlDml.Reader.Dbms;
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,17 @@ namespace Ex8.SqlDml.Integration.Test.Reader.Dbms
             dataTable.Tables.Should().NotBeEmpty();
             dataTable.Tables[0].Rows.Should().NotBeEmpty();
             expectedOutput.Should().Be(actualOutput);
+        }
+        [Fact]
+        public void Can_GetData_WithLimitAndOffset()
+        {
+            var builder = new PostgreSqlBuilder();
+            var query = builder.SelectDmlPageBuilder($"Select * from sales.Customer", "ID", 50000, 9);
+            var target = new PostgreSqlReader();
+            var dataTable = target.GetData(connectionString, query);
+            dataTable.Tables.Should().NotBeEmpty();
+            dataTable.Tables[0].Rows.Count.Should().Equals(50000);
+            dataTable.Tables[0].Rows.Should().NotBeEmpty();
         }
     }
 }
