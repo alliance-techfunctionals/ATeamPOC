@@ -63,13 +63,15 @@ namespace Ex8.SqlDml.Builder.TextSql
 
         public string SelectDmlPageBuilder(string selectDml, string pkColumn, int pageSize, int pageCount)
         {
+            int offsetValue = pageSize * (pageCount - 1); //  calculate the offsetValue
             var selectDmlBuilder = new StringBuilder();
             selectDmlBuilder.AppendLine(selectDml);
             selectDmlBuilder.AppendLine($"order by {pkColumn}");
             selectDmlBuilder.AppendLine($"LIMIT {pageSize}");
-            selectDmlBuilder.AppendLine($"OFFSET {pageSize} * ({pageCount}- 1);");
-
+            selectDmlBuilder.AppendLine($"OFFSET {offsetValue};");
             return selectDmlBuilder.ToString();
         }
+
+
     }
 }

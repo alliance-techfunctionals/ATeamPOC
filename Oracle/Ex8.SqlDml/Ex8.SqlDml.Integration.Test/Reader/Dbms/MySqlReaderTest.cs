@@ -1,4 +1,5 @@
-﻿using Ex8.SqlDml.Reader.Dbms;
+﻿using Ex8.SqlDml.Builder.TextSql;
+using Ex8.SqlDml.Reader.Dbms;
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,19 @@ namespace Ex8.SqlDml.Integration.Test.Reader.Dbms
             dataTable.Tables.Should().NotBeEmpty();
             dataTable.Tables[0].Rows.Should().NotBeEmpty();
             expectedOutput.Should().Be(actualOutput);
+        }
+
+        [Fact(Skip = "Integration Test. Manual execution only for now")]
+        public void Can_GetData_WithLimitAndOffset()
+        {
+            var builder = new MySqlBuilder();
+            var query = builder.SelectDmlPageBuilder($"Select * from ex8_db1.ATeam", "Id", 50000, 9);
+
+            var target = new MySqlReader();
+            var dataTable = target.GetData(connectionString, query);
+            dataTable.Tables.Should().NotBeEmpty();
+            dataTable.Tables[0].Rows.Count.Should().Equals(50000);
+            dataTable.Tables[0].Rows.Should().NotBeEmpty();
         }
     }
 }
